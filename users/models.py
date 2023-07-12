@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete = models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=11, default='', blank=True)
     address = models.CharField(max_length=100, default='', blank=True)
     city = models.CharField(max_length=100, default='', blank=True)
