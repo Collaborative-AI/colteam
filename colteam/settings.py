@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-$h)9wxq$c-vmy(@!$gpss%hiitvqih_y$n$(pe3xu+pd#rft6f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['web','0.0.0.0','localhost']
+ALLOWED_HOSTS = ['web', '0.0.0.0', 'localhost', '127.0.0.1']
 
-CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000','http://*.127.0.0.1:8000','http://*.0.0.0.0:8000','http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000', 'http://*.127.0.0.1:8000', 'http://*.0.0.0.0:8000', 'http://localhost:8000']
 
 # Application definition
 
