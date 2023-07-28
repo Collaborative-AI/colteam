@@ -58,7 +58,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 os.path.join(BASE_DIR, "my-react-app/build"),
+                 os.path.join(BASE_DIR, "reactapp/build"),
                  ]
         ,
         'APP_DIRS': True,
@@ -130,5 +130,5 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__),'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "my-react-app/build/static"),
+    os.path.join(BASE_DIR, "reactapp/build/static"),
 ]
