@@ -8,6 +8,7 @@ import Data from './components/data.component'
 import Team from './components/team.component'
 import Home from './components/home.component'
 import Navbar from './components/navbar.component'
+import LoggedIn from './components/loggedin.component'
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
               <Route exact path="/" element={<Home />} />
               <Route path="/data" element={<Data />} />
               <Route path="/team" element={<Team />} />
-              <Route path="/sign-in" element={<Login />} />
+              <Route path="/log-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/logged-in" element={<LoggedIn />} />
             </Routes>
           </div>
         </div>
