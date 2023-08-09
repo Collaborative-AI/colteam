@@ -92,14 +92,14 @@ DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "CLIENT": {
-            "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@test.nnygkal.mongodb.net/?retryWrites=true&w=majority",
-            "username": "admin",
-            "password": "OBrgZwHsZLq4xbSM",
-            "name": "test",
-            # "host": "mongodb+srv://chen_xiuyuan:Collaborative-AIcxy@synspot-cluster.iqgfk.mongodb.net/?retryWrites=true&w=majority",
-            # "username": "chen_xiuyuan",
-            # "password": "Collaborative-AIcxy",
-            # "name": "synspot_db",
+            # "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@test.nnygkal.mongodb.net/?retryWrites=true&w=majority",
+            # "username": "admin",
+            # "password": "OBrgZwHsZLq4xbSM",
+            # "name": "test",
+            "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
+            "username": "backend",
+            "password": "JBoj5w4spnOlbLvF",
+            "name": "Crawl-Data",
             "authMechanism": "SCRAM-SHA-1",
         },
     }}
