@@ -1,10 +1,71 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .forms import UserRegistrationForm, UserUpdateForm, UserUpdatePasswordForm
-from django.contrib.auth.decorators import login_required
-from django.contrib import auth
-from django.contrib import messages
-from .models import UserProfile
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from rest_framework import viewsets
+from .serializers import UserSerializer, GroupSerializer
+from django.http import HttpResponse
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from django.test import TestCase
+
+def hello(request):
+    return HttpResponse("Hello world ! ")
+
+
+
+@api_view(['POST'])
+def testView1(request):
+    # 解析前端传递的JSON数据
+    input_data = request.data
+
+    # 使用序列化器进行反序列化
+    user_serializer = UserSerializer(data=input_data)
+
+    if user_serializer.is_valid():
+        # 保存数据到数据库
+        user_serializer.save()
+
+        # 返回成功响应
+        return JsonResponse({'message': 'User created successfully'}, status=201)
+    else:
+        # 返回验证错误响应
+        return JsonResponse(user_serializer.errors, status=400)
+
+@api_view(['GET'])  
+def testView2(request):
+    # 在数据库中查询数据
+    users = User.objects.filter(username="Remi")
+
+    # 将请求对象添加到上下文中
+    context = {'request': request}
+
+    # 使用序列化器将数据序列化为JSON
+    user_serializer = UserSerializer(users, many=True, context=context)
+
+    # 返回序列化后的数据
+    return JsonResponse(user_serializer.data,safe=False)
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = User.objects.all().order_by('-date_joined')
+    serializer_class = UserSerializer
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows groups to be viewed or edited.
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
+
+# from django.shortcuts import render, redirect, get_object_or_404
+# from .forms import UserRegistrationForm, UserUpdateForm, UserUpdatePasswordForm
+# from django.contrib.auth.decorators import login_required
+# from django.contrib import auth
+# from django.contrib import messages
+# from .models import UserProfile
+# from django.contrib.auth.models import User
 
 
 # def UserRegister(request):

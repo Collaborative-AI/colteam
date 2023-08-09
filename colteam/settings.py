@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
+import os,ssl
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,6 +56,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'colteam.urls'
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # 允许的前端应用的域名
+]
 
 TEMPLATES = [
     {
@@ -83,10 +92,14 @@ DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "CLIENT": {
-            "host": "mongodb+srv://chen_xiuyuan:Collaborative-AIcxy@synspot-cluster.iqgfk.mongodb.net/?retryWrites=true&w=majority",
-            "username": "chen_xiuyuan",
-            "password": "Collaborative-AIcxy",
-            "name": "synspot_db",
+            "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@test.nnygkal.mongodb.net/?retryWrites=true&w=majority",
+            "username": "admin",
+            "password": "OBrgZwHsZLq4xbSM",
+            "name": "test",
+            # "host": "mongodb+srv://chen_xiuyuan:Collaborative-AIcxy@synspot-cluster.iqgfk.mongodb.net/?retryWrites=true&w=majority",
+            # "username": "chen_xiuyuan",
+            # "password": "Collaborative-AIcxy",
+            # "name": "synspot_db",
             "authMechanism": "SCRAM-SHA-1",
         },
     }}
