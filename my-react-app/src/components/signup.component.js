@@ -62,41 +62,18 @@ export default function SignUp() {
   return (
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
-      {/* <div className="mb-3">
-        <label>First name</label>
+ 
+      <div className="mb-3">
+        <label>User Name</label>
         <input
-          type="text"
+          type="username"
           className="form-control"
-          placeholder="First name"
-          name="firstName"
-          value={formData.firstName}
+          placeholder="Enter usernasme"
+          name="username"
+          value={formData.username}
           onChange={handleInputChange}
         />
       </div>
-      <div className="mb-3">
-        <label>Last name</label>
-        <input 
-          type="text" 
-          className="form-control" 
-          placeholder="Last name" 
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleInputChange}
-        />
-      </div> */}
-
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-      </div>
-
       <div className="mb-3">
         <label>Email address</label>
         <input
@@ -109,16 +86,17 @@ export default function SignUp() {
         />
       </div>
       <div className="mb-3">
-        <label>User Name</label>
+        <label>Password</label>
         <input
-          type="username"
+          type="password"
           className="form-control"
-          placeholder="Enter usernasme"
-          name="username"
-          value={formData.username}
+          placeholder="Enter password"
+          name="password"
+          value={formData.password}
           onChange={handleInputChange}
         />
       </div>
+
       <div className="d-grid">
         <button type="submit" className="btn btn-primary">
           Sign Up
