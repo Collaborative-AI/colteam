@@ -4,6 +4,9 @@ import axios from 'axios';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
+    // firstName: '',
+    // lastName: '',
+    // username: '',
     email: '',
     password: '',
   });
@@ -24,10 +27,13 @@ export default function SignUp() {
     event.preventDefault();
     // Construct the data object to send to the backend
     const data = {
+      // first_name: formData.firstName,
+      // last_name: formData.lastName,
+      //username: formData.email,
       username: formData.email,
       password: formData.password,
     };
-
+    console.log('Send Data:', data);
     // Send a POST request to the Django backend's registration API
     axios
       .post('http://localhost:8000/user/register/', data)
@@ -53,8 +59,20 @@ export default function SignUp() {
   return (
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
+ 
+      {/* <div className="mb-3">
+        <label>User Name</label>
+        <input
+          type="username"
+          className="form-control"
+          placeholder="Enter usernasme"
+          name="username"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
+      </div> */}
       <div className="mb-3">
-        <label>Email Address</label>
+        <label>Email address</label>
         <input
           type="email"
           className="form-control"
