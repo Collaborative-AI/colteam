@@ -6,7 +6,7 @@ export default function SignUp() {
   const [formData, setFormData] = useState({
     // firstName: '',
     // lastName: '',
-    username: '',
+    // username: '',
     email: '',
     password: '',
   });
@@ -29,12 +29,9 @@ export default function SignUp() {
     const data = {
       // first_name: formData.firstName,
       // last_name: formData.lastName,
-      username: formData.username,
-      email: formData.email,
+      //username: formData.email,
+      username: formData.email,
       password: formData.password,
-      // username: "test",
-      // email: "test@gmail.com",
-      // password: "testpassword",
     };
     console.log('Send Data:', data);
     // Send a POST request to the Django backend's registration API
@@ -63,7 +60,7 @@ export default function SignUp() {
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
  
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label>User Name</label>
         <input
           type="username"
@@ -73,7 +70,7 @@ export default function SignUp() {
           value={formData.username}
           onChange={handleInputChange}
         />
-      </div>
+      </div> */}
       <div className="mb-3">
         <label>Email address</label>
         <input
