@@ -15,7 +15,7 @@ export default function SignUp() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
-      ...FormData,
+      ...formData,
       [name]: value,
     });
   };
@@ -29,11 +29,14 @@ export default function SignUp() {
     const data = {
       // first_name: formData.firstName,
       // last_name: formData.lastName,
-      user: formData.username,
+      username: formData.username,
       email: formData.email,
       password: formData.password,
+      // username: "test",
+      // email: "test@gmail.com",
+      // password: "testpassword",
     };
-
+    console.log('Send Data:', data);
     // Send a POST request to the Django backend's registration API
     axios
       .post('http://localhost:8000/user/register/', data)
@@ -46,6 +49,7 @@ export default function SignUp() {
         // Handle errors
         if (error.response) {
           console.error('Status Code:', error.response.status);
+          
           console.error('Data:', error.response.data);
           console.error('Response Header:', error.response.headers);
         } else {
@@ -80,17 +84,19 @@ export default function SignUp() {
           onChange={handleInputChange}
         />
       </div> */}
+
       <div className="mb-3">
-        <label>User Name</label>
+        <label>Password</label>
         <input
-          type="username"
-          className="form-control"s
-          placeholder="Enter usernasme"
-          name="username"
-          value={formData.username}
+          type="password"
+          className="form-control"
+          placeholder="Enter password"
+          name="password"
+          value={formData.password}
           onChange={handleInputChange}
         />
       </div>
+
       <div className="mb-3">
         <label>Email address</label>
         <input
@@ -103,13 +109,13 @@ export default function SignUp() {
         />
       </div>
       <div className="mb-3">
-        <label>Password</label>
+        <label>User Name</label>
         <input
-          type="password"
+          type="username"
           className="form-control"
-          placeholder="Enter password"
-          name="password"
-          value={formData.password}
+          placeholder="Enter usernasme"
+          name="username"
+          value={formData.username}
           onChange={handleInputChange}
         />
       </div>
