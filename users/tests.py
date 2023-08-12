@@ -7,7 +7,7 @@ from .serializers import CustomUserSerializer
 from rest_framework.test import APIRequestFactory
 import json
 from rest_framework.authtoken.models import Token
-
+from django.contrib.auth import get_user_model
 # Create your tests here.
 class RegistrationAPITestCase(TestCase):
     def setUp(self):
@@ -16,11 +16,8 @@ class RegistrationAPITestCase(TestCase):
     def test_register_user(self):
         # 构造要发送的数据
         data = {
-            "username": "testuser",
-            "email": "test@example.com",
-            "password": "testpassword",
-            "firstName": "Test",
-            "lastName": "User"
+            "username": "testuserinreg@gmail.com",
+            "password": "testpassword"
         }
         # 发送 POST 请求
         response = self.client.post('/user/register/', data, format='json')
@@ -35,26 +32,20 @@ class RegistrationAPITestCase(TestCase):
 
         # 检查数据库中的用户信息是否正确
         user = CustomUser.objects.get()
-        self.assertEqual(user.username, 'testuser')
-        self.assertEqual(user.email, 'test@example.com')
+        self.assertEqual(user.username, 'testuserinreg@gmail.com')
 
 class LoginAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        # 构造要发送的数据
-        data0 = {
-            "username": "testuser",
-            "email": "test@example.com",
-            "password": "testpassword",
-            "firstName": "Test",
-            "lastName": "User"
-        }
-        response = self.client.post('/user/register/', data0, format='json')
-
+        # 创建测试用户
+        self.user = get_user_model().objects.create_user(
+            password='testpassword',
+            username='testuser@gmail.com'
+        )
 
     def test_successful_login(self):
         data = {
-            "username": "testuser",
+            "email": "testuser@gmail.com",
             "password": "testpassword"
         }
 
@@ -63,17 +54,46 @@ class LoginAPITestCase(TestCase):
         print("Generated Token:", token)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)
+# class LoginAPITestCase(TestCase):
+#     def setUp(self):
+#         self.client = APIClient()
+#         # 构造要发送的数据
+#         self.user = get_user_model().objects.create_user(
+#             username="testuser",email='testuser@gmail.com', password='testpassword')
+
+
+#     def test_successful_login(self):
+#         data = {
+#             "email": "testuser@gmail.com",
+#             "password": "testpassword"
+#         }
+#         # 使用 self.client.login 进行用户认证
+#         self.client.login(email='testuser@gmail.com', password='testpassword')
+
+#         response = self.client.post('/user/login/', data, format='json')
+#         token = response.data.get('token')
+#         print("Generated Token:", token)
+#         self.assertEqual(response.status_code, status.HTTP_200_OK)
+#         self.assertIn('token', response.data)
+
+        # response = self.client.post('/user/login/', data, format='json')
+        # token = response.data.get('token')
+        # print("Generated Token:", token)
+        # self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # self.assertIn('token', response.data)
 
     # def test_invalid_credentials(self):
     #     data = {
-    #         "username": "testuser",
+    #         "email": "testuser@gmail.com",
     #         "password": "wrongpassword"
     #     }
 
     #     response = self.client.post('/user/login/', data, format='json')
-
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #     self.assertNotIn('token', response.data)
+    #     token = response.data.get('token')
+    #     print("Generated Token:", token)
+    #     self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        # self.assertEqual(response.data['error'], 'Invalid credentials')
+        # self.assertFalse(Token.objects.filter(CustomUser=self.user).exists())
 
 # class CreateUserTestCase(TestCase):
 #     def setUp(self):

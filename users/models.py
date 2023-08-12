@@ -20,9 +20,8 @@ from django.contrib.auth.models import AbstractUser
 from djongo import models
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
     firstName = models.CharField(max_length=30)
-    lastName = models.CharField(max_length=30)
+    lastName = models.CharField(max_length=30) 
     
     # 添加你的其他自定义字段
     
@@ -37,7 +36,5 @@ class CustomUserProfile(models.Model):
 
     def __str__(self):
         return "{}'s Profile".format(self.user.username)
-
-
 
 

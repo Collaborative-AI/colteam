@@ -18,7 +18,9 @@ def hello(request):
 @api_view(['POST'])
 def register(request):
     if request.method == 'POST':
+        print(request.data)
         serializer = CustomUserSerializer(data=request.data)
+        
         if serializer.is_valid():
             user = serializer.save()
             token = AccessToken.for_user(user)
@@ -27,15 +29,25 @@ def register(request):
 
 
 
-# 
-
 @api_view(['POST'])
 def login(request):
+    # if request.method == 'POST':
+        # email = request.data.get('email')  # This can be either username or email
+        # password = request.data.get('password')
+
+        # user = authenticate(email=email, password=password)
+
+        # if user:
+        #     # 如果用户凭据有效，生成或获取 Token
+        #     token, created = Token.objects.get_or_create(user=user)
+        #     return Response({'token': token.key}, status=status.HTTP_200_OK)
+        # else:
+        #     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     if request.method == 'POST':
-        username = request.data.get('username')
+        email = request.data.get('email')
         password = request.data.get('password')
 
-        user = authenticate(username=username, password=password)
+        user = authenticate(username=email, password=password)
         if user:
             # 如果用户凭据有效，生成或获取 Token
             token, created = Token.objects.get_or_create(user=user)
