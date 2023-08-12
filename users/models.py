@@ -15,18 +15,20 @@
 # class User(models.Model):
 #     userName = models.CharField(max_length = 20)
 #     passWord = models.CharField(max_length = 100)
-    
+
 from django.contrib.auth.models import AbstractUser
 from djongo import models
 
+
 class CustomUser(AbstractUser):
     firstName = models.CharField(max_length=30)
-    lastName = models.CharField(max_length=30) 
-    
+    lastName = models.CharField(max_length=30)
+
     # 添加你的其他自定义字段
-    
+
     def __str__(self):
         return self.username  # 或者其他适当的表示形式
+
 
 class CustomUserProfile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='customuser_profile_user')
@@ -36,5 +38,3 @@ class CustomUserProfile(models.Model):
 
     def __str__(self):
         return "{}'s Profile".format(self.user.username)
-
-

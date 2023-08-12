@@ -2,11 +2,14 @@
 from .models import CustomUser
 from rest_framework import serializers
 
+
 class CustomUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+
     class Meta:
         model = CustomUser
         fields = ('username', 'password')  # 你的自定义字段
+
     def create(self, validated_data):
         password = validated_data.pop('password')
         user = CustomUser(**validated_data)
@@ -24,5 +27,3 @@ class CustomUserSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Group
 #         fields = ('url', 'name')
-
-

@@ -2,7 +2,7 @@
 from .models import CustomUser
 from rest_framework import viewsets, status
 from .serializers import CustomUserSerializer
-#UserSerializer, GroupSerializer
+# UserSerializer, GroupSerializer
 from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -11,6 +11,8 @@ from django.test import TestCase
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
+
+
 def hello(request):
     return HttpResponse("Hello world ! ")
 
@@ -20,7 +22,7 @@ def register(request):
     if request.method == 'POST':
         print(request.data)
         serializer = CustomUserSerializer(data=request.data)
-        
+
         if serializer.is_valid():
             user = serializer.save()
             token = AccessToken.for_user(user)
@@ -28,21 +30,20 @@ def register(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @api_view(['POST'])
 def login(request):
     # if request.method == 'POST':
-        # email = request.data.get('email')  # This can be either username or email
-        # password = request.data.get('password')
+    # email = request.data.get('email')  # This can be either username or email
+    # password = request.data.get('password')
 
-        # user = authenticate(email=email, password=password)
+    # user = authenticate(email=email, password=password)
 
-        # if user:
-        #     # 如果用户凭据有效，生成或获取 Token
-        #     token, created = Token.objects.get_or_create(user=user)
-        #     return Response({'token': token.key}, status=status.HTTP_200_OK)
-        # else:
-        #     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    # if user:
+    #     # 如果用户凭据有效，生成或获取 Token
+    #     token, created = Token.objects.get_or_create(user=user)
+    #     return Response({'token': token.key}, status=status.HTTP_200_OK)
+    # else:
+    #     return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     if request.method == 'POST':
         email = request.data.get('email')
         password = request.data.get('password')
@@ -74,6 +75,7 @@ def testView1(request):
         # 返回验证错误响应
         return JsonResponse(user_serializer.errors, status=400)
 
+
 @api_view(['GET'])
 def testView2(request):
     # 在数据库中查询数据
@@ -87,6 +89,7 @@ def testView2(request):
 
     # 返回序列化后的数据
     return JsonResponse(user_serializer.data, safe=False)
+
 
 # @api_view(['POST'])
 # def testView1(request):

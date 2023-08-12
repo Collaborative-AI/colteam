@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os,ssl
+import os
+import ssl
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -102,14 +103,14 @@ DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "CLIENT": {
-            "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@cluster0.6zz5g2s.mongodb.net/?retryWrites=true&w=majority",
-            "username": "admin",
-            "password": "OBrgZwHsZLq4xbSM",
-            "name": "Cluster0",
-            # "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
-            # "username": "backend",
-            # "password": "JBoj5w4spnOlbLvF",
-            # "name": "Crawl-Data",
+            # "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@cluster0.6zz5g2s.mongodb.net/?retryWrites=true&w=majority",
+            # "username": "admin",
+            # "password": "OBrgZwHsZLq4xbSM",
+            # "name": "Cluster0",
+            "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
+            "username": "backend",
+            "password": "JBoj5w4spnOlbLvF",
+            "name": "Crawl-Data",
             "authMechanism": "SCRAM-SHA-1",
         },
     }}
