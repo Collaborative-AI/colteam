@@ -30,6 +30,9 @@ ALLOWED_HOSTS = ['web', '0.0.0.0', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['http://*.vcm-xxxxx.vm.duke.edu:8000', 'http://*.127.0.0.1:8000', 'http://*.0.0.0.0:8000', 'http://localhost:8000']
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'rest_framework',
     'corsheaders',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -84,6 +88,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'colteam.wsgi.application'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
@@ -92,14 +102,14 @@ DATABASES = {
     "default": {
         "ENGINE": "djongo",
         "CLIENT": {
-            # "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@test.nnygkal.mongodb.net/?retryWrites=true&w=majority",
-            # "username": "admin",
-            # "password": "OBrgZwHsZLq4xbSM",
-            # "name": "test",
-            "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
-            "username": "backend",
-            "password": "JBoj5w4spnOlbLvF",
-            "name": "Crawl-Data",
+            "host":"mongodb+srv://admin:OBrgZwHsZLq4xbSM@cluster0.6zz5g2s.mongodb.net/?retryWrites=true&w=majority",
+            "username": "admin",
+            "password": "OBrgZwHsZLq4xbSM",
+            "name": "Cluster0",
+            # "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
+            # "username": "backend",
+            # "password": "JBoj5w4spnOlbLvF",
+            # "name": "Crawl-Data",
             "authMechanism": "SCRAM-SHA-1",
         },
     }}
