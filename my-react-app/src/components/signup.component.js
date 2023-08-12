@@ -4,8 +4,9 @@ import axios from 'axios';
 
 export default function SignUp() {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    // firstName: '',
+    // lastName: '',
+    username: '',
     email: '',
     password: '',
   });
@@ -26,8 +27,9 @@ export default function SignUp() {
     event.preventDefault();
     // Construct the data object to send to the backend
     const data = {
-      first_name: formData.firstName,
-      last_name: formData.lastName,
+      // first_name: formData.firstName,
+      // last_name: formData.lastName,
+      user: formData.username,
       email: formData.email,
       password: formData.password,
     };
