@@ -30,7 +30,7 @@ export default function Login(){
 
     // Send POST request to Django backend's login API
     axios
-      .post('http://localhost:8000/api/login/', data)
+      .post('http://localhost:8000/user/login/', data)
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);

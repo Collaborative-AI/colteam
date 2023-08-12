@@ -36,7 +36,7 @@ export default function SignUp() {
 
     // Send a POST request to the Django backend's registration API
     axios
-      .post('http://localhost:8000/api/register/', data)
+      .post('http://localhost:8000/user/register/', data)
       .then((response) => {
         // Handle successful registration, e.g., show success message
         console.log(response.data);
@@ -58,7 +58,7 @@ export default function SignUp() {
   return (
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label>First name</label>
         <input
           type="text"
@@ -77,6 +77,17 @@ export default function SignUp() {
           placeholder="Last name" 
           name="lastName"
           value={formData.lastName}
+          onChange={handleInputChange}
+        />
+      </div> */}
+      <div className="mb-3">
+        <label>User Name</label>
+        <input
+          type="username"
+          className="form-control"s
+          placeholder="Enter usernasme"
+          name="username"
+          value={formData.username}
           onChange={handleInputChange}
         />
       </div>
