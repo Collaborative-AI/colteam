@@ -4486,6 +4486,12 @@ fieldset:disabled .btn {
   display: block
 }
 
+.searchbar {
+  display: flex;
+
+
+}
+
 .navbar {
   --bs-navbar-padding-x: 0;
   --bs-navbar-padding-y: 0.5rem;

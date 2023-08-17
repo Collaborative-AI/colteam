@@ -10,7 +10,7 @@ import Home from './components/home.component'
 import Navbar from './components/navbar.component'
 import LoggedIn from './components/loggedin.component'
 
-function App() {
+function App () {
   return (
     <Router>
       <div className="App">
