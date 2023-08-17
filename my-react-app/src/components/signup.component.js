@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 export default function SignUp() {
@@ -40,7 +40,7 @@ export default function SignUp() {
         // Handle errors
         if (error.response) {
           console.error('Status Code:', error.response.status);
-          
+
           console.error('Data:', error.response.data);
           console.error('Response Header:', error.response.headers);
         } else {
@@ -49,7 +49,7 @@ export default function SignUp() {
       });
   };
 
-  
+
   return (
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
@@ -81,9 +81,11 @@ export default function SignUp() {
           Sign Up
         </button>
       </div>
+
       <p className="forgot-password text-right">
-        Already registered? <a href="/log-in">log in</a>
+        <Link to='/log-in'>alreay registered?
+        </Link>
       </p>
-    </form>
+    </form >
   );
 }

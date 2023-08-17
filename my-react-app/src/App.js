@@ -9,8 +9,9 @@ import Team from './components/team.component'
 import Home from './components/home.component'
 import Navbar from './components/navbar.component'
 import LoggedIn from './components/loggedin.component'
+import ForgetPasswd from './components/forget_passwd.component'
 
-function App () {
+function App() {
   return (
     <Router>
       <div className="App">
@@ -24,6 +25,7 @@ function App () {
               <Route path="/log-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/logged-in" element={<LoggedIn />} />
+              <Route path="/forget_passwd" element={<ForgetPasswd />} />
             </Routes>
           </div>
         </div>

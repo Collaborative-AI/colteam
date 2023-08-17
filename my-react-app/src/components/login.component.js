@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 
-export default function Login(){
+export default function Login() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -29,8 +29,7 @@ export default function Login(){
     };
 
     // Send POST request to Django backend's login API
-    axios
-      .post('http://localhost:8000/user/login/', data)
+    axios.post('http://localhost:8000/user/login/', data)
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
@@ -46,7 +45,7 @@ export default function Login(){
           console.error('Error:', error.message);
         }
       });
-    }
+  }
 
   return (
     <form onSubmit={handleFormSubmit}>
@@ -54,16 +53,16 @@ export default function Login(){
       <div className="mb-3">
         <label>Email address</label>
         <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          name="email"
+          type='email'
+          className='form-control'
+          placeholder='Enter email'
+          name='email'
           value={formData.email}
           onChange={handleInputChange}
         />
-      </div>
-      <div className="mb-3">
-        <label>Password</label>
+      </div > <div className='mb-3'>
+        <label>Password
+        </label>
         <input
           type="password"
           className="form-control"
@@ -73,15 +72,15 @@ export default function Login(){
           onChange={handleInputChange}
         />
       </div>
-      
+
       <div className="d-grid">
         <button type="submit" className="btn btn-primary">
           Submit
         </button>
       </div>
       <p className="forgot-password text-right">
-        <a href="#">Forgot password?</a>
-        {/* to do: add forgot password handle */}
+        <Link to='/forget_passwd'>forget password?
+        </Link>
       </p>
     </form>
   );
