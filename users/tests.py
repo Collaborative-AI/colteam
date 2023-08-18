@@ -8,6 +8,8 @@ from rest_framework.test import APIRequestFactory
 import json
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
+
+
 # Create your tests here.
 class RegistrationAPITestCase(TestCase):
     def setUp(self):
@@ -33,6 +35,7 @@ class RegistrationAPITestCase(TestCase):
         # 检查数据库中的用户信息是否正确
         user = CustomUser.objects.get()
         self.assertEqual(user.username, 'testuserinreg@gmail.com')
+
 
 class LoginAPITestCase(TestCase):
     def setUp(self):
@@ -76,24 +79,24 @@ class LoginAPITestCase(TestCase):
 #         self.assertEqual(response.status_code, status.HTTP_200_OK)
 #         self.assertIn('token', response.data)
 
-        # response = self.client.post('/user/login/', data, format='json')
-        # token = response.data.get('token')
-        # print("Generated Token:", token)
-        # self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # self.assertIn('token', response.data)
+# response = self.client.post('/user/login/', data, format='json')
+# token = response.data.get('token')
+# print("Generated Token:", token)
+# self.assertEqual(response.status_code, status.HTTP_200_OK)
+# self.assertIn('token', response.data)
 
-    # def test_invalid_credentials(self):
-    #     data = {
-    #         "email": "testuser@gmail.com",
-    #         "password": "wrongpassword"
-    #     }
+# def test_invalid_credentials(self):
+#     data = {
+#         "email": "testuser@gmail.com",
+#         "password": "wrongpassword"
+#     }
 
-    #     response = self.client.post('/user/login/', data, format='json')
-    #     token = response.data.get('token')
-    #     print("Generated Token:", token)
-    #     self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-        # self.assertEqual(response.data['error'], 'Invalid credentials')
-        # self.assertFalse(Token.objects.filter(CustomUser=self.user).exists())
+#     response = self.client.post('/user/login/', data, format='json')
+#     token = response.data.get('token')
+#     print("Generated Token:", token)
+#     self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+# self.assertEqual(response.data['error'], 'Invalid credentials')
+# self.assertFalse(Token.objects.filter(CustomUser=self.user).exists())
 
 # class CreateUserTestCase(TestCase):
 #     def setUp(self):

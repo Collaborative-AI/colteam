@@ -48,6 +48,7 @@ def login(request):
         email = request.data.get('email')
         password = request.data.get('password')
 
+        print(request.data)
         user = authenticate(username=email, password=password)
         if user:
             # 如果用户凭据有效，生成或获取 Token
