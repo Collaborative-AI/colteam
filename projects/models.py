@@ -6,11 +6,12 @@ from users.models import CustomUser
 
 # Create your models here.
 class ProjectDetail(models.Model):
-    owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     title = models.TextField("project title", max_length=50, null=False)
     post_date = models.DateTimeField("post data", default=timezone.now)
-    end_date = models.DateTimeField("end date", default='undefined')
+    end_date = models.DateTimeField("project deadline", default='undefined')
     description = models.TextField(blank=True, default='')
+    group_member = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return '(%s, %s)' % (self.owner.username, self.description)
