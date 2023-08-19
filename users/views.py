@@ -11,6 +11,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 
 def hello(request):
@@ -47,22 +48,25 @@ def login(request):
 @api_view(['POST'])
 @login_required
 def updateUserProfile(request):
-    if request.method == 'POST':
-        serializer = UpdateUserProfileSerializer(data=request.data)
-        if serializer.is_valid():
-            user_id = request.data.get('id')
-            new_phone_number = request.data.get('phone_number')
-            new_address = request.data.get('address')
-            new_signature = request.data.get('signature')
-            user = get_object_or_404(CustomUser, pk=user_id)
-            user_profile = get_object_or_404(CustomUserProfile, user=user)
-            user.phone_number = new_phone_number
-            user.address = new_address
-            user_profile.signature = new_signature
-            user.save()
-            user_profile.save()
-            return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        if request.method == 'POST':
+            serializer = UpdateUserProfileSerializer(data=request.data)
+            if serializer.is_valid():
+                user_id = request.data.get('id')
+                new_phone_number = request.data.get('phone_number')
+                new_address = request.data.get('address')
+                new_signature = request.data.get('signature')
+                user = get_object_or_404(CustomUser, pk=user_id)
+                user_profile = get_object_or_404(CustomUserProfile, user=user)
+                user.phone_number = new_phone_number
+                user.address = new_address
+                user_profile.signature = new_signature
+                user.save()
+                user_profile.save()
+                return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except Http404:
+        return Response({'message': 'Cannot find user or his profile by provided id'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @login_required

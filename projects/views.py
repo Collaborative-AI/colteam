@@ -1,23 +1,22 @@
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
+from users.models import CustomUser
 from .serializers import ProjectDetailSerializer
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import ProjectDetail
 
 
-def viewList(request, *args, **kwargs):
-    projects = ProjectDetail.objects.filter(owner=request.user.id)
-    serializer = ProjectDetailSerializer(projects, many=True)
+@api_view(['GET'])
+def getProjectByUserId(request):
+    user = CustomUser.objects.filter(id=request.data.get('id'))
+    project = ProjectDetail.objects.filter(owner=user)
+    serializer = ProjectDetailSerializer(project, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
 def createProject(request):
-    # data = {
-    #     'owner': request.user.id,
-    #     'description': request.data.get('description'),
-    # }
     serializer = ProjectDetailSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
