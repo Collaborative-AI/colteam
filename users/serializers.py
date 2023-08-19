@@ -25,7 +25,6 @@ class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser, CustomUserProfile
         fields = "__all__"
-        read_only_fields = ['id', 'phone_number', 'address', 'signature']
         extra_kwargs = {
             'id': {
                 'required': True
