@@ -1,11 +1,12 @@
 from djongo import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from users.models import CustomUser
 
 
 # Create your models here.
 class ProjectDetail(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     title = models.TextField("project title", max_length=50, null=False)
     post_date = models.DateTimeField("post data", default=timezone.now)
     end_date = models.DateField()
