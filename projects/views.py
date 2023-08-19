@@ -52,7 +52,7 @@ def updateProject(request):
 def deleteProject(request):
     try:
         project_id = request.data.get('id')
-        project = ProjectDetail.objects.filter(id=project_id)
+        project = ProjectDetail.objects.get(id=project_id)
         project.delete()
         return Response({'message': 'Delete project successfully'}, status=status.HTTP_200_OK)
     except Exception:
