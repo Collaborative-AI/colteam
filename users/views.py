@@ -57,6 +57,7 @@ def updateUserBaseProfile(request):
         return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @login_required
 def logout(request):
     auth.logout(request)
