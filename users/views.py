@@ -65,7 +65,6 @@ def updateUserProfile(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 @login_required
 def logout(request):
     auth.logout(request)
