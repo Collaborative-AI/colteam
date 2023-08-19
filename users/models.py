@@ -5,7 +5,7 @@ from django.dispatch import receiver
 
 
 class CustomUser(AbstractUser):
-    phone_num = models.CharField("phone number", max_length=11, default='', blank=True)
+    phone_number = models.CharField("phone number", max_length=11, default='', blank=True)
     address = models.CharField("user address", max_length=100, default='', blank=True)
 
     # 添加你的其他自定义字段

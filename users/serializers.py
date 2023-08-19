@@ -1,5 +1,5 @@
 # from django.contrib.auth.models import User, Group
-from .models import CustomUser
+from .models import CustomUser, CustomUserProfile
 from rest_framework import serializers
 
 
@@ -20,10 +20,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
             }
         }
 
-    # def create(self, validated_data):
-    #     password = validated_data.pop('password')
-    #     user = CustomUser(**validated_data)
-    #     user.set_password(password)
-    #     user.save()
-    #     return user
 
+class UpdateUserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser, CustomUserProfile
+        fields = "__all__"  # 你的自定义字段
+        read_only_fields = ['id']
+        extra_kwargs = {
+            'id': {
+                'required': True
+            }
+        }
