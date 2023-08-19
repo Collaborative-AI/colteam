@@ -4,11 +4,21 @@ from rest_framework import serializers
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
-
     class Meta:
         model = CustomUser
-        fields = ('username', 'password')  # 你的自定义字段
+        fields = "__all__"  # 你的自定义字段
+        read_only_fields = ['username', 'email', 'password']
+        extra_kwargs = {
+            'username': {
+                'required': True
+            },
+            'email': {
+                'required': True
+            },
+            'password': {
+                'required': True
+            }
+        }
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -17,13 +27,3 @@ class CustomUserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
-# class UserSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ('url', 'username', 'email', 'groups')
-
-
-# class GroupSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Group
-#         fields = ('url', 'name')
