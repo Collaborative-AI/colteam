@@ -107,7 +107,7 @@ DATABASES = {
             # "username": "admin",
             # "password": "OBrgZwHsZLq4xbSM",
             # "name": "Cluster0",
-            "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?retryWrites=true&w=majority",
+            "host":"mongodb+srv://backend:JBoj5w4spnOlbLvF@crawl-data.5blrkb2.mongodb.net/?ssl=true&ssl_cert_reqs=CERT_NONE&retryWrites=true&w=majority",
             "username": "backend",
             "password": "JBoj5w4spnOlbLvF",
             "name": "Crawl-Data",
