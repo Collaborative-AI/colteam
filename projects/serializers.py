@@ -6,4 +6,9 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProjectDetail
         fields = "__all__"
+        extra_kwargs = {
+            'title': {
+                'required': True
+            }
+        }
 

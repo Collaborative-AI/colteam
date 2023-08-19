@@ -13,7 +13,7 @@ def viewList(request, *args, **kwargs):
 
 
 @api_view(['POST'])
-def createProject(request, *args, **kwargs):
+def createProject(request):
     # data = {
     #     'owner': request.user.id,
     #     'description': request.data.get('description'),
