@@ -1,6 +1,6 @@
-from .models import CustomUser
+from .models import CustomUser, CustomUserProfile
 from rest_framework import viewsets, status
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, UpdateUserProfileSerializer
 from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from django.shortcuts import get_object_or_404
 
 
 def hello(request):
@@ -45,7 +46,7 @@ def login(request):
 
 @api_view(['POST'])
 @login_required
-def changeUserProfile(request):
+def updateUserProfile(request):
     if request.method == 'POST':
         serializer = UpdateUserProfileSerializer(data=request.data)
         if serializer.is_valid():
@@ -53,8 +54,16 @@ def changeUserProfile(request):
             new_phone_number = request.data.get('phone_number')
             new_address = request.data.get('address')
             new_signature = request.data.get('signature')
-            user = get_object_or_404(CustomUser,pk=user_id)
-            user_profile = get_object_or_404(CustomUserProfile,user=user)
+            user = get_object_or_404(CustomUser, pk=user_id)
+            user_profile = get_object_or_404(CustomUserProfile, user=user)
+            user.phone_number = new_phone_number
+            user.address = new_address
+            user_profile.signature = new_signature
+            user.save()
+            user_profile.save()
+            return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @login_required
