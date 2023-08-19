@@ -13,7 +13,8 @@ router.register(r'projects', views.ProjectViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     # path('hello/', views.hello, name='hello'),
-    path('projects/', ProjectApiView.as_view()),
+    # path('create/', ProjectApiView.as_view()),
+    path('get/', views.getProjectByUsername, name='getProjectByUsername'),
     path('create/', views.createProject, name='createProject'),
     path('update/', views.updateProject, name='updateProject'),
     path('delete/', views.deleteProject, name='deleteProject'),
