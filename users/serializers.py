@@ -24,7 +24,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class UpdateUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser, CustomUserProfile
-        fields = "__all__"  # 你的自定义字段
+        fields = "__all__"
         read_only_fields = ['id', 'phone_number', 'address', 'signature']
         extra_kwargs = {
             'id': {
