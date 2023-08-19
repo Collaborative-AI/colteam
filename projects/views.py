@@ -29,9 +29,20 @@ def createProject(request):
 def updateProject(request):
     serializer = ProjectDetailSerializer(data=request.data)
     if serializer.is_valid():
-        project = ProjectDetail.objects.filter(id=request.data.get('id'))
+        project_id = request.data.get('id')
+        project = ProjectDetail.objects.get(id=project_id)
         serializer.update(project, request.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def deleteProject(request):
+    serializer = ProjectDetailSerializer(data=request.data)
+    if serializer.is_valid():
+        project_id = request.data.get('id')
+        project = ProjectDetail.objects.filter(id=project_id)
+        project.delete()
+        return Response(serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
