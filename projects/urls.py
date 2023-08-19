@@ -14,6 +14,7 @@ urlpatterns = [
     path('', include(router.urls)),
     # path('hello/', views.hello, name='hello'),
     path('projects/', ProjectApiView.as_view()),
-    # path('project_list/', views.projList, name='project-list'),
-    # path('project/<str:a_project>', views.oneProject, name='one-project'),
+    path('create/', views.createProject, name='createProject'),
+    path('update/', views.updateProject, name='updateProject'),
+    path('delete/', views.deleteProject, name='deleteProject'),
 ]
