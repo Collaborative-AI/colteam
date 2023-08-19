@@ -1,6 +1,6 @@
 from .models import CustomUser, CustomUserProfile
 from rest_framework import viewsets, status
-from .serializers import CustomUserSerializer, UpdateUserProfileSerializer
+from .serializers import CustomUserSerializer, CustomUserProfileSerializer
 from django.http import HttpResponse
 from django.http import JsonResponse
 from rest_framework.response import Response
@@ -32,7 +32,8 @@ def register(request):
 
 @api_view(['POST'])
 def login(request):
-    if request.method == 'POST':
+    serializer = CustomUserSerializer(data=request.data)
+    if request.method == 'POST' and serializer.is_valid():
         email = request.data.get('email')
         password = request.data.get('password')
 
@@ -47,27 +48,14 @@ def login(request):
 
 @api_view(['POST'])
 @login_required
-def updateUserProfile(request):
-    try:
-        if request.method == 'POST':
-            serializer = UpdateUserProfileSerializer(data=request.data)
-            if serializer.is_valid():
-                user_id = request.data.get('id')
-                new_phone_number = request.data.get('phone_number')
-                new_address = request.data.get('address')
-                new_signature = request.data.get('signature')
-                user = get_object_or_404(CustomUser, pk=user_id)
-                user_profile = get_object_or_404(CustomUserProfile, user=user)
-                user.phone_number = new_phone_number
-                user.address = new_address
-                user_profile.signature = new_signature
-                user.save()
-                user_profile.save()
-                return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except Http404:
-        return Response({'message': 'Cannot find user or his profile by provided id'}, status=status.HTTP_400_BAD_REQUEST)
-
+def updateUserBaseProfile(request):
+    serializer = CustomUserSerializer(data=request.data)
+    if request.method == 'POST' and serializer.is_valid():
+        use_id = request.data.get('id')
+        user = CustomUser.objects.get(id=user_id)
+        serializer.update(user, request.data)
+        return Response({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @login_required
 def logout(request):

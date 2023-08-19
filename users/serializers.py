@@ -1,4 +1,3 @@
-# from django.contrib.auth.models import User, Group
 from .models import CustomUser, CustomUserProfile
 from rest_framework import serializers
 
@@ -7,8 +6,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = "__all__"  # 你的自定义字段
-        read_only_fields = ['username', 'email', 'password']
+        read_only_fields = ['id', 'username', 'email', 'password']
         extra_kwargs = {
+            'id': {
+                'required': True
+            },
             'username': {
                 'required': True
             },
@@ -21,23 +23,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         }
 
 
-class UpdateUserProfileSerializer(serializers.ModelSerializer):
+class CustomUserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomUser, CustomUserProfile
+        model = CustomUserProfile
         fields = "__all__"
-        extra_kwargs = {
-            'id': {
-                'required': True
-            },
-            'phone_number': {
-                'required': False,
-                'max_length': 11
-            },
-            'address': {
-                'required': False,
-                'max_length': 100
-            },
-            'signature': {
-                'required': False
-            }
-        }
