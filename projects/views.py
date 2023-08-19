@@ -1,3 +1,4 @@
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from .serializers import ProjectDetailSerializer
 from rest_framework import viewsets, status, permissions
@@ -11,12 +12,13 @@ def viewList(request, *args, **kwargs):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-def addProject(request, *args, **kwargs):
-    data = {
-        'owner': request.user.id,
-        'description': request.data.get('description'),
-    }
-    serializer = ProjectDetailSerializer(data=data)
+@api_view(['POST'])
+def createProject(request, *args, **kwargs):
+    # data = {
+    #     'owner': request.user.id,
+    #     'description': request.data.get('description'),
+    # }
+    serializer = ProjectDetailSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

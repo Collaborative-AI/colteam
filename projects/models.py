@@ -9,7 +9,7 @@ class ProjectDetail(models.Model):
     owner = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     title = models.TextField("project title", max_length=50, null=False)
     post_date = models.DateTimeField("post data", default=timezone.now)
-    end_date = models.DateField()
+    end_date = models.DateTimeField("end date", default='undefined')
     description = models.TextField(blank=True, default='')
 
     def __str__(self):
