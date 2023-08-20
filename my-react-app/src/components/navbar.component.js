@@ -5,7 +5,7 @@ import { Link, useLocation } from 'react-router-dom'
 
 class Navbar extends Component {
 
-  render () {
+  render() {
     return (
       <nav className="navbar navbar-expand-lg navbar-light fixed-top">
         <div className="container">
@@ -25,6 +25,11 @@ class Navbar extends Component {
               <li className="nav-item">
                 <Link className="nav-link" to={'/team'}>
                   Team
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" to={'/project'}>
+                  Project
                 </Link>
               </li>
               <li className="nav-item">

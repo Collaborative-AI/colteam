@@ -10,6 +10,7 @@ import Home from './components/home.component'
 import Navbar from './components/navbar.component'
 import LoggedIn from './components/loggedin.component'
 import ForgetPasswd from './components/forget_passwd.component'
+import Project from './components/project.component'
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route exact path="/" element={<Home />} />
               <Route path="/data" element={<Data />} />
               <Route path="/team" element={<Team />} />
+              <Route path="/project" element={<Project />} />
               <Route path="/log-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/logged-in" element={<LoggedIn />} />
