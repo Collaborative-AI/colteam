@@ -35,7 +35,7 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
-        // navigate('/logged-in');
+        // TBD: navigate('/logged-in');
         const accessToken = response?.data?.accessToken;
         const roles = response?.data?.roles;
         setAuth({ ...formData, roles, accessToken, success: true });

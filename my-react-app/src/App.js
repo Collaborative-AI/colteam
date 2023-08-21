@@ -29,7 +29,9 @@ function App() {
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/logged-in" element={<LoggedIn />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
-              {/* <Route path="/profile" element={<Profile />} /> */}
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/new_project" element={<newProject />} />
+              <Route path="/show_project" element={<showProject />} />
             </Routes>
           </div>
         </div>
