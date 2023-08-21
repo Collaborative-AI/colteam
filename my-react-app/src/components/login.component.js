@@ -6,8 +6,7 @@ import AuthContext from './AuthProvider.component';
 
 export default function Login() {
   const { setAuth } = useContext(AuthContext);
-  const [success, setSuccess] = useState(false);
-
+  const { success, setSuccess } = false;
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -39,7 +38,7 @@ export default function Login() {
         // navigate('/logged-in');
         const accessToken = response?.data?.accessToken;
         const roles = response?.data?.roles;
-        setAuth({ ...formData, roles, accessToken });
+        setAuth({ ...formData, roles, accessToken, success: true });
         setSuccess(true);
       })
       .catch((error) => {

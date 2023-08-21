@@ -4,7 +4,8 @@ import { Link, useLocation } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
 
 function Navbar() {
-  const { success } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
+  const { success } = auth;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top">
