@@ -1,8 +1,13 @@
 import axios from 'axios';
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { Link } from 'react-router-dom';
+import AuthContext from './AuthProvider.component';
+
 
 export default function Login() {
+  const { setAuth } = useContext(AuthContext);
+  const [success, setSuccess] = useState(false);
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,8 +21,6 @@ export default function Login() {
       [name]: value,
     });
   };
-
-  const navigate = useNavigate();
 
   // Handle form submission
   const handleFormSubmit = (event) => {
@@ -33,7 +36,11 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
-        navigate('/logged-in');
+        // navigate('/logged-in');
+        const accessToken = response?.data?.accessToken;
+        const roles = response?.data?.roles;
+        setAuth({ ...formData, roles, accessToken });
+        setSuccess(true);
       })
       .catch((error) => {
         // Handle errors
@@ -48,40 +55,52 @@ export default function Login() {
   }
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <h3>Sign In</h3>
-      <div className="mb-3">
-        <label>Email address</label>
-        <input
-          type='email'
-          className='form-control'
-          placeholder='Enter email'
-          name='email'
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-      </div > <div className='mb-3'>
-        <label>Password
-        </label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-      </div>
+    <>
+      {success ? (
+        <section>
+          {/* TBD: show profile */}
+          <h1>You are loggin in !</h1>
+        </section>
+      ) : (
+        <section>
+          <form onSubmit={handleFormSubmit}>
+            <h3>Sign In</h3>
+            <div className="mb-3">
+              <label>Email address</label>
+              <input
+                type='email'
+                className='form-control'
+                placeholder='Enter email'
+                name='email'
+                value={formData.email}
+                onChange={handleInputChange}
+              />
+            </div > <div className='mb-3'>
+              <label>Password
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                placeholder="Enter password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+              />
+            </div>
 
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Submit
-        </button>
-      </div>
-      <p className="forgot-password text-right">
-        <Link to='/forget_passwd'>forget password?
-        </Link>
-      </p>
-    </form>
+            <div className="d-grid">
+              <button type="submit" className="btn btn-primary">
+                Submit
+              </button>
+            </div>
+            <p className="forgot-password text-right">
+              <Link to='/forget_passwd'>forget password?
+              </Link>
+            </p>
+          </form>
+        </section>
+      )}
+    </>
+
   );
 };
