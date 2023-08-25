@@ -23,6 +23,6 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/', include('users.urls')),
-    path('project/', include('projects.urls')),
+    path('projects/', include('projects.urls')),
     # path('', TemplateView.as_view(template_name='index.html')),
 ]

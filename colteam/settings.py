@@ -111,6 +111,11 @@ DATABASES = {
             "password": "JBoj5w4spnOlbLvF",
             "name": "Crawl-Data",
             "authMechanism": "SCRAM-SHA-1",
+            # "host": "mongodb+srv://ColAccess:ColAI2023@crawl.xk12nv0.mongodb.net/?ssl=true&ssl_cert_reqs=CERT_NONE&retryWrites=true&w=majority",
+            # "username": "ColAccess",
+            # "password": "ColAI2023",
+            # "name": "Crawl-Data", #????
+            # "authMechanism": "SCRAM-SHA-1",
         },
     }}
 
