@@ -18,6 +18,7 @@ def getProjectByUsername(request):
     except Exception:
         return Response({'message': 'Invalid username'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['POST'])
 def viewOneProject(request):
     """
@@ -29,7 +30,8 @@ def viewOneProject(request):
         serializer = ProjectDetailSerializer(project, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
-        return Response({'message':'Invalid project ID'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Invalid project ID'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 def viewAllProjects(request):
@@ -38,7 +40,7 @@ def viewAllProjects(request):
         serializer = ProjectDetailSerializer(project, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
-        return Response({'message':'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
