@@ -20,4 +20,6 @@ urlpatterns = [
     path('delete/', views.deleteProject, name='deleteProject'),
     path('a_project/<str:a_project>', views.viewOneProject, name='viewOneProject'),
     path('view_all/', views.viewAllProjects, name='viewAllProject'),
+    path('getProjectByUsername/', views.getProjectByUsername, name='getProjectByUsername'),
+    
 ]

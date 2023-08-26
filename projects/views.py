@@ -33,12 +33,13 @@ def viewOneProject(request):
         return Response({'message': 'Invalid project ID'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def viewAllProjects(request):
     try:
         project = ProjectDetail.objects.all()
         serializer = ProjectDetailSerializer(project, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        #project_map = {project.id: serializer.data for project in projects}
+        return Response( serializer.data,status=status.HTTP_200_OK)
     except Exception:
         return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
