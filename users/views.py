@@ -104,3 +104,26 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = CustomUser.objects.all().order_by('-date_joined')  # 使用自定义用户模型
     serializer_class = CustomUserSerializer
+
+
+@login_required
+def UserChangePassword(request):
+    pk = request.user.id
+    user = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        form = UserUpdatePasswordForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['password1'] == form.cleaned_data['password2']:
+                new_password = form.cleaned_data['password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, f'You have sucessfully changed your password.')
+                return redirect('UserLogin')
+            else:
+                messages.warning(request, f"The two password fields didn't match! Please try again.")
+                return render(request, 'users/passwordchange.html',{'form' : form})
+        else:
+            return render(request, 'users/passwordchange.html',{'form' : form})
+    else:
+        form = UserUpdatePasswordForm()
+        return render(request, 'users/passwordchange.html',{'form' : form})
