@@ -13,6 +13,7 @@ import ForgetPasswd from './components/forget_passwd.component'
 import Project from './components/project.component'
 import Profile from './components/profile.component'
 import NewProject from './components/newProject.component'
+import ShowProject from './components/show_project.component'
 
 function App () {
   return (
@@ -32,7 +33,7 @@ function App () {
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
-              <Route path="/show_project" element={<showProject />} />
+              <Route path="/show_project" element={<ShowProject />} />
             </Routes>
           </div>
         </div>
