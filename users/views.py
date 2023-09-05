@@ -1,5 +1,4 @@
 import jwt
-
 from .models import CustomUser
 from django.contrib import auth
 from rest_framework import viewsets, status
@@ -10,6 +9,10 @@ from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
+from datetime import timedelta
+from enums.messageEnums import *
+from django.contrib.auth.models import User
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -49,12 +52,14 @@ def login(request):
             if user:
                 tokens = MyTokenObtainPairSerializer.get_token(user)
                 response = {
+                    'code': MessageType.LOGIN_SUCCESSFULLY.value,
                     'id': user.id,
                     'tokens': tokens,
                 }
                 return JsonResponse(response, status=status.HTTP_200_OK)
             else:
-                return JsonResponse({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+                return JsonResponse({'code': MessageType.INVALID_CREDENTIALS.value},
+                                    status=status.HTTP_401_UNAUTHORIZED)
     except Exception as exc:
         return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
 
@@ -74,7 +79,7 @@ def refresh_token(request):
 
 
 @api_view(['POST'])
-def update_user_profile(request):
+def update_user_profile_by_id(request):
     try:
         update_data = JSONParser().parse(request)
         serializer = CustomUserSerializer(data=update_data)
@@ -84,7 +89,8 @@ def update_user_profile(request):
             user_id = jwt.decode(user_token)['id']
             user = CustomUser.objects.get(id=user_id)
             serializer.update(user, request.data)
-            return JsonResponse({'message': 'Update user profile successfully'}, status=status.HTTP_200_OK)
+            return JsonResponse({'code': MessageType.UPDATE_SUCCESSFULLY.value},
+                                status=status.HTTP_200_OK)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
         return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
@@ -103,10 +109,34 @@ def view_user_profile_by_id(request):
         return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def change_password(request):
+    try:
+        json_data = JSONParser().parse(request)
+        user_token = json_data['access']
+        user_id = jwt.decode(user_token)['id']
+        user = CustomUser.objects.get(id=user_id)
+        new_password = json_data['password']
+        user.set_password(new_password)
+        user.save()
+    except Exception as exc:
+        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
 def logout(request):
     try:
-
-        return JsonResponse({'message': 'User logout successfully'}, status=status.HTTP_200_OK)
+        json_data = JSONParser().parse(request)
+        # set access token expired
+        access = json_data['access']
+        user_access_token = AccessToken(access)
+        user_access_token.set_exp(lifetime=timedelta(microseconds=1))
+        # set refresh token expired (add it to blacklist)
+        refresh = json_data['refresh']
+        user_refresh_token = RefreshToken(refresh)
+        user_refresh_token.blacklist()
+        return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
+                            status=status.HTTP_205_RESET_CONTENT)
     except Exception as exc:
         return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
 
