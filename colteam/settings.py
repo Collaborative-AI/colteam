@@ -9,10 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import datetime
 import os
 import ssl
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,11 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'corsheaders',
-    'rest_framework.authtoken',
     'users.apps.UsersConfig',
     'projects.apps.ProjectsConfig',
+    'corsheaders',
+    'rest_framework',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR / 'templates',
-                 os.path.join(BASE_DIR, "reactapp/build"),
+                 os.path.join(BASE_DIR, "my-react-app/build"),
                  ]
         ,
         'APP_DIRS': True,
@@ -90,9 +91,27 @@ TEMPLATES = [
 WSGI_APPLICATION = 'colteam.wsgi.application'
 
 REST_FRAMEWORK = {
+    # 指定使用的权限类
+    # a.在全局指定默认的权限类（当认证通过之后，可以获取何种权限）
+    'DEFAULT_PERMISSION_CLASSES': [
+        # AllowAny 不管是否有认证成功，都能获取所有权限
+        # IsAdminUser 管理员（管理员需要登录）具备所有权限
+        # IsAuthenticated 只要登录，就具备所有权限
+        # IsAuthenticatedOrReadOnly，如果登录了就具备所有权限，不登录只具备读取数据的权限
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
     ),
+}
+
+SIMPLE_JWT = {
+    # token有效时长(返回的 access 有效时长)
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
+    # token刷新的有效时间(返回的 refresh 有效时长)
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
 }
 
 # Database
@@ -111,11 +130,6 @@ DATABASES = {
             "password": "JBoj5w4spnOlbLvF",
             "name": "Crawl-Data",
             "authMechanism": "SCRAM-SHA-1",
-            # "host": "mongodb+srv://ColAccess:ColAI2023@crawl.xk12nv0.mongodb.net/?ssl=true&ssl_cert_reqs=CERT_NONE&retryWrites=true&w=majority",
-            # "username": "ColAccess",
-            # "password": "ColAI2023",
-            # "name": "Crawl-Data", #????
-            # "authMechanism": "SCRAM-SHA-1",
         },
     }}
 
@@ -160,5 +174,5 @@ STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "reactapp\build\static"),
+    os.path.join(BASE_DIR, "my-react-app\build\static"),
 ]
