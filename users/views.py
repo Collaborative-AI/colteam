@@ -1,4 +1,5 @@
 import jwt
+import json
 from .models import CustomUser
 from django.contrib import auth
 from rest_framework import viewsets, status
@@ -12,7 +13,8 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from datetime import timedelta
 from enums.messageEnums import *
-from django.contrib.auth.models import User
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -26,6 +28,8 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 @api_view(['POST'])
+@authentication_classes([])  # 空列表表示不使用任何身份验证
+@permission_classes([AllowAny])  # 允许任何用户访问
 def register(request):
     try:
         register_data = JSONParser().parse(request)
@@ -39,16 +43,18 @@ def register(request):
             return JsonResponse(user_info, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
+@authentication_classes([])  # 空列表表示不使用任何身份验证
+@permission_classes([AllowAny])  # 允许任何用户访问
 def login(request):
     try:
         login_data = JSONParser().parse(request)
-        serializer = CustomUserSerializer(data=login_data)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
-            user = authenticate(username=serializer.data.get('email'), password=serializer.data.get('password'))
+            user = authenticate(username=login_data['username'], password=login_data['password'])
             if user:
                 tokens = MyTokenObtainPairSerializer.get_token(user)
                 response = {
@@ -58,10 +64,11 @@ def login(request):
                 }
                 return JsonResponse(response, status=status.HTTP_200_OK)
             else:
-                return JsonResponse({'code': MessageType.INVALID_CREDENTIALS.value},
-                                    status=status.HTTP_401_UNAUTHORIZED)
+                errmsg = {'code': MessageType.INVALID_CREDENTIALS.value, 'message': 'Invalid Credentials Provided'}
+                return JsonResponse(errmsg, status=status.HTTP_401_UNAUTHORIZED)
+        return JsonResponse(serializer.errors, status=status.HTTP_200_OK)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -70,12 +77,12 @@ def refresh_token(request):
         refresh_data = JSONParser().parse(request)
         token = TokenRefreshSerializer.validate(TokenRefreshSerializer(), refresh_data)
         response = {
-            'id': request['id'],
+            'id': refresh_data['id'],
             'access': str(token),
         }
         return JsonResponse(response, status=status.HTTP_200_OK)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -93,7 +100,7 @@ def update_user_profile_by_id(request):
                                 status=status.HTTP_200_OK)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -106,7 +113,7 @@ def view_user_profile_by_id(request):
         serializer = CustomUserSerializer(user, many=True)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -120,7 +127,7 @@ def change_password(request):
         user.set_password(new_password)
         user.save()
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
@@ -138,7 +145,7 @@ def logout(request):
         return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
                             status=status.HTTP_205_RESET_CONTENT)
     except Exception as exc:
-        return JsonResponse(exc, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
