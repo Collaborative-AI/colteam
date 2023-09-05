@@ -113,6 +113,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
     # token刷新的有效时间(返回的 refresh 有效时长)
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 # Database

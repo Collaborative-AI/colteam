@@ -12,6 +12,7 @@ from datetime import timedelta
 from enums.messageEnums import *
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
+from django.contrib.auth.hashers import make_password
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -34,6 +35,7 @@ class LoginView(TokenObtainPairView):
 def register(request):
     try:
         register_data = JSONParser().parse(request)
+        register_data['password'] = make_password(register_data['password'])
         serializer = CustomUserSerializer(data=register_data)
         if serializer.is_valid():
             user = serializer.save()
