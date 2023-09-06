@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from './AuthProvider.component';
 
 
@@ -16,10 +16,11 @@ export default function Login() {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
-      ...FormData,
+      ...formData,
       [name]: value,
     });
   };
+  const navigate = useNavigate();
 
   // Handle form submission
   const handleFormSubmit = (event) => {
@@ -35,7 +36,7 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
-        // TBD: navigate('/logged-in');
+        navigate('/');
         const accessToken = response?.data?.accessToken;
         const roles = response?.data?.roles;
         setAuth({ ...formData, roles, accessToken, success: true });
