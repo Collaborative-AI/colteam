@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import AuthContext from './AuthProvider.component';
 
 
@@ -21,6 +21,8 @@ export default function Login() {
     });
   };
 
+  const navigate = useNavigate()
+
   // Handle form submission
   const handleFormSubmit = (event) => {
     event.preventDefault();
@@ -35,11 +37,12 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
-        // TBD: navigate('/logged-in');
-        const accessToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-        setAuth({ ...formData, roles, accessToken, success: true });
-        setSuccess(true);
+        // navigate('/logged-in');
+        const accessToken = response?.data?.accessToken
+        const roles = response?.data?.roles
+        setAuth({ ...formData, roles, accessToken, success: true })
+        setSuccess(true)
+        navigate('/')
       })
       .catch((error) => {
         // Handle errors
