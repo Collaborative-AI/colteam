@@ -118,7 +118,7 @@ JWT_AUTH = {
 
 SIMPLE_JWT = {
     # token有效时长(返回的 access 有效时长)
-    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=100),
+    'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
     # token刷新的有效时间(返回的 refresh 有效时长)
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1),  # 滑动刷新令牌的过期时间
