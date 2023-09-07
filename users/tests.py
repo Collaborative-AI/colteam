@@ -8,7 +8,9 @@ from rest_framework.test import APIRequestFactory
 import json
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
-
+import jwt
+import os
+import binascii
 
 # Create your tests here.
 class RegistrationAPITestCase(TestCase):
@@ -57,6 +59,8 @@ class LoginAPITestCase(TestCase):
         print("Generated Token:", token)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('token', response.data)
+
+
 # class LoginAPITestCase(TestCase):
 #     def setUp(self):
 #         self.client = APIClient()

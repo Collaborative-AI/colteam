@@ -9,13 +9,12 @@ router.register(r'all', views.UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('api/token/', TokenObtainPairView.as_view(), name='tokenObtainPair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='tokenRefresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='tokenVerify'),
-    path('register/', views.register, name='register'),
+    path('register/', views.RegisterView.register, name='register'),
     path('login/', views.LoginView.as_view(), name='login'),
-    path('logout/', views.logout, name='logout'),
-    path('updateProfile/', views.update_user_profile_by_id, name='updateUserProfileByID'),
-    path('viewProfile/', views.view_user_profile_by_id, name='viewUserProfileByID'),
-    path('changePassword/', views.change_password, name='changePassword'),
+    path('logout/', views.UserView.logout, name='logout'),
+    path('profile/update/', views.UserView.update_user_profile_by_id, name='update_user_profile_by_id'),
+    path('profile/view/', views.UserView.view_user_profile_by_id, name='view_user_profile_by_id'),
+    path('password/change/', views.UserView.change_password, name='change_password'),
+    path('token/refresh/', TokenVerifyView.as_view(), name='refresh_token'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

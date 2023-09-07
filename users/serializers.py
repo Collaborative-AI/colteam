@@ -1,3 +1,4 @@
+import json
 from .models import CustomUser
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -34,9 +35,7 @@ class LoginSerializer(TokenObtainPairSerializer):
             "password": attrs["password"],
         }
 
-        self.user = authenticate(**authenticate_kwargs)
-
-        user = self.user
+        user = authenticate(**authenticate_kwargs)
 
         user_info = {
             'id': user.id,
