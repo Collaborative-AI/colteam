@@ -23,7 +23,7 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
 }
 
 
-function NewProject() {
+function NewProject () {
   const [projectName, setProjectName] = useState("")
   const [description, setDescription] = useState("")
   const { auth } = useContext(AuthContext)
@@ -36,13 +36,8 @@ function NewProject() {
       title: projectName,
       description: description
     }
-    const config = {
-      headers: {
-        accessToken: auth.accessToken
-      }
-    }
     axios
-      .post('http://localhost:8000/projects/create/', data, config)
+      .post('http://localhost:8000/projects/create/', data)
       .then((response) => {
         console.log(response.data)
         navigate('/show_project')

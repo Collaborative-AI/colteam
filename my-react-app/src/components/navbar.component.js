@@ -5,6 +5,7 @@ import AuthContext from './AuthProvider.component'
 
 function Navbar() {
   const { auth } = useContext(AuthContext);
+  const { success } = auth;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top">
@@ -31,7 +32,7 @@ function Navbar() {
                 Project
               </Link>
             </li>
-            {auth.success ? (
+            {success ? (
               <li className="nav-item">
                 <Link className="nav-link" to={'/profile'}>
                   Profile
