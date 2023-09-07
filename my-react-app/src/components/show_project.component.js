@@ -9,14 +9,16 @@ function ShowProject() {
   const navigate = useNavigate();
   useEffect(() => {
     // URL
-    const backendURL = 'http://localhost:8000/';
-
-    axios.get(`${backendURL}/projects/get`, {
+    const backendURL = 'http://localhost:8000';
+    axios.get(`${backendURL}/projects/view_all/`, {
       params: {
         id: auth.username
       }
     })
-    .then(response => setProjects(response.data))
+    .then(response => {
+      setProjects(response.data);
+      console.log("test:",response.data[0].title);
+    })
     .catch(error => console.error('Error fetching data:', error));
   }, []);
 
@@ -29,7 +31,8 @@ function ShowProject() {
       <h1>Projects List</h1>
       <ul>
         {projects.map(project => (
-          <li key={project.id}>{project.name}</li>
+          <li key={project.id}>{project.title}</li>
+          
         ))}
       </ul>
       <button onClick={handleReturn}>Return</button>
