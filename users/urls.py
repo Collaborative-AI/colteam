@@ -15,6 +15,6 @@ urlpatterns = [
     path('profile/update/', views.UserView.update_user_profile_by_id, name='update_user_profile_by_id'),
     path('profile/view/', views.UserView.view_user_profile_by_id, name='view_user_profile_by_id'),
     path('password/change/', views.UserView.change_password, name='change_password'),
-    path('token/refresh/', TokenVerifyView.as_view(), name='refresh_token'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]

@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'projects.apps.ProjectsConfig',
-    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'crontab',
 ]
 
 MIDDLEWARE = [
@@ -190,4 +190,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "my-react-app\build\static"),
+]
+
+# 定时任务
+CRONJOBS = [
+    ('*/30 * * * *', 'users.tasks.clean_expired_tokens'),  # 每30分钟运行一次任务
 ]
