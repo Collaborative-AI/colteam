@@ -15,11 +15,11 @@ function ShowProject() {
         id: auth.username
       }
     })
-    .then(response => {
-      setProjects(response.data);
-      console.log("test:",response.data[0].title);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+      .then(response => {
+        setProjects(response.data);
+        console.log("test:", response.data[0].title);
+      })
+      .catch(error => console.error('Error fetching data:', error));
   }, []);
 
   const handleReturn = () => {
@@ -32,7 +32,7 @@ function ShowProject() {
       <ul>
         {projects.map(project => (
           <li key={project.id}>{project.title}</li>
-          
+
         ))}
       </ul>
       <button onClick={handleReturn}>Return</button>
