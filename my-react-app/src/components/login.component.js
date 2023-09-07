@@ -1,54 +1,54 @@
-import axios from 'axios';
+import axios from 'axios'
 import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from './AuthProvider.component';
+import { Link, useNavigate } from 'react-router-dom'
+import AuthContext from './AuthProvider.component'
 
 
-export default function Login() {
-  const { auth, setAuth } = useContext(AuthContext);
+export default function Login () {
+  const { auth, setAuth } = useContext(AuthContext)
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-  });
+  })
 
   // Update component state when input values change
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData({
-      ...FormData,
+      ...formData,
       [name]: value,
-    });
-  };
-
+    })
+  }
   const navigate = useNavigate()
 
   // Handle form submission
   const handleFormSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     // Build data object to be sent to the backend
     const data = {
       email: formData.email,
       password: formData.password,
-    };
+    }
 
     // Send POST request to Django backend's login API
     axios.post('http://localhost:8000/user/login/', data)
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
-        console.log(response.data);
-        setAuth({ ...formData, roles: response?.data?.roles, accessToken: response?.data?.user_token, success: true });
+        console.log(response.data)
+        setAuth({ ...formData, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
         navigate('/')
       })
       .catch((error) => {
         // Handle errors
         if (error.response) {
-          console.error('Status Code:', error.response.status);
-          console.error('Data:', error.response.data);
-          console.error('Response Header:', error.response.headers);
+          console.error('Status Code:', error.response.status)
+          console.error('Data:', error.response.data)
+          console.error('Response Header:', error.response.headers)
         } else {
-          console.error('Error:', error.message);
+          console.error('Error:', error.message)
         }
-      });
+      })
   }
 
   return (
@@ -99,5 +99,5 @@ export default function Login() {
       )}
     </>
 
-  );
-};
+  )
+}
