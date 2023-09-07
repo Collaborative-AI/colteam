@@ -5,8 +5,7 @@ import AuthContext from './AuthProvider.component';
 
 
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
-  const { success, setSuccess } = false;
+  const { auth, setAuth } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -36,11 +35,8 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data);
+        setAuth({ ...formData, roles: response?.data?.roles, accessToken: response?.data?.user_token, success: true });
         navigate('/');
-        const accessToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-        setAuth({ ...formData, roles, accessToken, success: true });
-        setSuccess(true);
       })
       .catch((error) => {
         // Handle errors
@@ -56,7 +52,7 @@ export default function Login() {
 
   return (
     <>
-      {success ? (
+      {auth.success ? (
         <section>
           {/* TBD: show profile */}
           <h1>You are loggin in !</h1>
