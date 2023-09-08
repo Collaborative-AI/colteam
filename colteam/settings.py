@@ -107,7 +107,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
 }
-
 JWT_AUTH = {
     'JWT_ALGORITHM': 'HS256',  # 选择适合您的加密算法
     'JWT_ALLOW_REFRESH': True,
@@ -121,10 +120,12 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(minutes=5),
     # token刷新的有效时间(返回的 refresh 有效时长)
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+
     'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1),  # 滑动刷新令牌的过期时间
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': datetime.timedelta(minutes=5),  # 滑动刷新令牌宽限期
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',  # 滑动刷新令牌的过期时间声明名称
     'BLACKLIST_AFTER_ROTATION': True,
+
     'ALGORITHM': 'HS256',
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
