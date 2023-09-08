@@ -8,18 +8,16 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'projects', views.ProjectViewSet)
+router.register(r'all', views.ProjectViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    # path('hello/', views.hello, name='hello'),
-    # path('create/', ProjectApiView.as_view()),
-    path('get/', views.getProjectByUsername, name='getProjectByUsername'),
-    path('create/', views.createProject, name='createProject'),
-    path('update/', views.updateProject, name='updateProject'),
-    path('delete/', views.deleteProject, name='deleteProject'),
-    path('a_project/<str:a_project>', views.viewOneProject, name='viewOneProject'),
-    path('view_all/', views.viewAllProjects, name='viewAllProject'),
-    path('getProjectByUsername/', views.getProjectByUsername, name='getProjectByUsername'),
+    path('create/', views.create_project, name='createProject'),
+    path('update/', views.update_project, name='updateProject'),
+    path('delete/', views.delete_project, name='deleteProject'),
+    path('a_project/', views.view_one_project, name='viewOneProject'),
+    # path('a_project/<str:a_project>', views.view_one_project, name='viewOneProject'),
+    path('all_projects/', views.all_projects, name='view_all_projects'),
+    path('my_projects/', views.my_projects, name='view_my_projects'),
     
 ]
