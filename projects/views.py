@@ -12,10 +12,13 @@ from rest_framework_jwt.utils import jwt_decode_handler
 
 @api_view(['POST'])
 def create_project(request):
-    user_id = request.data.get("id")
-    user = CustomUser.objects.get(id=user_id)
+    # 得到已经登录了的用户
+    user_token_Auth = UserView.get_token_from_request(request)
+    user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
+    user_Auth = CustomUser.objects.get(id=user_id_Auth)
+
     request_data = {key: value for key, value in request.data.items() if key != 'id'}
-    request_data['owner'] = user.pk
+    request_data['owner'] = user_Auth.pk
     serializer = ProjectDetailSerializer(data=request_data)
     if serializer.is_valid():
         project = serializer.save()
