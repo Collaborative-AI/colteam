@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
 
 
-export default function Login () {
+export default function Login() {
   const { auth, setAuth } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -27,12 +27,12 @@ export default function Login () {
     event.preventDefault()
     // Build data object to be sent to the backend
     const data = {
-      email: formData.email,
+      username: formData.email,
       password: formData.password,
     }
 
     // Send POST request to Django backend's login API
-    axios.post('http://localhost:8000/user/login/', data)
+    axios.post('http://localhost:8000/users/login/', data)
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
