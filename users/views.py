@@ -41,12 +41,14 @@ class RegisterView(TokenViewBase):
             request.__setitem__('email', make_password(request.get('username')))
             request.__setitem__('password', make_password(request.get('password')))
             serializer = CustomUserSerializer(data=request)
-            user = serializer.save()
-            user_info = {
-                'id': user.id,
-                'username': user.username,
-            }
-            return JsonResponse(user_info, status=status.HTTP_201_CREATED)
+            if serializer.is_valid():
+                user = serializer.save()
+                user_info = {
+                    'id': user.id,
+                    'username': user.username,
+                }
+                return JsonResponse(user_info, status=status.HTTP_201_CREATED)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
