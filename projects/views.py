@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny
 from users.views import UserView
 from rest_framework_jwt.utils import jwt_decode_handler
 
+
 @api_view(['POST'])
 def create_project(request):
     user_id = request.data.get("id")
@@ -21,23 +22,24 @@ def create_project(request):
         project = serializer.save()
         return Response({'message': 'Create project successfully'}, status=status.HTTP_201_CREATED)
     else:
-        print((f'Project creation failed: {serializer.errors}'))
+        print(f'Project creation failed: {serializer.errors}')
         return Response({'message': 'Create project failed'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @api_view(['GET'])
 def my_projects(request):
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
-        
-        project = ProjectDetail.objects.filter(owner=user_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
+
+        project = ProjectDetail.objects.filter(owner=user_auth)
         serializer = ProjectDetailSerializer(project, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
         return Response({'message': 'Invalid username'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -59,20 +61,18 @@ def view_one_project(request):
 def update_project(request):
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
         # 拿到项目
         project_id = request.data.get('id')
-        print(project_id)
         project = ProjectDetail.objects.get(id=project_id)
-        print(project)
 
-        if user_Auth.id==project.owner.id:
+        if user_auth.id == project.owner.id:
             request_data = {key: value for key, value in request.data.items() if key != 'owner'}
             serializer = ProjectDetailSerializer(instance=project, data=request_data, partial=True)
             if serializer.is_valid():
-                serializer.update(project,request_data)
+                serializer.update(project, request_data)
                 return Response({'message': 'Update project successfully'}, status=status.HTTP_200_OK)
             else:
                 print(serializer.errors)
@@ -88,20 +88,21 @@ def update_project(request):
 def delete_project(request):
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
         # 得到项目信息
         project_id = request.data.get('id')
         project = ProjectDetail.objects.get(id=project_id)
         # 判断项目owner是否登录
-        if user_Auth == project.owner:
+        if user_auth == project.owner:
             project.delete()
             return Response({'message': 'Delete project successfully'}, status=status.HTTP_200_OK)
         else:
             return Response({'message': 'You can only delete your project'}, status=status.HTTP_400_BAD_REQUEST)
     except Exception:
         return Response({'message': 'Invalid project id'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @authentication_classes([])
@@ -110,13 +111,15 @@ def all_projects(request):
     try:
         project = ProjectDetail.objects.all()
         serializer = ProjectDetailSerializer(project, many=True)
-        #project_map = {project.id: serializer.data for project in projects}
-        return Response( serializer.data,status=status.HTTP_200_OK)
+        # project_map = {project.id: serializer.data for project in projects}
+        return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
         return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProjectApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """

@@ -12,10 +12,10 @@ router.register(r'all', views.ProjectViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('create/', views.create_project, name='createProject'),
-    path('update/', views.update_project, name='updateProject'),
-    path('delete/', views.delete_project, name='deleteProject'),
-    path('a_project/', views.view_one_project, name='viewOneProject'),
+    path('create/', views.create_project, name='create_project'),
+    path('update/', views.update_project, name='update_project'),
+    path('delete/', views.delete_project, name='delete_project'),
+    path('a_project/', views.view_one_project, name='view_one_project'),
     # path('a_project/<str:a_project>', views.view_one_project, name='viewOneProject'),
     path('all_projects/', views.all_projects, name='view_all_projects'),
     path('my_projects/', views.my_projects, name='view_my_projects'),

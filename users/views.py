@@ -5,7 +5,7 @@ from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, Logi
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenViewBase
 from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from datetime import timedelta
@@ -30,10 +30,12 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
 
-class RegisterView(generics.GenericAPIView):
+class RegisterView(TokenViewBase):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_class = CustomUserSerializer
+
     @api_view(['POST'])
-    @authentication_classes([])
-    @permission_classes([AllowAny])
     def register(self, request):
         try:
             register_data = JSONParser().parse(request)
@@ -49,6 +51,11 @@ class RegisterView(generics.GenericAPIView):
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
             return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request, *args, **kwargs):
+        # 覆盖 TokenViewBase 中的 post 方法
+        # 在此处调用自定义函数
+        return self.register(request)
 
 
 class UserView(generics.GenericAPIView):
