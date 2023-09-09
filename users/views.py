@@ -41,23 +41,21 @@ class RegisterView(TokenViewBase):
             request.__setitem__('email', make_password(request.get('username')))
             request.__setitem__('password', make_password(request.get('password')))
             serializer = CustomUserSerializer(data=request)
-            if serializer.is_valid():
-                user = serializer.save()
-                user_info = {
-                    'id': user.id,
-                    'username': user.username,
-                }
-                return JsonResponse(user_info, status=status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            user = serializer.save()
+            user_info = {
+                'id': user.id,
+                'username': user.username,
+            }
+            return JsonResponse(user_info, status=status.HTTP_201_CREATED)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request: Request, *args, **kwargs) -> JsonResponse:
         try:
             super().post(request, *args, **kwargs)
             return self.register(request.data)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(generics.GenericAPIView):
@@ -93,7 +91,7 @@ class UserView(generics.GenericAPIView):
                                     status=status.HTTP_200_OK)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['GET'])
     def view_user_profile_by_id(self, request):
@@ -105,7 +103,7 @@ class UserView(generics.GenericAPIView):
             serializer = CustomUserSerializer(user, many=True)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['POST'])
     def change_password(self, request):
@@ -117,7 +115,7 @@ class UserView(generics.GenericAPIView):
             user.set_password(make_password(json_data['password']))
             user.save()
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['POST'])
     def logout(self, request):
@@ -134,7 +132,7 @@ class UserView(generics.GenericAPIView):
             return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
                                 status=status.HTTP_205_RESET_CONTENT)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):
