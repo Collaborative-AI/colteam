@@ -6,14 +6,13 @@ from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenViewBase
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from datetime import timedelta
 from enums.messageEnums import *
-from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from django.contrib.auth.hashers import make_password
 from rest_framework_jwt.utils import jwt_decode_handler
+from django.http import QueryDict
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -35,12 +34,13 @@ class RegisterView(TokenViewBase):
     authentication_classes = ()
     serializer_class = CustomUserSerializer
 
-    @api_view(['POST'])
-    def register(self, request):
+    @classmethod
+    def register(cls, request: QueryDict):
         try:
-            register_data = JSONParser().parse(request)
-            register_data['password'] = make_password(register_data['password'])
-            serializer = CustomUserSerializer(data=register_data)
+            request = request.copy()
+            request.__setitem__('email', make_password(request.get('username')))
+            request.__setitem__('password', make_password(request.get('password')))
+            serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
                 user = serializer.save()
                 user_info = {
@@ -52,10 +52,12 @@ class RegisterView(TokenViewBase):
         except Exception as exc:
             return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-    def post(self, request, *args, **kwargs):
-        # 覆盖 TokenViewBase 中的 post 方法
-        # 在此处调用自定义函数
-        return self.register(request)
+    def post(self, request: Request, *args, **kwargs) -> JsonResponse:
+        try:
+            super().post(request, *args, **kwargs)
+            return self.register(request.data)
+        except Exception as exc:
+            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(generics.GenericAPIView):
