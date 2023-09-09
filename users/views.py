@@ -5,15 +5,14 @@ from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, Logi
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-from rest_framework_simplejwt.serializers import TokenRefreshSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenViewBase
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from datetime import timedelta
 from enums.messageEnums import *
-from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from django.contrib.auth.hashers import make_password
 from rest_framework_jwt.utils import jwt_decode_handler
+from django.http import QueryDict
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -30,15 +29,18 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
 
-class RegisterView(generics.GenericAPIView):
-    @api_view(['POST'])
-    @authentication_classes([])
-    @permission_classes([AllowAny])
-    def register(request):
+class RegisterView(TokenViewBase):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_class = CustomUserSerializer
+
+    @classmethod
+    def register(cls, request: QueryDict):
         try:
-            register_data = JSONParser().parse(request)
-            register_data['password'] = make_password(register_data['password'])
-            serializer = CustomUserSerializer(data=register_data)
+            request = request.copy()
+            request.__setitem__('email', make_password(request.get('username')))
+            request.__setitem__('password', make_password(request.get('password')))
+            serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
                 user = serializer.save()
                 user_info = {
@@ -48,7 +50,14 @@ class RegisterView(generics.GenericAPIView):
                 return JsonResponse(user_info, status=status.HTTP_201_CREATED)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request: Request, *args, **kwargs) -> JsonResponse:
+        try:
+            super().post(request, *args, **kwargs)
+            return self.register(request.data)
+        except Exception as exc:
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserView(generics.GenericAPIView):
@@ -84,7 +93,7 @@ class UserView(generics.GenericAPIView):
                                     status=status.HTTP_200_OK)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['GET'])
     def view_user_profile_by_id(self, request):
@@ -96,7 +105,7 @@ class UserView(generics.GenericAPIView):
             serializer = CustomUserSerializer(user, many=True)
             return JsonResponse(serializer.data, status=status.HTTP_200_OK)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['POST'])
     def change_password(self, request):
@@ -108,7 +117,7 @@ class UserView(generics.GenericAPIView):
             user.set_password(make_password(json_data['password']))
             user.save()
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     @api_view(['POST'])
     def logout(self, request):
@@ -125,7 +134,7 @@ class UserView(generics.GenericAPIView):
             return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
                                 status=status.HTTP_205_RESET_CONTENT)
         except Exception as exc:
-            return JsonResponse({'message': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserViewSet(viewsets.ModelViewSet):

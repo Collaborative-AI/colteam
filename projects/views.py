@@ -10,6 +10,7 @@ from rest_framework.permissions import AllowAny
 from users.views import UserView
 from rest_framework_jwt.utils import jwt_decode_handler
 
+
 @api_view(['POST'])
 def create_project(request):
     # 得到已经登录了的用户
@@ -24,9 +25,9 @@ def create_project(request):
         project = serializer.save()
         return Response({'message': 'Create project successfully'}, status=status.HTTP_201_CREATED)
     else:
-        print((f'Project creation failed: {serializer.errors}'))
+        print(f'Project creation failed: {serializer.errors}')
         return Response({'message': 'Create project failed'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 @api_view(['GET'])
 def my_projects(request):
@@ -44,6 +45,7 @@ def my_projects(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
         return Response({'message': 'Invalid username'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['POST'])
 @authentication_classes([])
@@ -76,7 +78,7 @@ def update_project(request):
             request_data = {key: value for key, value in request.data.items() if key != 'owner'}
             serializer = ProjectDetailSerializer(instance=project, data=request_data, partial=True)
             if serializer.is_valid():
-                serializer.update(project,request_data)
+                serializer.update(project, request_data)
                 return Response({'message': 'Update project successfully'}, status=status.HTTP_200_OK)
             else:
                 print(serializer.errors)
@@ -107,6 +109,7 @@ def delete_project(request):
     except Exception:
         return Response({'message': 'Invalid project id'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([AllowAny])
@@ -114,13 +117,15 @@ def all_projects(request):
     try:
         project = ProjectDetail.objects.all()
         serializer = ProjectDetailSerializer(project, many=True)
-        #project_map = {project.id: serializer.data for project in projects}
-        return Response( serializer.data,status=status.HTTP_200_OK)
+        # project_map = {project.id: serializer.data for project in projects}
+        return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
         return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProjectApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
+
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
