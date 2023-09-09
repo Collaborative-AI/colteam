@@ -1,62 +1,66 @@
-import axios from 'axios';
+import axios from 'axios'
 import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
-import AuthContext from './AuthProvider.component';
+<<<<<<< HEAD
+import { Link, useNavigate } from 'react-router-dom'
+import AuthContext from './AuthProvider.component'
+=======
+import { Link, useNavigate } from 'react-router-dom'
+import AuthContext from './AuthProvider.component'
+>>>>>>> frontend_react
 
 
-export default function Login() {
-  const { setAuth } = useContext(AuthContext);
-  const { success, setSuccess } = false;
+export default function Login () {
+  const { auth, setAuth } = useContext(AuthContext)
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-  });
+  })
 
   // Update component state when input values change
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
-  const navigate = useNavigate();
+
+    })
+  }
+  const navigate = useNavigate()
 
   // Handle form submission
   const handleFormSubmit = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     // Build data object to be sent to the backend
     const data = {
       email: formData.email,
       password: formData.password,
-    };
+    }
 
     // Send POST request to Django backend's login API
     axios.post('http://localhost:8000/user/login/', data)
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
-        console.log(response.data);
-        navigate('/');
-        const accessToken = response?.data?.accessToken;
-        const roles = response?.data?.roles;
-        setAuth({ ...formData, roles, accessToken, success: true });
-        setSuccess(true);
+        console.log(response.data)
+        setAuth({ ...formData, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
+        navigate('/')
+
       })
       .catch((error) => {
         // Handle errors
         if (error.response) {
-          console.error('Status Code:', error.response.status);
-          console.error('Data:', error.response.data);
-          console.error('Response Header:', error.response.headers);
+          console.error('Status Code:', error.response.status)
+          console.error('Data:', error.response.data)
+          console.error('Response Header:', error.response.headers)
         } else {
-          console.error('Error:', error.message);
+          console.error('Error:', error.message)
         }
-      });
+      })
   }
 
   return (
     <>
-      {success ? (
+      {auth.success ? (
         <section>
           {/* TBD: show profile */}
           <h1>You are loggin in !</h1>
@@ -102,5 +106,5 @@ export default function Login() {
       )}
     </>
 
-  );
-};
+  )
+}

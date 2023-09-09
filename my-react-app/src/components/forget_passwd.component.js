@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 // import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import AuthContext from './AuthProvider.component'
 
 export default function ForgetPasswd() {
     const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ export default function ForgetPasswd() {
             [name]: value,
         });
     };
+    const { auth } = useContext(AuthContext)
 
     // Handle form submission
     const handleFormSubmit = (event) => {
@@ -22,10 +24,14 @@ export default function ForgetPasswd() {
         const data = {
             email: formData.email,
         };
-
+        const config = {
+            headers: {
+                accessToken: auth.accessToken
+            }
+        }
         // Send POST request to Django backend's forget passwd API
         axios
-            .post('http://localhost:8000/user/forget_passwd/', data)
+            .post('http://localhost:8000/user/forget_passwd/', data, config)
             .then((response) => {
                 // Handle successful email check, then reset passwd
                 console.log(response.data);

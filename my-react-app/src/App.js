@@ -8,14 +8,13 @@ import Data from './components/data.component'
 import Team from './components/team.component'
 import Home from './components/home.component'
 import Navbar from './components/navbar.component'
-import LoggedIn from './components/loggedin.component'
 import ForgetPasswd from './components/forget_passwd.component'
 import Project from './components/project.component'
 import Profile from './components/profile.component'
 import NewProject from './components/newProject.component'
 import ShowProject from './components/show_project.component'
 
-function App () {
+function App() {
   return (
     <Router>
       <div className="App">
@@ -29,7 +28,6 @@ function App () {
               <Route path="/project" element={<Project />} />
               <Route path="/log-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
-              <Route path="/logged-in" element={<LoggedIn />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
