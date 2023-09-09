@@ -30,7 +30,7 @@ export default function SignUp () {
 
     // Send a POST request to the Django backend's registration API
     axios
-      .post('http://localhost:8000/user/register/', data)
+      .post('http://localhost:8000/users/register/', data)
       .then((response) => {
         // Handle successful registration, e.g., show success message
         console.log(response.data)
