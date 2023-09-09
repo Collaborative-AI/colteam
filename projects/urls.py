@@ -10,14 +10,14 @@ from .views import (
 router = DefaultRouter()
 router.register(r'all', views.ProjectViewSet)
 
+#  projects/create
 urlpatterns = [
     path('', include(router.urls)),
     path('create/', views.create_project, name='createProject'),
     path('update/', views.update_project, name='updateProject'),
     path('delete/', views.delete_project, name='deleteProject'),
-    path('a_project/', views.view_one_project, name='viewOneProject'),
-    # path('a_project/<str:a_project>', views.view_one_project, name='viewOneProject'),
-    path('all_projects/', views.all_projects, name='view_all_projects'),
-    path('my_projects/', views.my_projects, name='view_my_projects'),
-    
+    # find a project by project id
+    path('detail/find', views.view_one_project, name='viewOneProject'),
+    path('detail/view_all', views.all_projects, name='view_all_projects'),
+    path('detail/view_my', views.my_projects, name='view_my_projects'),
 ]

@@ -1,12 +1,7 @@
 import axios from 'axios'
 import React, { useState, useContext } from 'react'
-<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
-=======
-import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from './AuthProvider.component'
->>>>>>> frontend_react
 
 
 export default function Login () {

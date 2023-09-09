@@ -13,12 +13,12 @@ from rest_framework_jwt.utils import jwt_decode_handler
 @api_view(['POST'])
 def create_project(request):
     # 得到已经登录了的用户
-    user_token_Auth = UserView.get_token_from_request(request)
-    user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-    user_Auth = CustomUser.objects.get(id=user_id_Auth)
+    user_token_auth = UserView.get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
 
     request_data = {key: value for key, value in request.data.items() if key != 'id'}
-    request_data['owner'] = user_Auth.pk
+    request_data['owner'] = user_auth.pk
     serializer = ProjectDetailSerializer(data=request_data)
     if serializer.is_valid():
         project = serializer.save()
@@ -30,13 +30,16 @@ def create_project(request):
 
 @api_view(['GET'])
 def my_projects(request):
+    # TODO: 返回前x个项目,展开分页展示。
+    # TODO: 添加类
+    # TODO: 将东西放到日志里
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
         
-        project = ProjectDetail.objects.filter(owner=user_Auth)
+        project = ProjectDetail.objects.filter(owner=user_auth)
         serializer = ProjectDetailSerializer(project, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception:
@@ -62,16 +65,14 @@ def view_one_project(request):
 def update_project(request):
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
         # 拿到项目
         project_id = request.data.get('id')
-        print(project_id)
         project = ProjectDetail.objects.get(id=project_id)
-        print(project)
 
-        if user_Auth.id==project.owner.id:
+        if user_auth.id==project.owner.id:
             request_data = {key: value for key, value in request.data.items() if key != 'owner'}
             serializer = ProjectDetailSerializer(instance=project, data=request_data, partial=True)
             if serializer.is_valid():
@@ -91,14 +92,14 @@ def update_project(request):
 def delete_project(request):
     try:
         # 得到已经登录了的用户
-        user_token_Auth = UserView.get_token_from_request(request)
-        user_id_Auth = jwt_decode_handler(user_token_Auth)['user_id']
-        user_Auth = CustomUser.objects.get(id=user_id_Auth)
+        user_token_auth = UserView.get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
         # 得到项目信息
         project_id = request.data.get('id')
         project = ProjectDetail.objects.get(id=project_id)
         # 判断项目owner是否登录
-        if user_Auth == project.owner:
+        if user_auth == project.owner:
             project.delete()
             return Response({'message': 'Delete project successfully'}, status=status.HTTP_200_OK)
         else:

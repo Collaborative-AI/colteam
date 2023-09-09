@@ -34,7 +34,7 @@ class RegisterView(generics.GenericAPIView):
     @api_view(['POST'])
     @authentication_classes([])
     @permission_classes([AllowAny])
-    def register(self, request):
+    def register(request):
         try:
             register_data = JSONParser().parse(request)
             register_data['password'] = make_password(register_data['password'])
