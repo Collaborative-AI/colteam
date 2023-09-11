@@ -13,6 +13,7 @@ import Project from './components/project/project.component'
 import Profile from './components/profile.component'
 import NewProject from './components/project/newProject.component'
 import ShowProject from './components/project/show_project.component'
+import ProjectDetail from './components/project/show_project_detail.component'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
               <Route path="/show_project" element={<ShowProject />} />
+              <Route path="/show_project_detail" element={<ProjectDetail />} />
             </Routes>
           </div>
         </div>
