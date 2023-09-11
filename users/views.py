@@ -38,7 +38,7 @@ class RegisterView(TokenViewBase):
     def register(cls, request: QueryDict):
         try:
             request = request.copy()
-            request.__setitem__('email', make_password(request.get('username')))
+            request.__setitem__('email', request.get('username'))
             request.__setitem__('password', make_password(request.get('password')))
             serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
