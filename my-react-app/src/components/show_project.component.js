@@ -10,7 +10,7 @@ function ShowProject () {
   useEffect(() => {
     // URL
     const backendURL = 'http://localhost:8000'
-    axios.get(`${backendURL}/projects/my_projects/`, {
+    axios.get(`${backendURL}/projects/detail/view_my`, {
       params: {
         id: auth.username
       },
