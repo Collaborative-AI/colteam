@@ -2,17 +2,18 @@ import React from 'react'
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import Login from './components/login.component'
-import SignUp from './components/signup.component'
-import Data from './components/data.component'
+import Login from './components/authenticate/login.component'
+import SignUp from './components/authenticate/signup.component'
+import Data from './components/data/data.component'
 import Team from './components/team.component'
 import Home from './components/home.component'
 import Navbar from './components/navbar.component'
-import ForgetPasswd from './components/forget_passwd.component'
-import Project from './components/project.component'
+import ForgetPasswd from './components/authenticate/forget_passwd.component'
+import Project from './components/project/project.component'
 import Profile from './components/profile.component'
-import NewProject from './components/newProject.component'
-import ShowProject from './components/show_project.component'
+import NewProject from './components/project/newProject.component'
+import ShowProject from './components/project/show_project.component'
+import ProjectDetail from './components/project/show_project_detail.component'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
               <Route path="/show_project" element={<ShowProject />} />
+              <Route path="/show_project_detail" element={<ProjectDetail />} />
             </Routes>
           </div>
         </div>

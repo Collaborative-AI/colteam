@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import AuthContext from './AuthProvider.component'
-import { useNavigate } from 'react-router-dom'
+import AuthContext from '../AuthProvider.component'
+import { useNavigate, Link } from 'react-router-dom'
 
-function ShowProject () {
+function ShowProject() {
   const [projects, setProjects] = useState([])
   const { auth } = useContext(AuthContext)
   const navigate = useNavigate()
@@ -34,8 +34,9 @@ function ShowProject () {
       <h1>Projects List</h1>
       <ul>
         {projects.map(project => (
-          <li key={project.id}>{project.title}</li>
-
+          <li key={project.id}>
+          <Link to={`/project/${project.id}`}>{project.title}</Link>
+        </li>
         ))}
       </ul>
       <button onClick={handleReturn}>Return</button>

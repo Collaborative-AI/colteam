@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState, useContext } from 'react'
-import './../index.css'
-import colteam_logo from './../images/colteam_logo.png'
-import AuthContext from './AuthProvider.component'
+import '../../index.css'
+import colteam_logo from '../../images/colteam_logo.png'
+import AuthContext from '../AuthProvider.component'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -23,7 +23,7 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
 }
 
 
-function NewProject () {
+function NewProject() {
   const [projectName, setProjectName] = useState("")
   const [description, setDescription] = useState("")
   const { auth, setAuth } = useContext(AuthContext)

@@ -1,10 +1,15 @@
-import React, { Component, useContext } from 'react'
+import React, { Component, useState, useContext } from 'react'
 import SearchBar from './searchbar.component'
 import { Link, useLocation } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
 
 function Navbar() {
   const { auth } = useContext(AuthContext);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light fixed-top">
@@ -13,8 +18,12 @@ function Navbar() {
           ColAI
         </Link>
 
+        <button className="navbar-toggler" type="button" onClick={toggleMenu}>
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
         {/* {this.props.pathname === "/data" ? <SearchBar /> : null} */}
-        <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id=" navbarToggler">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item">
               <Link className="nav-link" to={'/data'}>
