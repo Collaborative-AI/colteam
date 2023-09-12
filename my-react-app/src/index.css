@@ -132,7 +132,7 @@ html,
   flex-direction: column;
 }
 
-.create-project-button-container {
+.project-button-container {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -173,7 +173,7 @@ html,
   font-weight: lighter;
 }
 
-.create-project-create-button {
+.project-button {
   appearance: none;
   background-color: #fafbfc;
   border: 1px solid rgba(27, 31, 35, 0.15);
@@ -201,33 +201,41 @@ html,
   word-wrap: break-word;
 }
 
-.create-project-create-button:hover {
+.project-button:hover {
   background-color: #f3f4f6;
   text-decoration: none;
   transition-duration: 0.1s;
 }
 
-.create-project-create-button:disabled {
+.project-button:disabled {
   background-color: #fafbfc;
   border-color: rgba(27, 31, 35, 0.15);
   color: #959da5;
   cursor: default;
 }
 
-.create-project-create-button:active {
+.project-button:active {
   background-color: #edeff2;
   box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
   transition: none 0s;
 }
 
-.create-project-create-button:focus {
+.project-button:focus {
   outline: 1px transparent;
 }
 
-.create-project-create-button:before {
+.project-button:before {
   display: none;
 }
 
-.create-project-create-button:-webkit-details-marker {
+.project-button:-webkit-details-marker {
   display: none;
+}
+
+.show-project-item {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  margin-top: 10px;
+  justify-content: space-between;
 }

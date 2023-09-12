@@ -1,15 +1,10 @@
 import axios from 'axios'
 import React, { useState, useContext } from 'react'
-<<<<<<< HEAD
 import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from './AuthProvider.component'
-=======
-import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from './AuthProvider.component'
->>>>>>> frontend_react
+import AuthContext from '../AuthProvider.component'
 
 
-export default function Login () {
+export default function Login() {
   const { auth, setAuth } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -63,7 +58,7 @@ export default function Login () {
       {auth.success ? (
         <section>
           {/* TBD: show profile */}
-          <h1>You are loggin in !</h1>
+          <h1>You are logged in !</h1>
         </section>
       ) : (
         <section>

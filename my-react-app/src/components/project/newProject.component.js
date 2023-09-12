@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState, useContext } from 'react'
-import './../index.css'
-import colteam_logo from './../images/colteam_logo.png'
-import AuthContext from './AuthProvider.component'
+import '../../index.css'
+import colteam_logo from '../../images/colteam_logo.png'
+import AuthContext from '../AuthProvider.component'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
@@ -92,8 +92,8 @@ function NewProject () {
       <div className="create-project-info-text">
         Once your model is created, you can upload your files using the web interface or git.
       </div>
-      <div className="create-project-button-container">
-        <button className="create-project-create-button" onClick={handleSubmit}>Create Your New Project!</button>
+      <div className="project-button-container">
+        <button className="project-button" onClick={handleSubmit}>Create Your New Project!</button>
       </div>
     </div>
 

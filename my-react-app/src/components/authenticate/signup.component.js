@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export default function SignUp () {
+export default function SignUp() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
