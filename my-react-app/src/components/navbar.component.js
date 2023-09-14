@@ -1,16 +1,17 @@
-import React, { Component, useState, useContext } from 'react'
-import SearchBar from './searchbar.component'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
-import Dropdown from 'react-bootstrap/Dropdown';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Nav from 'react-bootstrap/Nav';
+import Navbar from 'react-bootstrap/Navbar';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import profile_image from '../images/colteam_logo.png'
 
-function Navbar() {
+function NavbarIns() {
   const { auth } = useContext(AuthContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
   const navigate = useNavigate();
   const handleDropdownSelect = (eventKey) => {
     switch (eventKey) {
@@ -29,21 +30,17 @@ function Navbar() {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light fixed-top">
-      <div className="container">
-        <Link className="navbar-brand" to={'/'}>
-          ColAI
-        </Link>
-
-        <button className="navbar-toggler" type="button" onClick={toggleMenu}>
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-
-        {/* {this.props.pathname === "/data" ? <SearchBar /> : null} */}
-        <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id=" navbarToggler">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
+    <Navbar expand="lg" className="bg-body-tertiary">
+      <Container fluid>
+        <Navbar.Brand>ColAI</Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarScroll" />
+        <Navbar.Collapse id="navbarScroll">
+          <Nav
+            className="me-auto my-2 my-lg-0"
+            style={{ maxHeight: '100%' }}
+            navbarScroll
+          >
+            <li>
               <Link className="nav-link" to={'/data'}>
                 Data
               </Link>
@@ -59,19 +56,12 @@ function Navbar() {
               </Link>
             </li>
             {auth.success ? (
-              <li class="nav-item dropdown">
-                <Dropdown onSelect={handleDropdownSelect}>
-                  <Dropdown.Toggle variant="secondary" id="dropdown-basic" bg="white">
-                    Profile
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item eventKey="action-1">New Project</Dropdown.Item>
-                    <Dropdown.Item eventKey="action-2">My Projects</Dropdown.Item>
-                    {/* <Dropdown.Item eventKey="action-3">Setting</Dropdown.Item> */}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </li>
+              <NavDropdown title="Profile" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
+                <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
+                <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item eventKey="action-3">setting</NavDropdown.Item>
+              </NavDropdown>
             ) : (
               <>
                 < li className="nav-item">
@@ -85,17 +75,22 @@ function Navbar() {
                   </Link>
                 </li>
               </>)}
-          </ul>
-        </div >
-      </div >
-    </nav >
+            <Form className="d-flex">
+              <Form.Control
+                type="search"
+                placeholder="Search"
+                className="me-2"
+                aria-label="Search"
+              />
+              <Button variant="outline-success">Search</Button>
+            </Form>
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar >
   )
 }
 
-// const NavbarWithLocation = props => {
-//   const location = useLocation()
-//   return <Navbar {...props} pathname={location.pathname} />
-// }
 
-export default Navbar
-// WithLocation
+
+export default NavbarIns
