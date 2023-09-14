@@ -35,13 +35,13 @@ function ProjectDetail({ match }) {
       <h2>Title: {project.title}</h2>
       <p>Description: {project.description}</p>
       {/* Other Information */}
-      <Link to="/projects/update">
+      <Link to="/update_project">
         <button>
           update project
         </button>
       </Link>
     </div>
-  );
+  )
 }
 
-export default ProjectDetail;
+export default ProjectDetail

@@ -93,8 +93,7 @@ function UpdateProject() {
                 <button className="create-project-create-button" onClick={handleSubmit}>Update</button>
             </div>
         </div>
-
     )
-
 }
 
+export default UpdateProject
