@@ -1,7 +1,8 @@
 import React, { Component, useState, useContext } from 'react'
 import SearchBar from './searchbar.component'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function Navbar() {
   const { auth } = useContext(AuthContext);
@@ -9,6 +10,22 @@ function Navbar() {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  const navigate = useNavigate();
+  const handleDropdownSelect = (eventKey) => {
+    switch (eventKey) {
+      case 'action-1':
+        navigate('/new_project')
+        break
+      case 'action-2':
+        navigate('/show_project')
+        break
+      case 'action-3':
+        navigate('/profile_setting')
+        break
+      default:
+        break
+    }
   };
 
   return (
@@ -21,6 +38,7 @@ function Navbar() {
         <button className="navbar-toggler" type="button" onClick={toggleMenu}>
           <span className="navbar-toggler-icon"></span>
         </button>
+
 
         {/* {this.props.pathname === "/data" ? <SearchBar /> : null} */}
         <div className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`} id=" navbarToggler">
@@ -41,10 +59,18 @@ function Navbar() {
               </Link>
             </li>
             {auth.success ? (
-              <li className="nav-item">
-                <Link className="nav-link" to={'/profile'}>
-                  Profile
-                </Link>
+              <li class="nav-item dropdown">
+                <Dropdown onSelect={handleDropdownSelect}>
+                  <Dropdown.Toggle variant="secondary" id="dropdown-basic" bg="white">
+                    Profile
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item eventKey="action-1">New Project</Dropdown.Item>
+                    <Dropdown.Item eventKey="action-2">My Projects</Dropdown.Item>
+                    {/* <Dropdown.Item eventKey="action-3">Setting</Dropdown.Item> */}
+                  </Dropdown.Menu>
+                </Dropdown>
               </li>
             ) : (
               <>
@@ -60,8 +86,8 @@ function Navbar() {
                 </li>
               </>)}
           </ul>
-        </div>
-      </div>
+        </div >
+      </div >
     </nav >
   )
 }
