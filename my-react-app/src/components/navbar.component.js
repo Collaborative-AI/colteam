@@ -75,6 +75,8 @@ function NavbarIns() {
                   </Link>
                 </li>
               </>)}
+          </Nav>
+          <Nav class="ml-auto">
             <Form className="d-flex">
               <Form.Control
                 type="search"
