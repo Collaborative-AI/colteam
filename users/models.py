@@ -16,6 +16,7 @@ class CustomUser(AbstractUser):
         blank=True,
         null=True,
     )
+    verify_code = models.TextField("verify code", default='', blank=True)
 
     def __str__(self):
         return self.username
