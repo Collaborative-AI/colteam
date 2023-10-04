@@ -1,3 +1,5 @@
+import enums
+
 from .models import CustomUser
 from rest_framework import generics
 from rest_framework import viewsets, status
@@ -8,7 +10,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView, TokenViewBase
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from datetime import timedelta
-from ..enums.messageEnums import *
+from enums.messageEnums import *
 from rest_framework.request import Request
 from django.contrib.auth.hashers import make_password
 from rest_framework_jwt.utils import jwt_decode_handler
