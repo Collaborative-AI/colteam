@@ -195,8 +195,19 @@ STATICFILES_DIRS = [
 
 # 定时任务
 CRONJOBS = [
-    ('*/30 * * * *', 'users.tasks.clean_expired_tokens'),  # 每30分钟运行一次任务
+    ('*/10 * * * *', 'users.tasks.clean_expired_tokens'),  # 每10分钟运行一次任务
 ]
+
+# Redis缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis 地址
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        }
+    }
+}
 
 # email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

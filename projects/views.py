@@ -37,7 +37,7 @@ def create_project(request):
 
 
 @api_view(['GET'])
-def my_projects(request):
+def view_my_projects(request):
     # TODO: 返回前x个项目,展开分页展示。
     # TODO: 添加类
     # TODO: 将东西放到日志里
