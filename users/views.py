@@ -23,6 +23,7 @@ from colteam import settings
 from django.core import signing
 from django.utils.html import format_html
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
@@ -48,9 +49,9 @@ class RegisterView(TokenViewBase):
             request = request.copy()
             request.__setitem__('email', request.get('username'))
             request.__setitem__('password', make_password(request.get('password')))
-            request.__setitem__('is_active',False)
+            request.__setitem__('is_active', False)
             verification_code = generate_verification_code()
-            request.__setitem__('verify_code',verification_code)
+            request.__setitem__('verify_code', verification_code)
             serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
                 user = serializer.save()
@@ -58,7 +59,7 @@ class RegisterView(TokenViewBase):
                     'id': user.id,
                     'username': user.username,
                 }
-                send_verify_email(user,verification_code)
+                send_verify_email(user, verification_code)
                 return JsonResponse(user_info, status=status.HTTP_201_CREATED)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
@@ -152,6 +153,13 @@ def logout(request):
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+def search(request):
+    try:
+        pass
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -159,11 +167,13 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-date_joined')  # 使用自定义用户模型
     serializer_class = CustomUserSerializer
 
+
 def generate_verification_code(length=6):
-    characters = string.digits  
+    characters = string.digits
     return ''.join(random.choice(characters) for _ in range(length))
 
-def send_verify_email(user_info,verification_code):
+
+def send_verify_email(user_info, verification_code):
     serialized_data = signing.dumps(verification_code)
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [user_info]
@@ -172,10 +182,12 @@ def send_verify_email(user_info,verification_code):
     suffix_first = 'Sincerely,'
     suffix = "Colteam."
     html_message = format_html(
-        "<html><body><h4>Thank you for joining our community.</h4><p>Please Click <a href='{}'>Here</a> to activate your account.</p><p>{}</p><p>{}</p></body></html>",
+        "<html><body><h4>Thank you for joining our community.</h4><p>Please Click <a href='{}'>Here</a> to activate "
+        "your account.</p><p>{}</p><p>{}</p></body></html>",
         activation_link, suffix_first, suffix
     )
     send_mail(subject, "", email_from, recipient_list, html_message=html_message)
+
 
 # TODO: Return a front-end page
 # TODO: Add verify time limit

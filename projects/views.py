@@ -11,10 +11,12 @@ from rest_framework_jwt.utils import jwt_decode_handler
 from users.views import *
 from rest_framework.pagination import PageNumberPagination
 
+
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 10  # 每页显示的数量
     page_size_query_param = 'page_size'
     max_page_size = 100
+
 
 @api_view(['POST'])
 def create_project(request):
@@ -49,7 +51,7 @@ def my_projects(request):
         # 不使用分页器
         # serializer = ProjectDetailSerializer(project, many=True)
         # return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
         # 使用分页器分页
         paginator = CustomPageNumberPagination()
         result_page = paginator.paginate_queryset(project, request)
