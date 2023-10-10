@@ -1,5 +1,4 @@
 import enums
-
 from .models import CustomUser
 from rest_framework import generics
 from rest_framework import viewsets, status
@@ -19,9 +18,9 @@ import random
 import string
 from django.core.mail import *
 from colteam import settings
-# from django.utils import timezone
 from django.core import signing
 from django.utils.html import format_html
+from .forms import SearchForm
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -47,6 +46,10 @@ class RegisterView(TokenViewBase):
     def register(cls, request: QueryDict):
         try:
             request = request.copy()
+            # 判断是否已经包含此用户名
+            user = CustomUser.objects.filter(email=request.get('username')).first()
+            if user is not None:
+                return JsonResponse({'Duplicated': 'User already exists!'}, status=status.HTTP_409_CONFLICT)
             request.__setitem__('email', request.get('username'))
             request.__setitem__('password', make_password(request.get('password')))
             request.__setitem__('is_active', False)
@@ -153,13 +156,6 @@ def logout(request):
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
-def search(request):
-    try:
-        pass
-    except Exception as exc:
-        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -203,3 +199,34 @@ def activate_account(request, token):
             return JsonResponse({'verification code failed'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
     except CustomUser.DoesNotExist:
         return JsonResponse({'verification code false'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+
+
+def search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                results = CustomUser.objects.filter(username=search_term)
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# 模糊查询
+def fuzzy_search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                results = CustomUser.objects.filter(username__icontains=search_term)
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
