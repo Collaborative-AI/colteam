@@ -9,7 +9,12 @@ from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework_jwt.utils import jwt_decode_handler
 from users.views import *
+from rest_framework.pagination import PageNumberPagination
 
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 10  # 每页显示的数量
+    page_size_query_param = 'page_size'
+    max_page_size = 100
 
 @api_view(['POST'])
 def create_project(request):
@@ -40,9 +45,16 @@ def my_projects(request):
         user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
         user_auth = CustomUser.objects.get(id=user_id_auth)
 
-        project = ProjectDetail.objects.filter(owner=user_auth)
-        serializer = ProjectDetailSerializer(project, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        project = ProjectDetail.objects.filter(owner=user_auth).order_by('id')
+        # 不使用分页器
+        # serializer = ProjectDetailSerializer(project, many=True)
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        # 使用分页器分页
+        paginator = CustomPageNumberPagination()
+        result_page = paginator.paginate_queryset(project, request)
+        serializer = ProjectDetailSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
     except Exception:
         return Response({'message': 'Invalid username'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -115,10 +127,16 @@ def delete_project(request):
 @permission_classes([AllowAny])
 def all_projects(request):
     try:
-        project = ProjectDetail.objects.all()
-        serializer = ProjectDetailSerializer(project, many=True)
-        # project_map = {project.id: serializer.data for project in projects}
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        project = ProjectDetail.objects.all().order_by('id')
+        # 不使用分页器分页
+        # serializer = ProjectDetailSerializer(project, many=True)
+        # return Response(serializer.data, status=status.HTTP_200_OK)
+        # 使用分页器
+        paginator = CustomPageNumberPagination()
+        result_page = paginator.paginate_queryset(project, request)
+        serializer = ProjectDetailSerializer(result_page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
     except Exception:
         return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
