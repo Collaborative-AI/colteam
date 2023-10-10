@@ -14,7 +14,6 @@ import os
 import ssl
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -202,17 +201,32 @@ CRONJOBS = [
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis 地址
+        'LOCATION': 'redis://127.0.0.1:6379',  # Redis 地址
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100}
+            # 'PASSWORD': '密码',
         }
     }
 }
 
-# email
+# Email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'ridol.mailbox@gmail.com' #sender's email-id
-EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh' #password associated with above email-id
+EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
+EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
+
+# Celery配置
+CELERY_BROKER_URL = 'redis://localhost:6379/1'  # Redis连接URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'  # Redis连接URL
+
+# 让celery在启动时加载Django配置
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True

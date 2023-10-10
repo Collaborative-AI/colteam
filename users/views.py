@@ -1,3 +1,4 @@
+from django.views.decorators.cache import cache_page
 import enums
 from .models import CustomUser
 from rest_framework import generics
@@ -113,6 +114,7 @@ def update_user_profile_by_id(request):
 
 
 @api_view(['GET'])
+@cache_page(60 * 15)  # 缓存 15 分钟
 def view_user_profile_by_id(request):
     try:
         json_data = JSONParser().parse(request)

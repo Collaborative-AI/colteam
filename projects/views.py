@@ -1,5 +1,7 @@
-from rest_framework.decorators import api_view
+from users.views import *
+from django.core.cache import cache
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from users.models import CustomUser
 from .serializers import ProjectDetailSerializer
 from rest_framework import viewsets, status, permissions
@@ -8,8 +10,8 @@ from .models import ProjectDetail
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework_jwt.utils import jwt_decode_handler
-from users.views import *
 from rest_framework.pagination import PageNumberPagination
+from django.views.decorators.cache import cache_page
 
 
 class CustomPageNumberPagination(PageNumberPagination):
@@ -37,6 +39,7 @@ def create_project(request):
 
 
 @api_view(['GET'])
+@cache_page(60 * 15)  # 缓存 15 分钟
 def view_my_projects(request):
     # TODO: 返回前x个项目,展开分页展示。
     # TODO: 添加类
@@ -64,9 +67,10 @@ def view_my_projects(request):
 @api_view(['POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
+@cache_page(60 * 15)  # 缓存 15 分钟
 def view_one_project(request):
     """
-    view a specific project and its details (get a project by Id)
+    view a specific project and its details (get a project by ID)
     """
     try:
         project_id = request.data.get('id')

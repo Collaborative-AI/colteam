@@ -18,4 +18,6 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='refresh_token'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('activate/<str:token>/', views.activate_account, name='activate_account'),
+    path('search/', views.search, name='search_users'),
+    path('fuzzy/search/', views.fuzzy_search, name='fuzzy_search_users'),
 ]
