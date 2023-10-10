@@ -156,6 +156,40 @@ def logout(request):
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                results = CustomUser.objects.filter(username=search_term)
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# 模糊查询
+@api_view(['POST'])
+def fuzzy_search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                # 只返回前十个
+                results = CustomUser.objects.filter(username__icontains=search_term)[:10]
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
@@ -199,37 +233,3 @@ def activate_account(request, token):
             return JsonResponse({'verification code failed'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
     except CustomUser.DoesNotExist:
         return JsonResponse({'verification code false'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
-
-
-@api_view(['POST'])
-def search(request):
-    try:
-        form = SearchForm(request.GET)
-        results = []
-
-        if form.is_valid():
-            search_term = form.cleaned_data['search_term']
-            if search_term:
-                results = CustomUser.objects.filter(username=search_term)
-
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
-    except Exception as exc:
-        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# 模糊查询
-@api_view(['POST'])
-def fuzzy_search(request):
-    try:
-        form = SearchForm(request.GET)
-        results = []
-
-        if form.is_valid():
-            search_term = form.cleaned_data['search_term']
-            if search_term:
-                # 只返回前十个
-                results = CustomUser.objects.filter(username__icontains=search_term)[:10]
-
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
-    except Exception as exc:
-        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
