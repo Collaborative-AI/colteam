@@ -9,6 +9,7 @@ TAG_CHOICES = (
     # add more here
 )
 
+
 # Create your models here.
 class ProjectDetail(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="owner")
@@ -16,15 +17,16 @@ class ProjectDetail(models.Model):
     post_date = models.DateTimeField("post data", default=timezone.now)
     end_date = models.DateTimeField("project deadline", default=timezone.now() + timezone.timedelta(days=7))
     description = models.TextField(blank=True, default='')
-    group_member = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True, related_name="members")
+    group_member = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
+                                     related_name="members")
     categories = models.CharField(
         max_length=20,
         choices=TAG_CHOICES,
         default='1'
     )
-    website = models.URLField(max_length = 200)
+    website = models.URLField(max_length=200)
     # contact information: Email, name
-    email = models.EmailField("contact email", max_length = 254)
+    email = models.EmailField("contact email", max_length=254)
     qualification = models.TextField("qualifications", default='')
 
     def __str__(self):

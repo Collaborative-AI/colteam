@@ -201,11 +201,11 @@ CRONJOBS = [
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',  # Redis 地址
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis 地址
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-            'CONNECTION_POOL_KWARGS': {'max_connections': 100}
-            # 'PASSWORD': '密码',
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+            'PASSWORD': 'colteam',
         }
     }
 }
@@ -219,8 +219,8 @@ EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
 EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
 
 # Celery配置
-CELERY_BROKER_URL = 'redis://localhost:6379/1'  # Redis连接URL
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/1'  # Redis连接URL
+CELERY_BROKER_URL = 'redis://:colteam@127.0.0.1:6379/6'  # Redis连接URL
+CELERY_RESULT_BACKEND = 'redis://:colteam@127.0.0.1:6379/8'  # Redis连接URL
 
 # 让celery在启动时加载Django配置
 CELERY_ACCEPT_CONTENT = ['json']
