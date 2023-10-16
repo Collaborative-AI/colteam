@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export default function SignUp() {
+export default function SignUp () {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    alreadyHasUser: false,
   })
 
   // Update component state when input values change
@@ -33,19 +34,28 @@ export default function SignUp() {
       .post('http://localhost:8000/users/register/', data)
       .then((response) => {
         // Handle successful registration, e.g., show success message
-        console.log(response.data)
-        navigate('/log-in')
+        console.log(response.status)
+        //收到201， 跳转到提示页面
+        navigate('/email_verification')
       })
       .catch((error) => {
+        console.log(error.response.status)
         // Handle errors
         if (error.response) {
           console.error('Status Code:', error.response.status)
 
           console.error('Data:', error.response.data)
           console.error('Response Header:', error.response.headers)
+          if (error.response.status === 409) {
+            setFormData({
+              ...formData,
+              alreadyHasUser: true,
+            })
+          }
         } else {
           console.error('Error:', error.message)
         }
+
       })
   }
 
@@ -64,6 +74,7 @@ export default function SignUp() {
           value={formData.email}
           onChange={handleInputChange}
         />
+        {formData.alreadyHasUser && <label>User is already in System!</label>}
       </div>
       <div className="mb-3">
         <label>Password</label>
