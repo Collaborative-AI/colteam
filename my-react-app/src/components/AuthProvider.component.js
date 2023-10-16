@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
         email: 'test@test.com',
         // password: '',
-        ...FormData,
         roles: '',
         accessToken: '',
         success: true,

@@ -36,7 +36,7 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
-        setAuth({ ...formData, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
+        setAuth({ email: response?.data?.email, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
         navigate('/')
       })
       .catch((error) => {

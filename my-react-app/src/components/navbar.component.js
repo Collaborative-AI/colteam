@@ -24,6 +24,9 @@ function NavbarIns() {
       case 'action-3':
         navigate('/profile_setting')
         break
+      case 'action-4':
+        navigate('/log_out')
+        break
       default:
         break
     }
@@ -61,6 +64,8 @@ function NavbarIns() {
                 <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item eventKey="action-3">setting</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item eventKey="action-4">log out</NavDropdown.Item>
               </NavDropdown>
             ) : (
               <>
