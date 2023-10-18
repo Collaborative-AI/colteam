@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from djongo import models
 from .permissions import UserPermissions
-
+from datetime import datetime
 
 class CustomUser(AbstractUser):
     phone_number = models.CharField("phone number", max_length=11, default='', blank=True)
@@ -17,6 +17,7 @@ class CustomUser(AbstractUser):
         null=True,
     )
     verify_code = models.TextField("verify code", default='', blank=True)
+    send_code_time = models.DateTimeField("code send time", auto_now=False,default = datetime.now)
 
     def __str__(self):
         return self.username

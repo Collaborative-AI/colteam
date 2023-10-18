@@ -215,8 +215,13 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+# TODO: need finish register
 EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
 EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
+# test email
+# EMAIL_HOST_USER = 'ridol.mailbox@gmail.com'  # sender's email-id
+# EMAIL_HOST_PASSWORD = 'pcqg uflt lxrb qkaw'  # password associated with above email-id
+
 
 # Celery配置
 CELERY_BROKER_URL = 'redis://:colteam@127.0.0.1:6379/6'  # Redis连接URL

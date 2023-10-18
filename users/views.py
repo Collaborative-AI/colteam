@@ -3,6 +3,8 @@ import enums
 from .models import CustomUser
 from rest_framework import generics
 from rest_framework import viewsets, status
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import permission_classes
 from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, LoginSerializer
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
@@ -22,6 +24,7 @@ from colteam import settings
 from django.core import signing
 from django.utils.html import format_html
 from .forms import SearchForm
+from django.utils import timezone
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -56,6 +59,7 @@ class RegisterView(TokenViewBase):
             request.__setitem__('is_active', False)
             verification_code = generate_verification_code()
             request.__setitem__('verify_code', verification_code)
+            request.__setitem__('send_code_time', timezone.now())
             serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
                 user = serializer.save()
@@ -220,18 +224,40 @@ def send_verify_email(user_info, verification_code):
     )
     send_mail(subject, "", email_from, recipient_list, html_message=html_message)
 
+# TODO: 注释需调整
+@api_view(['POST'])
+# @authentication_classes([])
+@permission_classes([AllowAny])
+def resend_verify_email(request):
+    try:
+        user_data = JSONParser().parse(request)
+        user = CustomUser.objects.get(username=user_data['username'])
+        if user is None:
+            return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
+        verification_code = generate_verification_code()
+        user.verify_code = verification_code
+        user.send_code_time = timezone.now()
+        user.save()
+        send_verify_email(user, verification_code)
+        return JsonResponse('Your verify email has been successfully send, please check your email.', status=status.HTTP_200_OK, safe=False) 
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
 # TODO: Return a front-end page
-# TODO: Add verify time limit
 def activate_account(request, token):
     try:
         decoded_token = signing.loads(token)
         user = CustomUser.objects.get(verify_code=decoded_token)
-        if user is not None:
-            user.is_active = True
-            user.save()
-            return JsonResponse("Your account is activated, Thank you", status=status.HTTP_200_OK, safe=False)
-        else:
-            return JsonResponse({'verification code failed'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+        code_send_time = user.send_code_time
+        verify_time = timezone.now()
+        time_limit = timedelta(seconds=10*60)
+        if((verify_time-code_send_time) > time_limit):
+            return JsonResponse({'message': str('verify code expired')}, status=status.HTTP_400_BAD_REQUEST)
+        user.is_active = True
+        user.save()
+        return JsonResponse("Your account is activated, Thank you!", status=status.HTTP_200_OK, safe=False)
+
     except CustomUser.DoesNotExist:
-        return JsonResponse({'verification code false'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+        return JsonResponse('Verification failed, please try again.', status=status.HTTP_400_BAD_REQUEST, safe=False)
+    # 收到验证消息失败的时候的时候前端再跳转回注册页面
+    # 如果验证失败则不做任何操作，前端不跳转且把验证按钮重新enable，如果成功则将数据库中is_active变成true
