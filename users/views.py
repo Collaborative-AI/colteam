@@ -224,6 +224,7 @@ def send_verify_email(user_info, verification_code):
     )
     send_mail(subject, "", email_from, recipient_list, html_message=html_message)
 
+
 # TODO: 注释需调整
 @api_view(['POST'])
 # @authentication_classes([])
@@ -239,9 +240,11 @@ def resend_verify_email(request):
         user.send_code_time = timezone.now()
         user.save()
         send_verify_email(user, verification_code)
-        return JsonResponse('Your verify email has been successfully send, please check your email.', status=status.HTTP_200_OK, safe=False) 
+        return JsonResponse('Your verify email has been successfully send, please check your email.',
+                            status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+
 
 # TODO: Return a front-end page
 def activate_account(request, token):
@@ -250,8 +253,8 @@ def activate_account(request, token):
         user = CustomUser.objects.get(verify_code=decoded_token)
         code_send_time = user.send_code_time
         verify_time = timezone.now()
-        time_limit = timedelta(seconds=10*60)
-        if((verify_time-code_send_time) > time_limit):
+        time_limit = timedelta(seconds=10 * 60)
+        if ((verify_time - code_send_time) > time_limit):
             return JsonResponse({'message': str('verify code expired')}, status=status.HTTP_400_BAD_REQUEST)
         user.is_active = True
         user.save()
