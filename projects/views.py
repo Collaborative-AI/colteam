@@ -41,7 +41,6 @@ def create_project(request):
 @api_view(['GET'])
 @cache_page(60 * 15)  # 缓存 15 分钟
 def view_my_projects(request):
-    # TODO: 返回前x个项目,展开分页展示。
     # TODO: 添加类
     # TODO: 将东西放到日志里
     try:
