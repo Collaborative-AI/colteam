@@ -25,7 +25,7 @@ if ! cd redis_mac; then
     mkdir redis_mac && cd redis_mac || return
     curl -O http://download.redis.io/redis-stable.tar.gz
     tar xzvf redis-stable.tar.gz
-    cd redis-stable || return
+    cd redis-stable || exit 1
     make
     make test
     sudo make install
