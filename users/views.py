@@ -25,6 +25,7 @@ from django.core import signing
 from django.utils.html import format_html
 from .forms import SearchForm
 from django.utils import timezone
+from celery import Celery
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
