@@ -1,12 +1,22 @@
 #!/bin/bash
-python.exe -m pip install --upgrade pip
-pip show django || pip install django
-pip show djongo || pip install djongo
-pip show celery || pip install celery
-pip show django-redis || pip install django-redis
-pip show django-cors-headers || pip install django-cors-headers
-pip show channels==3.0.4 || pip install channels==3.0.4
-pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
+echo "PACKAGES WILL BE INSTALLED. THIS MAY BREAK YOUR EXISTING TOOLCHAIN."
+echo "YOU ACCEPT ALL RESPONSIBILITY BY PROCEEDING."
+read -r -p "Proceed? [Y/n] : " yn
+case $yn in
+  Y|y) install;;
+  *) ;;
+esac
+
+install(){
+  python.exe -m pip install --upgrade pip
+  pip show django || pip install django
+  pip show djongo || pip install djongo
+  pip show celery || pip install celery
+  pip show django-redis || pip install django-redis
+  pip show django-cors-headers || pip install django-cors-headers
+  pip show channels==3.0.4 || pip install channels==3.0.4
+  pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
+}
 
 # server
 python3 manage.py makemigrations
