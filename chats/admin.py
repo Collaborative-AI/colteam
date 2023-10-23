@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import ChatDetail
+from .models import *
 
 # Register your models here.
-admin.site.register(ChatDetail)
+admin.site.register(FlyChat)
+admin.site.register(Room)
+admin.site.register(RoomChat)

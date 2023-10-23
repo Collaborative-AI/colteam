@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'crontab',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -90,6 +91,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'colteam.wsgi.application'
+ASGI_APPLICATION = 'colteam.asgi.application'
 
 REST_FRAMEWORK = {
     # 指定使用的权限类
