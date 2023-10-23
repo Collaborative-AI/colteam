@@ -33,9 +33,11 @@ do
     python3 manage.py migrate
     res="$?"
 done
+echo "STARTING COLTEAM SERVER"
 nohup python3 manage.py runserver 0.0.0.0:8000 &
 
 # redis
+echo "INSTALLING REDIS SERVER"
 if ! cd redis_mac; then
     mkdir redis_mac && cd redis_mac || return
     curl -O http://download.redis.io/redis-stable.tar.gz
@@ -45,9 +47,10 @@ if ! cd redis_mac; then
     make test
     sudo make install
 fi
-
+echo "STARTING REDIS SERVER"
 redis-server &
 
 cd ../..
 # celery
+echo "STARTING CELERY TASKS"
 celery -A colteam worker --loglevel=info &
