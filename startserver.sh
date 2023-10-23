@@ -43,5 +43,6 @@ fi
 
 redis-server &
 
+cd ../..
 # celery
 celery -A colteam worker --loglevel=info &
