@@ -1,11 +1,14 @@
 #!/bin/bash
-pip install celery
-pip install djongo
-pip install django-redis
-pip install django-cors-headers
-pip install channels==3.0.4
-pip install channels_redis==3.3.1
+python.exe -m pip install --upgrade pip
+pip show django || pip install django
+pip show djongo || pip install djongo
+pip show celery || pip install celery
+pip show django-redis || pip install django-redis
+pip show django-cors-headers || pip install django-cors-headers
+pip show channels==3.0.4 || pip install channels==3.0.4
+pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
 
+# server
 python3 manage.py makemigrations
 python3 manage.py migrate
 res="$?"
@@ -16,7 +19,11 @@ do
     res="$?"
 done
 python3 manage.py runserver 0.0.0.0:8000
-cd redis || return
+
+# redis
+cd redis || echo "Cannot find redis package"
 redis-server.exe redis.windows.conf
 cd ..
+
+# celery
 celery -A colteam worker --loglevel=info
