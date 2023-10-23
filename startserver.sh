@@ -16,5 +16,7 @@ do
     res="$?"
 done
 python3 manage.py runserver 0.0.0.0:8000
-
+cd redis || return
+redis-server.exe redis.windows.conf
+cd ..
 celery -A colteam worker --loglevel=info
