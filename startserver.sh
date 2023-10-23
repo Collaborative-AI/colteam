@@ -10,9 +10,14 @@ esac
 install(){
   python.exe -m pip install --upgrade pip
   pip show django || pip install django
+  pip show djangorestframework || pip install djangorestframework
+  pip show djangorestframework-jwt || pip install djangorestframework-jwt
+  pip show djangorestframework-simplejwt || pip install djangorestframework-simplejwt
   pip show djongo || pip install djongo
   pip show celery || pip install celery
-  pip show django-redis || pip install django-redis
+  pip show crontab || pip install crontab
+  pip show django-crontab || pip install django-crontab
+  pip show celery || pip install celery
   pip show django-cors-headers || pip install django-cors-headers
   pip show channels==3.0.4 || pip install channels==3.0.4
   pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
