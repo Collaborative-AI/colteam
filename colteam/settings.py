@@ -217,11 +217,11 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 # TODO: need finish register
-EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
-EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
+# EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
+# EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
 # test email
-# EMAIL_HOST_USER = 'ridol.mailbox@gmail.com'  # sender's email-id
-# EMAIL_HOST_PASSWORD = 'pcqg uflt lxrb qkaw'  # password associated with above email-id
+EMAIL_HOST_USER = 'ridol.mailbox@gmail.com'  # sender's email-id
+EMAIL_HOST_PASSWORD = 'pcqg uflt lxrb qkaw'  # password associated with above email-id
 
 
 # Celery配置

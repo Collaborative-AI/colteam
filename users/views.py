@@ -70,7 +70,7 @@ class RegisterView(TokenViewBase):
                     'id': user.id,
                     'username': user.username,
                 }
-                send_verify_email.delay(user, verification_code)
+                send_verify_email.delay(user.username, verification_code)
                 return JsonResponse(user_info, status=status.HTTP_201_CREATED)
             return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as exc:
@@ -212,7 +212,7 @@ def generate_verification_code(length=6):
     return ''.join(random.choice(characters) for _ in range(length))
 
 
-@app.task(bind=True, ignore_result=True)
+@app.task(bind=False, ignore_result=True)
 def send_verify_email(user_info, verification_code):
     serialized_data = signing.dumps(verification_code)
     email_from = settings.EMAIL_HOST_USER
@@ -243,7 +243,7 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
-        send_verify_email.delay(user, verification_code)
+        send_verify_email.delay(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
