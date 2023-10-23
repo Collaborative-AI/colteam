@@ -21,13 +21,17 @@ done
 nohup python3 manage.py runserver 0.0.0.0:8000 &
 
 # redis
-if ! cd redis; then
-    echo "Failed to change directory to redis!"
-    exit 1
+if ! cd redis_mac; then
+    mkdir redis_mac && cd redis_mac || return
+    curl -O http://download.redis.io/redis-stable.tar.gz
+    tar xzvf redis-stable.tar.gz
+    cd redis-stable || return
+    make
+    make test
+    sudo make install
 fi
-redis-server.exe redis.windows.conf &
-# shellcheck disable=SC2103
-cd ..
+
+redis-server &
 
 # celery
 celery -A colteam worker --loglevel=info &
