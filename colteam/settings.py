@@ -206,7 +206,7 @@ CACHES = {
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             'CONNECTION_POOL_KWARGS': {'max_connections': 100},
-            'PASSWORD': 'colteam',
+            # 'PASSWORD': 'colteam',
         }
     }
 }
@@ -225,8 +225,8 @@ EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email
 
 
 # Celery配置
-CELERY_BROKER_URL = 'redis://:colteam@127.0.0.1:6379/6'  # Redis连接URL
-CELERY_RESULT_BACKEND = 'redis://:colteam@127.0.0.1:6379/8'  # Redis连接URL
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/6'  # Redis连接URL
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/8'  # Redis连接URL
 
 # 让celery在启动时加载Django配置
 CELERY_ACCEPT_CONTENT = ['json']
