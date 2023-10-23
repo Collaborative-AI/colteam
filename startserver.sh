@@ -21,8 +21,12 @@ done
 nohup python3 manage.py runserver 0.0.0.0:8000 &
 
 # redis
-cd redis || echo "Cannot find redis package"
+if ! cd redis; then
+    echo "Failed to change directory to redis!"
+    exit 1
+fi
 redis-server.exe redis.windows.conf &
+# shellcheck disable=SC2103
 cd ..
 
 # celery
