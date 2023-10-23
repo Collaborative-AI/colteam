@@ -18,12 +18,12 @@ do
     python3 manage.py migrate
     res="$?"
 done
-python3 manage.py runserver 0.0.0.0:8000
+nohup python3 manage.py runserver 0.0.0.0:8000 &
 
 # redis
 cd redis || echo "Cannot find redis package"
-redis-server.exe redis.windows.conf
+redis-server.exe redis.windows.conf &
 cd ..
 
 # celery
-celery -A colteam worker --loglevel=info
+celery -A colteam worker --loglevel=info &
