@@ -25,3 +25,9 @@ Go check ```http://localhost:8000/```
 develop -> test -> (release) -> main
 develop is used for develop new functions and self test.
 
+### Shortcut
+Run startserver.sh for MAC
+
+Run startserver.bat for WINDOWS
+
+Packages will be installed
