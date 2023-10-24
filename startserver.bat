@@ -43,6 +43,5 @@ start "Run Redis Server" /B redis-server.exe redis.windows.conf
 
 :: celery
 cd ..
-cd ..
 echo STARTING CELERY TASKS
 start "Celery Tasks" /B celery -A colteam worker --loglevel=info
