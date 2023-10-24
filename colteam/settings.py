@@ -225,7 +225,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'ridol.mailbox@gmail.com'  # sender's email-id
 EMAIL_HOST_PASSWORD = 'pcqg uflt lxrb qkaw'  # password associated with above email-id
 
-
+ 
 # Celery配置
 CELERY_BROKER_URL = 'redis://127.0.0.1:6379/6'  # Redis连接URL
 CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/8'  # Redis连接URL

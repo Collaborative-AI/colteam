@@ -20,11 +20,7 @@ from rest_framework_jwt.utils import jwt_decode_handler
 from django.http import QueryDict
 import random
 import string
-from django.core.mail import *
-from colteam import settings
 from django.core import signing
-from django.utils.html import format_html
-from .forms import SearchForm
 from django.utils import timezone
 from celery import Celery
 
@@ -62,7 +58,7 @@ class RegisterView(TokenViewBase):
             request.__setitem__('is_active', False)
             verification_code = generate_verification_code()
             request.__setitem__('verify_code', verification_code)
-            request.__setitem__('send_code_time', timezone.now())
+            request.__setitem__('send_code_time', timezone.now())           
             serializer = CustomUserSerializer(data=request)
             if serializer.is_valid():
                 user = serializer.save()
