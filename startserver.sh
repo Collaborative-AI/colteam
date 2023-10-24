@@ -46,6 +46,7 @@ if ! cd redis_mac; then
     make
     make test
     sudo make install
+    cd ..
 fi
 echo "STARTING REDIS SERVER"
 redis-server &
