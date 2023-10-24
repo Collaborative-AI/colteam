@@ -30,4 +30,4 @@ Run startserver.sh for MAC
 
 Run startserver.bat for WINDOWS
 
-Packages will be installed
+Packages will be installed automatically, things will be setup.
