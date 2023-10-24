@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
         ...FormData,
         roles: '',
         accessToken: '',
-        success: false,
+        success: true,
     })
 
     return (

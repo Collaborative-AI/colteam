@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import AuthContext from '../AuthProvider.component';
+import { Link } from 'react-router-dom';
+
 
 function ProjectDetail({ match }) {
   const projectId = match.params.id;
@@ -33,8 +35,13 @@ function ProjectDetail({ match }) {
       <h2>Title: {project.title}</h2>
       <p>Description: {project.description}</p>
       {/* Other Information */}
+      <Link to="/update_project">
+        <button>
+          update project
+        </button>
+      </Link>
     </div>
-  );
+  )
 }
 
-export default ProjectDetail;
+export default ProjectDetail
