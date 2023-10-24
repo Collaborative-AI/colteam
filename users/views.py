@@ -78,7 +78,7 @@ class RegisterView(TokenViewBase):
 
     def post(self, request: Request, *args, **kwargs) -> JsonResponse:
         try:
-            super().post(request, *args, **kwargs)
+            # super().post(request, *args, **kwargs)
             return self.register(request.data)
         except Exception as exc:
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
