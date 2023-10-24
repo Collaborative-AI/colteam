@@ -39,7 +39,7 @@ nohup python3 manage.py runserver 0.0.0.0:8000 &
 # redis
 echo "INSTALLING REDIS SERVER"
 if ! cd redis_mac; then
-    mkdir redis_mac && cd redis_mac || return
+    mkdir redis_mac && cd redis_mac || exit 1
     curl -O http://download.redis.io/redis-stable.tar.gz
     tar xzvf redis-stable.tar.gz
     cd redis-stable || exit 1
