@@ -19,15 +19,13 @@ class ChatConsumer(WebsocketConsumer):
             self.room_name = self.scope['url_route']['kwargs']['room_name']
             self.room_group_name = f'chat_{self.room_name}'
             self.room = Room.objects.get(name=self.room_name)
-
-            # connection has to be accepted
-            self.accept()
-
             # join the room group
             async_to_sync(self.channel_layer.group_add)(
                 self.room_group_name,
                 self.channel_name,
             )
+            # connection has to be accepted
+            self.accept()
         else:
             # Handle the case where 'url_route' or 'kwargs' are not present
             # Add your own error handling logic here
@@ -45,6 +43,7 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        print("Now received message:",message)
 
         # send chat message event to the room
         async_to_sync(self.channel_layer.group_send)(
