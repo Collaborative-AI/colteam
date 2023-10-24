@@ -20,7 +20,8 @@ install(){
   pip show celery || pip install celery
   pip show django-cors-headers || pip install django-cors-headers
   pip show channels==3.0.4 || pip install channels==3.0.4
-  pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
+  pip show channels_redis || pip install channels_redis==4.1.0
+  pip show daphne || pip install daphne==4.0.0
 }
 
 # server
