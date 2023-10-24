@@ -141,7 +141,6 @@ def all_projects(request):
         result_page = paginator.paginate_queryset(project, request)
         serializer = ProjectDetailSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
-
     except Exception:
         return Response({'message': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 

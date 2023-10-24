@@ -1,5 +1,6 @@
 from django.views.decorators.cache import cache_page
 import enums
+from auths.token_auth import get_token_from_request
 from colteam.settings import CELERY_BROKER_URL
 from .models import CustomUser
 from rest_framework import generics
@@ -29,6 +30,7 @@ from django.utils import timezone
 from celery import Celery
 
 app = Celery('users', broker=CELERY_BROKER_URL)
+
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -71,15 +73,15 @@ class RegisterView(TokenViewBase):
                         'id': user.id,
                         'username': user.username,
                     }
-                
+
                     send_verify_email.delay(user.username, verification_code)
                     return JsonResponse(user_info, status=status.HTTP_201_CREATED)
                 return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
-                
+
                 verification_code = generate_verification_code()
                 user.verify_code = verification_code
-                user.password = make_password(request.get('password'))            
+                user.password = make_password(request.get('password'))
                 user.send_code_time = timezone.now()
                 user.save()
                 send_verify_email.delay(user.username, verification_code)
@@ -88,34 +90,16 @@ class RegisterView(TokenViewBase):
                     'username': user.username,
                 }
                 return JsonResponse(user_info, status=status.HTTP_201_CREATED)
-            
+
         except Exception as exc:
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request: Request, *args, **kwargs) -> JsonResponse:
-        try:           
+        try:
             # super().post(request, *args, **kwargs)
             return self.register(request.data)
-        except Exception as exc:           
+        except Exception as exc:
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
-
-# class UserView(generics.GenericAPIView):
-
-def get_token_from_request(request):
-    authorization_header = request.META.get('HTTP_AUTHORIZATION', '')
-
-    if not authorization_header:
-        return None  # 如果请求头中没有 Authorization 字段，则返回 None
-
-    try:
-        auth_type, token = authorization_header.split()
-        if auth_type.lower() == 'bearer':
-            return token
-        else:
-            return None  # 如果认证类型不是 'token'，则返回 None
-    except ValueError:
-        return None  # 如果请求头无法分割成两部分（认证类型和令牌），则返回 None
 
 
 @api_view(['POST'])
@@ -172,9 +156,9 @@ def logout(request):
         user_access_token = AccessToken(access)
         user_access_token.set_exp(lifetime=timedelta(microseconds=1))
         # set refresh token expired (add it to blacklist)
-        refresh = json_data['refresh']
-        user_refresh_token = RefreshToken(refresh)
-        user_refresh_token.blacklist()
+        # refresh = json_data['refresh']
+        # user_refresh_token = RefreshToken(refresh)
+        # user_refresh_token.blacklist()
         return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
                             status=status.HTTP_205_RESET_CONTENT)
     except Exception as exc:
@@ -259,7 +243,7 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
-        
+
         send_verify_email.delay(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)
