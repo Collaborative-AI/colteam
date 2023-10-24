@@ -20,7 +20,11 @@ from rest_framework_jwt.utils import jwt_decode_handler
 from django.http import QueryDict
 import random
 import string
+from django.core.mail import *
+from colteam import settings
 from django.core import signing
+from django.utils.html import format_html
+from .forms import SearchForm
 from django.utils import timezone
 from celery import Celery
 
@@ -51,32 +55,48 @@ class RegisterView(TokenViewBase):
             request = request.copy()
             # 判断是否已经包含此用户名
             user = CustomUser.objects.filter(email=request.get('username')).first()
-            if user is not None:
+            if user is not None and user.is_active:
                 return JsonResponse({'Duplicated': 'User already exists!'}, status=status.HTTP_409_CONFLICT)
-            request.__setitem__('email', request.get('username'))
-            request.__setitem__('password', make_password(request.get('password')))
-            request.__setitem__('is_active', False)
-            verification_code = generate_verification_code()
-            request.__setitem__('verify_code', verification_code)
-            request.__setitem__('send_code_time', timezone.now())           
-            serializer = CustomUserSerializer(data=request)
-            if serializer.is_valid():
-                user = serializer.save()
+            elif user is None:
+                request.__setitem__('email', request.get('username'))
+                request.__setitem__('password', make_password(request.get('password')))
+                request.__setitem__('is_active', False)
+                verification_code = generate_verification_code()
+                request.__setitem__('verify_code', verification_code)
+                request.__setitem__('send_code_time', timezone.now())
+                serializer = CustomUserSerializer(data=request)
+                if serializer.is_valid():
+                    user = serializer.save()
+                    user_info = {
+                        'id': user.id,
+                        'username': user.username,
+                    }
+                
+                    send_verify_email.delay(user.username, verification_code)
+                    return JsonResponse(user_info, status=status.HTTP_201_CREATED)
+                return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                
+                verification_code = generate_verification_code()
+                user.verify_code = verification_code
+                user.password = make_password(request.get('password'))            
+                user.send_code_time = timezone.now()
+                user.save()
+                send_verify_email.delay(user.username, verification_code)
                 user_info = {
                     'id': user.id,
                     'username': user.username,
                 }
-                send_verify_email.delay(user.username, verification_code)
                 return JsonResponse(user_info, status=status.HTTP_201_CREATED)
-            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
         except Exception as exc:
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request: Request, *args, **kwargs) -> JsonResponse:
-        try:
+        try:           
             # super().post(request, *args, **kwargs)
             return self.register(request.data)
-        except Exception as exc:
+        except Exception as exc:           
             return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -239,6 +259,7 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
+        
         send_verify_email.delay(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)

@@ -22,7 +22,7 @@ function EmailVerification () {
     e.preventDefault()
 
     axios
-      .post('http.//localhost:8000/users/resendVerify/', location.state.username)
+      .post('http://localhost:8000/users/resendVerify/', { username: location.state.username })
       .then((response) => {
         console.log(response.status)
       })
