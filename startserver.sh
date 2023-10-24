@@ -50,7 +50,7 @@ fi
 echo "STARTING REDIS SERVER"
 redis-server &
 
-cd ../..
+cd ..
 # celery
 echo "STARTING CELERY TASKS"
 celery -A colteam worker --loglevel=info &
