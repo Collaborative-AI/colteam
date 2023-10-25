@@ -1,6 +1,7 @@
 from rest_framework_simplejwt.token_blacklist.models import BlacklistedToken, OutstandingToken
 from django.utils import timezone
 
+
 # from .models import CustomUser
 # python manage.py crontab add
 # python manage.py crontab show
