@@ -4,7 +4,7 @@ import AuthContext from '../AuthProvider.component'
 import { useNavigate, Link } from 'react-router-dom'
 
 
-function ShowProject () {
+function ShowProject() {
   const [projects, setProjects] = useState([])
   const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ function ShowProject () {
     navigate('/profile')
   }
 
-  function handleDelteProject (projectID) {
+  function handleDelteProject(projectID) {
     const data = {
       id: projectID
     }
@@ -62,7 +62,7 @@ function ShowProject () {
     <div>
       <h1>Projects List</h1>
       <ul>
-        {projects.map(project => (
+        {Array.isArray(projects) && projects.map(project => (
           <li className="show-project-item" key={project.id}>
             <Link to={`/project/${project.id}`}>{project.title}</Link>
             <div className="project-button-container">
