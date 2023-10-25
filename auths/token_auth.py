@@ -1,19 +1,16 @@
 from django.core.cache import cache
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import authentication
 
 
-class TokenValidationMiddleware:
-    def __init__(self, get_response):
-        self.get_response = get_response
+class TokenValidationMiddleware(authentication.BaseAuthentication):
 
-    def __call__(self, request):
+    def authenticate(self, request):
         token = get_token_from_request(request)
         if token:
             if cache.get(token):
                 return Response({"Unauthorized": "Token is blacklisted."}, status=status.HTTP_401_UNAUTHORIZED)
-        response = self.get_response(request)
-        return response
 
 
 def get_token_from_request(request):
