@@ -24,10 +24,10 @@ export default function LogOut() {
             })
             .catch((error) => {
                 console.error('Error:', error.message);
-            });
-
-        return (
-            <p>You are now successfully log out! </p>
-        )
+            })
     }
+
+    return (
+        <h1>You are logged out !</h1>
+    )
 }
