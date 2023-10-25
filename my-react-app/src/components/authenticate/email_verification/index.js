@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
 import axios from 'axios'
 
-function EmailVerification () {
+function EmailVerification() {
 
   const [counts, setCounts] = useState(5)
 

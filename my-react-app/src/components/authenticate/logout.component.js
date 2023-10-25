@@ -11,12 +11,12 @@ export default function LogOut() {
     const handleLogOut = (event) => {
         const config = {
             headers: {
-                accessToken: auth.accessToken
+                Authorization: "Bearer " + auth.accessToken
             }
         }
 
         axios
-            .post('/logout', config)
+            .post('http://localhost:8000/users/logout', config)
             .then((response) => {
                 console.log(response.data)
                 setAuth({ email: '', roles: '', accessToken: '', success: false })
