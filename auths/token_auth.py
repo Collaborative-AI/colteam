@@ -8,11 +8,10 @@ class TokenValidationMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        token = request.META.get('HTTP_AUTHORIZATION')
+        token = get_token_from_request(request)
         if token:
             if cache.get(token):
-                return Response({"detail": "Token is blacklisted."}, status=status.HTTP_401_UNAUTHORIZED)
-
+                return Response({"Unauthorized": "Token is blacklisted."}, status=status.HTTP_401_UNAUTHORIZED)
         response = self.get_response(request)
         return response
 

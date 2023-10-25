@@ -1,4 +1,5 @@
 from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 import enums
 from auths.token_auth import get_token_from_request
 from colteam.settings import CELERY_BROKER_URL
@@ -152,14 +153,18 @@ def logout(request):
     try:
         json_data = JSONParser().parse(request)
         # set access token expired
-        access = json_data['access']
-        user_access_token = AccessToken(access)
-        user_access_token.set_exp(lifetime=timedelta(microseconds=1))
+        user_token = get_token_from_request(request)
+        if user_token:
+            user_token.set_exp(lifetime=timedelta(microseconds=1))
+            cache.set(user_token, True, timeout=18000)
+        # access = json_data['access']
+        # user_access_token = AccessToken(access)
+        # user_access_token.set_exp(lifetime=timedelta(microseconds=1))
         # set refresh token expired (add it to blacklist)
         # refresh = json_data['refresh']
         # user_refresh_token = RefreshToken(refresh)
         # user_refresh_token.blacklist()
-        return JsonResponse({'code': MessageType.LOGIN_SUCCESSFULLY.value},
+        return JsonResponse({'code': MessageType.LOGOUT_SUCCESSFULLY.value},
                             status=status.HTTP_205_RESET_CONTENT)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)

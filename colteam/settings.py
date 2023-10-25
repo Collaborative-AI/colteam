@@ -104,6 +104,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'auths.token_auth.TokenValidationMiddleware',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -113,7 +114,7 @@ JWT_AUTH = {
     'JWT_ALGORITHM': 'HS256',  # 选择适合您的加密算法
     'JWT_ALLOW_REFRESH': True,
     'JWT_VERIFY_EXPIRATION': True,  # 验证令牌是否过期
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 刷新令牌有效期
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=5),  # 刷新令牌有效期
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
@@ -121,9 +122,9 @@ SIMPLE_JWT = {
     # token有效时长(返回的 access 有效时长)
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=2),
     # token刷新的有效时间(返回的 refresh 有效时长)
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=5),
 
-    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1),  # 滑动刷新令牌的过期时间
+    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(hours=5),  # 滑动刷新令牌的过期时间
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': datetime.timedelta(minutes=5),  # 滑动刷新令牌宽限期
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',  # 滑动刷新令牌的过期时间声明名称
     'BLACKLIST_AFTER_ROTATION': True,
