@@ -7,7 +7,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('test_chats/<str:room_name>/', views.test_chats, name="test_chats"),
-    path('create_room/<str:room_name>/', views.create_room, name='create_room'),
-    path('find_room/<str:room_name>/', views.find_room, name='find_room'),
+    path('create_room/', views.create_room, name="create_room"),
+    path('find_room/', views.find_room, name='find_room'),
+    path('create_flychat/', views.create_flychat, name="create_flychat"),
+    path('find_flychat/', views.find_flychat, name='find_flychat'),
+    # path('create_roomchat/', views.create_roomchat, name="create_roomchat"),
+    # path('find_roomchat/', views.find_roomchat, name='find_roomchat'),
 ]

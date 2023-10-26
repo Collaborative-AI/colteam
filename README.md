@@ -21,6 +21,12 @@ python3 manage.py runserver
 ```
 Go check ```http://localhost:8000/```
 
+```
+redis-server
+celery -A colteam worker --loglevel=info
+daphne -p 8001 colteam.asgi:application
+```
+
 #### branch clarification
 develop -> test -> (release) -> main
 develop is used for develop new functions and self test.
