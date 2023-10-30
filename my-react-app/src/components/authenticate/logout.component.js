@@ -9,6 +9,7 @@ export default function LogOut() {
     const navigate = useNavigate()
 
     const handleLogOut = (event) => {
+        event.preventDefault()
         const config = {
             headers: {
                 Authorization: "Bearer " + auth.accessToken
@@ -16,7 +17,7 @@ export default function LogOut() {
         }
 
         axios
-            .post('http://localhost:8000/users/logout', config)
+            .post('http://localhost:8000/users/logout/', config)
             .then((response) => {
                 console.log(response.data)
                 setAuth({ email: '', roles: '', accessToken: '', success: false })
@@ -28,6 +29,16 @@ export default function LogOut() {
     }
 
     return (
-        <h1>You are logged out !</h1>
+        <section>
+            <h3>Are you sure to log out? </h3>
+            <div className="d-flex justify-content-center">
+                <button type="submit" className="btn btn-primary mx-5" onClick={handleLogOut}>
+                    Yes
+                </button>
+                <button type="submit" className="btn btn-primary mx-5" >
+                    No
+                </button>
+            </div>
+        </section>
     )
 }

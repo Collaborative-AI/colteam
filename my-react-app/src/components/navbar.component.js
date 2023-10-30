@@ -8,6 +8,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import profile_image from '../images/colteam_logo.png'
+import handleLogOut from './authenticate/logout.component'
 
 function NavbarIns() {
   const { auth } = useContext(AuthContext);
@@ -25,7 +26,7 @@ function NavbarIns() {
         navigate('/profile_setting')
         break
       case 'action-4':
-        navigate('/log_out')
+        navigate('/log-out')
         break
       default:
         break
