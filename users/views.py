@@ -274,3 +274,32 @@ def activate_account(request, token):
         return JsonResponse('Verification failed, please try again.', status=status.HTTP_400_BAD_REQUEST, safe=False)
     # 收到验证消息失败的时候的时候前端再跳转回注册页面
     # 如果验证失败则不做任何操作，前端不跳转且把验证按钮重新enable，如果成功则将数据库中is_active变成true
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def reset_password(request):
+    try:
+        user_data = JSONParser().parse(request)
+        user = CustomUser.objects.get(username=user_data['username'])
+        if user is None:
+            return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.username]
+        user_id = signing.dumps(user.id)
+        # print(signing.loads(user_id))
+        subject = 'Collaborative-AI reset password.'
+        reset_link = f"http://127.0.0.1:8000/reset_password/{user_id}/"
+        suffix_first = 'Sincerely,'
+        suffix = "Colteam."
+        html_message = format_html(
+            "<html><body><h4>Thank you for visiting Collaborative-AI, here is the link to reset your password:</h4>"
+            "<p>Please click <a href='{}'>here</a> to reset your password.</p>"
+            "<p>{}</p><p>{}</p></body></html>",
+            reset_link, suffix_first, suffix
+        )
+        send_mail(subject, "", email_from, recipient_list, html_message=html_message)
+        return JsonResponse('Your password reset email has been successfully send, please check your email.',
+                            status=status.HTTP_200_OK, safe=False)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST, safe=False)
