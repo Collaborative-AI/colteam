@@ -9,7 +9,7 @@ import Team from './components/team.component'
 import Home from './components/home.component'
 import Navbar from './components/navbar.component'
 import ForgetPasswd from './components/authenticate/forget_passwd.component'
-import ResetPasswd from './components/authenticate/reset_passwd.component'
+// import ResetPasswd from './components/authenticate/reset_passwd.component'
 import Project from './components/project/project.component'
 import Profile from './components/profile.component'
 import NewProject from './components/project/newProject.component'
@@ -19,7 +19,7 @@ import EmailVerification from './components/authenticate/email_verification'
 import UpdateProject from './components/project/updateProject.component'
 import LogOut from './components/authenticate/logout.component'
 
-function App() {
+function App () {
   return (
     <Router>
       <div className="App">
@@ -34,7 +34,7 @@ function App() {
               <Route path="/log_in" element={<Login />} />
               <Route path="/sign_up" element={<SignUp />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
-              <Route path="/reset_passwd" element={<ResetPasswd />} />
+              {/* <Route path="/reset_passwd" element={<ResetPasswd />} /> */}
               <Route path="/log_out" element={<LogOut />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
