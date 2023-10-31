@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export default function SignUp () {
+export default function SignUp() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -66,7 +66,6 @@ export default function SignUp () {
 
 
   return (
-
     <form onSubmit={handleFormSubmit}>
       <h3>Sign Up</h3>
       <div className="mb-3">
@@ -100,7 +99,7 @@ export default function SignUp () {
       </div>
 
       <p className="forgot-password text-right">
-        <Link to='/log-in'>alreay registered?
+        <Link to='/log_in'>alreay registered?
         </Link>
       </p>
     </form >

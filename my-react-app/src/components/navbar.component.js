@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
 import Button from 'react-bootstrap/Button';
@@ -8,7 +8,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import profile_image from '../images/colteam_logo.png'
-import handleLogOut from './authenticate/logout.component'
 
 function NavbarIns() {
   const { auth } = useContext(AuthContext);
@@ -26,7 +25,7 @@ function NavbarIns() {
         navigate('/profile_setting')
         break
       case 'action-4':
-        navigate('/log-out')
+        navigate('/log_out')
         break
       default:
         break
@@ -71,12 +70,12 @@ function NavbarIns() {
             ) : (
               <>
                 < li className="nav-item">
-                  <Link className="nav-link" to={'/log-in'}>
+                  <Link className="nav-link" to={'/log_in'}>
                     Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to={'/sign-up'}>
+                  <Link className="nav-link" to={'/sign_up'}>
                     Sign up
                   </Link>
                 </li>
