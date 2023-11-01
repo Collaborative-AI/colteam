@@ -21,6 +21,6 @@ urlpatterns = [
     path('search/', views.search, name='search_users'),
     path('fuzzy/search/', views.fuzzy_search, name='fuzzy_search_users'),
     path('resendVerify/', views.resend_verify_email, name='resend_email'),
-    path('sendResetPwEmail/', views.send_reset_password_email, name='send_reset_password_email'),
+    path('sendResetPasswordEmail/', views.send_reset_password_email, name='send_reset_password_email'),
     path('resetPassword/', views.reset_password, name='reset_password'),
 ]
