@@ -278,7 +278,7 @@ def activate_account(request, token):
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
-def reset_password(request):
+def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
         user = CustomUser.objects.get(username=user_data['username'])
@@ -303,3 +303,17 @@ def reset_password(request):
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST, safe=False)
+    
+
+@api_view(['POST'])
+def reset_password(request):
+    try:
+        json_data = JSONParser().parse(request)
+        user_id = signing.loads(json_data['userid'])
+        user = CustomUser.objects.get(id=user_id)
+        if user is None:
+            return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
+        user.set_password(make_password(json_data['password']))
+        user.save()
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
