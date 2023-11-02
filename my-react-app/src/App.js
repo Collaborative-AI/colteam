@@ -34,7 +34,7 @@ function App() {
               <Route path="/log_in" element={<Login />} />
               <Route path="/sign_up" element={<SignUp />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
-              <Route path="/reset_passwd" element={<ResetPasswd />} />
+              <Route path="/reset_passwd/:user_id" element={<ResetPasswd />} />
               <Route path="/log_out" element={<LogOut />} />
               {/* <Route path="/profile" element={<Profile />} /> */}
               <Route path="/new_project" element={<NewProject />} />

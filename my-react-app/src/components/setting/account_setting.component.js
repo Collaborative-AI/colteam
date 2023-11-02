@@ -1,25 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useParams, useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-export default function ResetPasswd() {
-    const { user_id } = useParams();
-
+export default function AccountSetting() {
     const [formData, setFormData] = useState({
+        old_passwd: '',
         new_password: '',
-        new_password_verify: '',
     });
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-
-
-        if (formData.new_password !== formData.new_password_verify) {
-            setError({ error: true })
-        }
-        else {
-            setError({ error: false })
-        }
         setFormData({
             ...FormData,
             [name]: value,
@@ -28,21 +18,18 @@ export default function ResetPasswd() {
 
     const navigate = useNavigate()
 
-    const [error, setError] = useState('');
     // Handle form submission
     const handleFormSubmit = (event) => {
         event.preventDefault()
-
         // Build data object to be sent to the backend
         const data = {
             new_password: formData.new_password,
             new_password_verify: formData.new_password_verify,
-            userid: user_id
-        }
+        };
 
         // Send POST request to Django backend's reset passwd API
         axios
-            .post('http://localhost:8000/users/resetPassword/', data)
+            .post('http://localhost:8000/user/reset_passwd/', data)
             .then((response) => {
                 console.log(response.data);
                 navigate('/log_in')
@@ -81,12 +68,6 @@ export default function ResetPasswd() {
                     Submit
                 </button>
             </div>
-            {error && (
-                <p style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>
-                    Passwords do not match. Please check and try again.
-                </p>
-            )}
         </form>
-
     );
 };

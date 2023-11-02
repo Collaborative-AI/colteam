@@ -31,7 +31,8 @@ export default function ForgetPasswd() {
             .then((response) => {
                 // Handle successful email check, then reset passwd
                 console.log(response.data);
-                navigate('/reset_passwd', { state: { user_id: response.user_id } })
+                // navigate('/reset_passwd', { state: { user_id: response.user_id } })
+                // navigate('/reset_passwd')
             })
             .catch((error) => {
                 // TBD: Don't show error reason for safety

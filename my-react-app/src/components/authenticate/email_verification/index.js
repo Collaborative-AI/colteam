@@ -60,7 +60,7 @@ function EmailVerification() {
     <div>
       <Space direction="vertical" style={{ width: '100%' }}>
         <Button type="primary" block onClick={counts == 0 ? handleResend : () => { }}>
-          you can resend the verification after {counts}.
+          you can resend the verification after {counts} seconds.
         </Button>
       </Space>
       <div className="hint-container">
