@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Space } from 'antd'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 
 function EmailVerification() {
@@ -45,7 +44,7 @@ function EmailVerification() {
   }
   const handleSignIn = (e) => {
     e.preventDefault()
-    navigate('/log-in', { replace: true })
+    navigate('/log_in', { replace: true })
   }
 
 

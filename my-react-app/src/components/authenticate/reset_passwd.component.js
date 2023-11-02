@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 export default function ResetPasswd() {
     const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export default function ResetPasswd() {
     }
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     // Handle form submission
     const handleFormSubmit = (event) => {
@@ -24,12 +25,13 @@ export default function ResetPasswd() {
         // Build data object to be sent to the backend
         const data = {
             new_password: formData.new_password,
-            new_password_verify: formData.new_password_verify,
-        };
+            // new_password_verify: formData.new_password_verify,
+            userid: location.state.user_id
+        }
 
         // Send POST request to Django backend's reset passwd API
         axios
-            .post('http://localhost:8000/user/reset_passwd/', data)
+            .post('http://localhost:8000/users/resetPassword/', data)
             .then((response) => {
                 console.log(response.data);
                 navigate('/log_in')

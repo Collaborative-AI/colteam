@@ -313,7 +313,7 @@ def reset_password(request):
         user = CustomUser.objects.get(id=user_id)
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
-        user.set_password(make_password(json_data['password']))
+        user.set_password(make_password(json_data['new_password']))
         user.save()
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
