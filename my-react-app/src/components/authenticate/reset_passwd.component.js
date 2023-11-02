@@ -8,12 +8,10 @@ export default function ResetPasswd() {
     const [formData, setFormData] = useState({
         new_password: '',
         new_password_verify: '',
-    });
+    })
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-
-
         if (formData.new_password !== formData.new_password_verify) {
             setError({ error: true })
         }
@@ -21,7 +19,7 @@ export default function ResetPasswd() {
             setError({ error: false })
         }
         setFormData({
-            ...FormData,
+            ...formData,
             [name]: value,
         })
     }
@@ -36,10 +34,8 @@ export default function ResetPasswd() {
         // Build data object to be sent to the backend
         const data = {
             new_password: formData.new_password,
-            new_password_verify: formData.new_password_verify,
             userid: user_id
         }
-
         // Send POST request to Django backend's reset passwd API
         axios
             .post('http://localhost:8000/users/resetPassword/', data)
