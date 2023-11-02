@@ -59,19 +59,19 @@ export default function ResetPasswd() {
             <div className="mb-3">
                 <label>New Password</label>
                 <input
-                    type="passwd"
+                    type="new_password"
                     className="form-control"
                     placeholder="Enter new password"
-                    name="passwd"
+                    name="new_password"
                     value={formData.new_password}
                     onChange={handleInputChange}
                 />
                 <label>Verify New Password</label>
                 <input
-                    type="passwd"
+                    type="new_password_verify"
                     className="form-control"
                     placeholder="Enter new password again"
-                    name="passwd"
+                    name="new_password_verify"
                     value={formData.new_password_verify}
                     onChange={handleInputChange}
                 />
