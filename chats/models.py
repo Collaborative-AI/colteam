@@ -1,5 +1,7 @@
 from django.db import models
 from users.models import CustomUser
+from django.utils import timezone
+
 
 
 class FlyChat(models.Model):
