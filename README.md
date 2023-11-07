@@ -20,6 +20,13 @@ Run application
 python3 manage.py runserver
 ```
 Go check ```http://localhost:8000/```
+The order of start the backend is:
+
+```
+celery -A colteam worker --loglevel=info
+redis-server
+daphne colteam.asgi:application
+```
 
 #### branch clarification
 develop -> test -> (release) -> main
