@@ -18,8 +18,10 @@ import ProjectDetail from './components/project/show_project_detail.component'
 import EmailVerification from './components/authenticate/email_verification'
 import UpdateProject from './components/project/updateProject.component'
 import LogOut from './components/authenticate/logout.component'
+import ProjectLayout from './components/project/allproject/projectLayout/'
 
-function App() {
+
+function App () {
   return (
     <Router>
       <div className="App">
@@ -30,7 +32,7 @@ function App() {
               <Route exact path="/" element={<Home />} />
               <Route path="/data" element={<Data />} />
               <Route path="/team" element={<Team />} />
-              <Route path="/project" element={<Project />} />
+              <Route path="/project" element={<ProjectLayout />} />
               <Route path="/log_in" element={<Login />} />
               <Route path="/sign_up" element={<SignUp />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
@@ -42,6 +44,7 @@ function App() {
               <Route path="/show_project_detail" element={<ProjectDetail />} />
               <Route path="/email_verification" element={<EmailVerification />} />
               <Route path="/update_project" element={<UpdateProject />} />
+              {/* <Route path='/show_all_project' element={<ProjectLayput />} /> */}
             </Routes>
           </div>
         </div>
