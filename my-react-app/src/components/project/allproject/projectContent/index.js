@@ -18,7 +18,9 @@ function AllProject () {
     per_page: 10
   })
 
-
+  // data.forEach(function (data) {
+  //   data
+  // })
 
 
   useEffect(() => {
@@ -80,7 +82,7 @@ function AllProject () {
     }
   ]
 
-  const data = [
+  const data1 = [
     {
       id: 17,
       title: "hello",
@@ -94,8 +96,44 @@ function AllProject () {
       group_member: null
     }
   ]
+
+
+
+  // const data2 = [
+  //   {
+  //     id: 27,
+  //     title: "hello22222",
+  //     post_date: "2024-11-06T21:04:59.885000",
+  //     description: "",
+  //     categories: "5",
+  //     website: "https://www.baidu.com",
+  //     email: "wang3ys@163.com",
+  //     qualification: "",
+  //     owner: 115,
+  //     group_member: null
+  //   }
+  // ]
+
+  const data3 = [
+    {
+      id: 37,
+      title: "hello333333",
+      // post_date: "2026-11-06T21:04:59.885000",
+      // description: "",
+      // categories: "1",
+      // website: "https://www.baidu.com",
+      // email: "wang3ys@163.com",
+      // qualification: "",
+      // owner: 115,
+      // group_member: null
+    }
+  ]
+
+  const data = [{ data1 }, { data3 }]
+  console.log(data)
+
   return (
-    <Card title={`根据筛选条件共查询到 count 条结果：`}>
+    <Card title={`Total projects: count`}>
       <Table
         rowKey="id"
         columns={columns}
