@@ -30,6 +30,7 @@ from .forms import SearchForm
 from django.utils import timezone
 from celery import Celery
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 app = Celery('users', broker=CELERY_BROKER_URL)
 
 
@@ -147,7 +148,7 @@ def change_password(request):
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-
+@csrf_exempt
 @api_view(['POST'])
 def logout(request):
     try:
@@ -282,9 +283,7 @@ def activate_account(request, token):
 def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
-        print("user: ",user_data)
-        user = CustomUser.objects.get(username=user_data['email'])
-        print("user: ",user_data)
+        user = CustomUser.objects.get(username=user_data['email'])       
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
         
@@ -319,7 +318,7 @@ def reset_password(request):
         user = CustomUser.objects.get(id=user_id)
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
-        user.set_password(make_password(json_data['new_password']))
+        user.password = make_password(json_data['new_password'])
         user.save()
         return JsonResponse('Your password has been successfully reset.',
                             status=status.HTTP_200_OK, safe=False)
