@@ -154,9 +154,10 @@ def logout(request):
         json_data = JSONParser().parse(request)
         # set access token expired
         user_token = get_token_from_request(request)
+        user_access_token = AccessToken(user_token)
         if user_token:
-            user_token.set_exp(lifetime=timedelta(microseconds=1))
-            cache.set(user_token, True, timeout=18000)
+            user_access_token.set_exp(lifetime=timedelta(microseconds=1))
+            cache.set(user_access_token, True, timeout=18000)
         # access = json_data['access']
         # user_access_token = AccessToken(access)
         # user_access_token.set_exp(lifetime=timedelta(microseconds=1))
