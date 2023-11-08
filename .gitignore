@@ -3,5 +3,5 @@
 # cache
 /redis_mac
 /redis_windows
-
+.DS_Store
 
