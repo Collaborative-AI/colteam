@@ -1,15 +1,17 @@
 from .models import FlyChat, Room, RoomChat
-from .serializers import FlyChatSerializer,RoomSerializer,RoomChatSerializer
+from .serializers import FlyChatSerializer, RoomSerializer, RoomChatSerializer
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from users.models import CustomUser
 from rest_framework.pagination import PageNumberPagination
 
+
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 10  # 每页显示的数量
     page_size_query_param = 'page_size'
     max_page_size = 100000
+
 
 @api_view(['POST'])
 def create_room(request):
@@ -25,6 +27,7 @@ def create_room(request):
     serializer = RoomSerializer(room)
     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+
 @api_view(['GET'])
 def find_room(request):
     try:
@@ -34,6 +37,7 @@ def find_room(request):
         return Response(serializer.data)
     except Room.DoesNotExist:
         return Response({'message': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['POST'])
 def create_flychat(request):
@@ -55,6 +59,7 @@ def create_flychat(request):
     serializer = FlyChatSerializer(flychat)
     return Response({'message': 'Create flychat successfully'}, status=status.HTTP_201_CREATED)
 
+
 @api_view(['GET'])
 def find_flychat(request):
     sender_id = request.data.get('sender')
@@ -68,9 +73,9 @@ def find_flychat(request):
         receiver = CustomUser.objects.get(id=receiver_id)
     except CustomUser.DoesNotExist:
         return Response({'message': 'Sender or receiver not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     try:
-        flychat = FlyChat.objects.filter(sender = sender, receiver = receiver).order_by('timestamp')
+        flychat = FlyChat.objects.filter(sender=sender, receiver=receiver).order_by('timestamp')
         # 使用分页器分页
         paginator = CustomPageNumberPagination()
         flychat = paginator.paginate_queryset(flychat, request)

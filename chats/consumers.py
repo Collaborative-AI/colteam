@@ -31,9 +31,6 @@ class ChatConsumer(WebsocketConsumer):
             # Add your own error handling logic here
             pass
 
-
-
-
     def disconnect(self, close_code):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
@@ -43,7 +40,7 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        print("Now received message:",message)
+        print("Now received message:", message)
 
         # send chat message event to the room
         async_to_sync(self.channel_layer.group_send)(
