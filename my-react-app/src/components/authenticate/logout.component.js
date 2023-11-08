@@ -18,7 +18,7 @@ export default function LogOut() {
         }
 
         axios
-            .post('http://localhost:8000/users/logout/', config)
+            .post('http://localhost:8000/users/logout/', null, config)
             .then((response) => {
                 console.log(response.data)
                 setAuth({ email: '', roles: '', accessToken: '', success: false })

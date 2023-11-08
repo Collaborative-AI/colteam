@@ -29,8 +29,6 @@ from django.utils.html import format_html
 from .forms import SearchForm
 from django.utils import timezone
 from celery import Celery
-from django.http import HttpResponseRedirect
-from django.views.decorators.csrf import csrf_exempt
 app = Celery('users', broker=CELERY_BROKER_URL)
 
 
@@ -143,16 +141,16 @@ def change_password(request):
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
-        user.set_password(make_password(json_data['password']))
+        user.password = make_password(json_data['password'])
         user.save()
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-@csrf_exempt
+
 @api_view(['POST'])
 def logout(request):
     try:
-        json_data = JSONParser().parse(request)
+        # json_data = JSONParser().parse(request)
         # set access token expired
         user_token = get_token_from_request(request)
         user_access_token = AccessToken(user_token)
