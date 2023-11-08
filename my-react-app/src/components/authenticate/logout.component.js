@@ -13,7 +13,6 @@ export default function LogOut() {
         const config = {
             headers: {
                 Authorization: "Bearer " + auth.accessToken,
-                "X-CSRFToken": getCookie("csrftoken")
             }
         }
 
@@ -42,10 +41,4 @@ export default function LogOut() {
             </div>
         </section>
     )
-}
-// Function to get the CSRF token from cookies
-function getCookie(name) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
 }
