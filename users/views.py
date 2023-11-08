@@ -150,16 +150,12 @@ def change_password(request):
 @api_view(['POST'])
 def logout(request):
     try:
-        # json_data = JSONParser().parse(request)
         # set access token expired
         user_token = get_token_from_request(request)
-        user_access_token = AccessToken(user_token)
         if user_token:
+            user_access_token = AccessToken(user_token)
             user_access_token.set_exp(lifetime=timedelta(microseconds=1))
             cache.set(user_access_token, True, timeout=18000)
-        # access = json_data['access']
-        # user_access_token = AccessToken(access)
-        # user_access_token.set_exp(lifetime=timedelta(microseconds=1))
         # set refresh token expired (add it to blacklist)
         # refresh = json_data['refresh']
         # user_refresh_token = RefreshToken(refresh)
