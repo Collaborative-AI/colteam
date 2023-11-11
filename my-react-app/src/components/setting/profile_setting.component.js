@@ -59,8 +59,15 @@
 // export default ProfileSetting;
 
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import Navbar from '../../components/navbar.component'
+import Nav from 'react-bootstrap/Nav'
+import AuthContext from '../AuthProvider.component'
+import NavDropdown from 'react-bootstrap/NavDropdown'
+import { Container } from "react-bootstrap"
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 // 用户基本信息
 const UserInfo = () => (
@@ -69,7 +76,7 @@ const UserInfo = () => (
         <p>Username: YourUsername</p>
         <p>Primary Email: youremail@example.com</p>
     </div>
-);
+)
 
 // 用户帐户设置
 const AccountSettings = () => (
@@ -80,7 +87,7 @@ const AccountSettings = () => (
         <label>Confirm New Password: <input type="password" /></label><br />
         <button>Change Password</button>
     </div>
-);
+)
 
 // 用户通知设置
 const NotificationSettings = () => (
@@ -88,7 +95,7 @@ const NotificationSettings = () => (
         <h2>Notification Settings</h2>
         <p>Notification preferences go here.</p>
     </div>
-);
+)
 
 // 用户账单信息
 const BillingSettings = () => (
@@ -96,12 +103,13 @@ const BillingSettings = () => (
         <h2>Billing Settings</h2>
         <p>Billing details and options go here.</p>
     </div>
-);
+)
 
-function ProfileSetting() {
-    const [selectedTab, setSelectedTab] = useState('profile');
+function ProfileSetting () {
+    const [selectedTab, setSelectedTab] = useState('profile')
+    const { auth, setAuth } = useContext(AuthContext)
 
-    const navigate = useNavigate();
+    const navigate = useNavigate()
     const handleDropdownSelect = (eventKey) => {
         switch (eventKey) {
             case 'profile':
@@ -116,7 +124,7 @@ function ProfileSetting() {
             default:
                 break
         }
-    };
+    }
 
     // return (
     //     <div className="user-settings-container">
@@ -184,8 +192,8 @@ function ProfileSetting() {
                 </Container>
             </Navbar>
         </div>
-    );
+    )
 
 }
 
-export default ProfileSetting;
+export default ProfileSetting
