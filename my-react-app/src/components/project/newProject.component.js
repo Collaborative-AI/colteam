@@ -63,7 +63,7 @@ function NewProject () {
   }
 
   return (
-    <div>
+    <div className="auth-inner-large">
       <div className="create-project-header-container">
         <div>
           <img className="logo" src={colteam_logo} alt="" />

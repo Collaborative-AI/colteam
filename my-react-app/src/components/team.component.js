@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 export default class Team extends Component {
-  render() {
+  render () {
     return (
-      <form>
+
+      <div className="auth-inner-large">
         <h3>Team</h3>
-      </form>
+      </div>
     )
   }
 }

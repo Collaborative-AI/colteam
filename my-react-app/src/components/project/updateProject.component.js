@@ -21,7 +21,7 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
     )
 }
 
-function UpdateProject() {
+function UpdateProject () {
     const [projectName, setProjectName] = useState("")
     const [description, setDescription] = useState("")
     const { auth, setAuth } = useContext(AuthContext)
@@ -60,7 +60,7 @@ function UpdateProject() {
             })
     }
     return (
-        <div>
+        <div className="auth-inner-large">
             <div className="create-project-header-container">
                 <div>
                     <img className="logo" src={colteam_logo} alt="" />

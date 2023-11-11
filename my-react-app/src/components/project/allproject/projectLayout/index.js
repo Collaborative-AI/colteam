@@ -7,12 +7,13 @@ const { Header } = Layout
 function ProjectLayout () {
 
   return (
-    <Layout>
-      <Header className="header">
-
-      </Header>
-      <Layout className="layout-content" style={{ padding: 20 }}> <AllProject /> </Layout>
-    </Layout>
+    <div className="auth-inner-large">
+      <Layout>
+        <Header className="header">
+        </Header>
+        <Layout className="layout-content" style={{ padding: 20 }}> <AllProject /> </Layout>
+      </Layout>
+    </div>
 
   )
 }

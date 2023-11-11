@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
-import AuthContext from '../AuthProvider.component';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
+import axios from 'axios'
+import AuthContext from '../AuthProvider.component'
+import { Link } from 'react-router-dom'
 
 
-function ProjectDetail({ match }) {
-  const projectId = match.params.id;
-  const [project, setProject] = useState(null);
-  const { auth } = useContext(AuthContext);
+function ProjectDetail ({ match }) {
+  const projectId = match.params.id
+  const [project, setProject] = useState(null)
+  const { auth } = useContext(AuthContext)
 
   useEffect(() => {
     // URL
-    const backendURL = 'http://localhost:8000';
+    const backendURL = 'http://localhost:8000'
     axios
       .get(`${backendURL}/projects/${projectId}`, {
         headers: {
@@ -19,18 +19,18 @@ function ProjectDetail({ match }) {
         },
       })
       .then((response) => {
-        setProject(response.data);
+        setProject(response.data)
       })
-      .catch((error) => console.error('Error fetching project data:', error));
-  }, [projectId, auth.accessToken]);
+      .catch((error) => console.error('Error fetching project data:', error))
+  }, [projectId, auth.accessToken])
 
   if (!project) {
     // Loading Information
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
-    <div>
+    <div className="auth-inner-large">
       <h1>Project Details</h1>
       <h2>Title: {project.title}</h2>
       <p>Description: {project.description}</p>

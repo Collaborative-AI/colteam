@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
 
 
-export default function LogOut() {
+export default function LogOut () {
     const { auth, setAuth } = useContext(AuthContext)
     const navigate = useNavigate()
 
@@ -24,21 +24,23 @@ export default function LogOut() {
                 navigate('/')
             })
             .catch((error) => {
-                console.error('Error:', error.message);
+                console.error('Error:', error.message)
             })
     }
 
     return (
-        <section>
-            <h3>Are you sure to log out? </h3>
-            <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary mx-5" onClick={handleLogOut}>
-                    Yes
-                </button>
-                <button type="submit" className="btn btn-primary mx-5" >
-                    No
-                </button>
-            </div>
-        </section>
+        <div className="auth-inner-small">
+            <section>
+                <h3>Are you sure to log out? </h3>
+                <div className="d-flex justify-content-center">
+                    <button type="submit" className="btn btn-primary mx-5" onClick={handleLogOut}>
+                        Yes
+                    </button>
+                    <button type="submit" className="btn btn-primary mx-5" >
+                        No
+                    </button>
+                </div>
+            </section>
+        </div>
     )
 }

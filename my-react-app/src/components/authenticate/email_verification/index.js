@@ -3,7 +3,7 @@ import { Button, Space } from 'antd'
 import { useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
 
-function EmailVerification() {
+function EmailVerification () {
 
   const [counts, setCounts] = useState(5)
 
@@ -57,7 +57,7 @@ function EmailVerification() {
   }, [counts])
 
   return (
-    <div>
+    <div className="auth-inner-small">
       <Space direction="vertical" style={{ width: '100%' }}>
         <Button type="primary" block onClick={counts == 0 ? handleResend : () => { }}>
           you can resend the verification after {counts} seconds.

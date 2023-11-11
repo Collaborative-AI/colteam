@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
 
 
-export default function Login() {
+export default function Login () {
   const { auth, setAuth } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -54,7 +54,7 @@ export default function Login() {
   }
 
   return (
-    <>
+    <div className="auth-inner-small">
       {auth.success ? (
         <section>
           {/* TBD: show profile */}
@@ -99,7 +99,7 @@ export default function Login() {
           </form>
         </section>
       )}
-    </>
+    </div>
 
   )
 }
