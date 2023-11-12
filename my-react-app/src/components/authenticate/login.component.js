@@ -37,7 +37,10 @@ export default function Login () {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
-        setAuth({ email: response?.data?.email, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
+        console.log(response.data.user_info.username)
+        setAuth({ email: response?.data?.user_info?.username, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
+        console.log("loginaaaaaaaaaa")
+        console.log(auth.email)
         navigate('/')
 
       })

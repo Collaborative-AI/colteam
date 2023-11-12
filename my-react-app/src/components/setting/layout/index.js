@@ -1,9 +1,10 @@
 import { Layout, Menu } from 'antd'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom'
 
 const { Sider } = Layout
 function SettingLayout () {
-
+  const location = useLocation().pathname
+  // console.log(location)
 
   return (
     <Layout>
@@ -11,7 +12,7 @@ function SettingLayout () {
         <Menu
           mode="inline"
           theme="dark"
-          defaultSelectedKeys={1}
+          defaultSelectedKeys={[location]}
           style={{ height: '100%', borderRight: 0 }}
         >
           <Menu.Item key='/settings/ProfileSetting'>

@@ -22,7 +22,7 @@ function NavbarIns () {
         navigate('/show_project')
         break
       case 'action-3':
-        navigate('/settings')
+        navigate('/settings/ProfileSetting')
         break
       case 'action-4':
         navigate('/log_out')

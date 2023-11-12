@@ -29,7 +29,10 @@ function NewProject () {
   const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
 
+  console.log(auth.email)
+
   const handleSubmit = (e) => {
+    console.log(e)
     e.preventDefault()
     const data = {
       id: auth.email,
