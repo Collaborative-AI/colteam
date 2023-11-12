@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-export default function AccountSetting() {
+export default function AccountSetting () {
     const [formData, setFormData] = useState({
         old_passwd: '',
         new_password: '',
-    });
+    })
 
     const handleInputChange = (event) => {
-        const { name, value } = event.target;
+        const { name, value } = event.target
         setFormData({
             ...FormData,
             [name]: value,
@@ -25,13 +25,13 @@ export default function AccountSetting() {
         const data = {
             new_password: formData.new_password,
             new_password_verify: formData.new_password_verify,
-        };
+        }
 
         // Send POST request to Django backend's reset passwd API
         axios
             .post('http://localhost:8000/user/reset_passwd/', data)
             .then((response) => {
-                console.log(response.data);
+                console.log(response.data)
                 navigate('/log_in')
             })
             .catch((error) => {
@@ -69,5 +69,5 @@ export default function AccountSetting() {
                 </button>
             </div>
         </form>
-    );
+    )
 };

@@ -1,18 +1,18 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from './AuthProvider.component'
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Nav from 'react-bootstrap/Nav'
+import Navbar from 'react-bootstrap/Navbar'
+import NavDropdown from 'react-bootstrap/NavDropdown'
 import profile_image from '../images/colteam_logo.png'
 
-function NavbarIns() {
-  const { auth } = useContext(AuthContext);
+function NavbarIns () {
+  const { auth } = useContext(AuthContext)
 
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const handleDropdownSelect = (eventKey) => {
     switch (eventKey) {
       case 'action-1':
@@ -22,7 +22,7 @@ function NavbarIns() {
         navigate('/show_project')
         break
       case 'action-3':
-        navigate('/profile_setting')
+        navigate('/settings')
         break
       case 'action-4':
         navigate('/log_out')
@@ -30,7 +30,7 @@ function NavbarIns() {
       default:
         break
     }
-  };
+  }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">

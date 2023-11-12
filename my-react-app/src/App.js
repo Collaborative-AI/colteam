@@ -20,8 +20,8 @@ import UpdateProject from './components/project/updateProject.component'
 import LogOut from './components/authenticate/logout.component'
 import ProjectLayout from './components/project/allproject/projectLayout/'
 import SettingLayout from './components/setting/layout'
-import AccountSetting from './components/setting/account_setting.component'
-import ProfileSetting from './components/setting/profile_setting.component'
+import AccountSetting from './components/setting/account_setting'
+import ProfileSetting from './components/setting/profile_setting'
 
 function App () {
   return (
@@ -45,9 +45,9 @@ function App () {
             <Route path="/show_project_detail" element={<ProjectDetail />} />
             <Route path="/email_verification" element={<EmailVerification />} />
             <Route path="/update_project" element={<UpdateProject />} />
-            <Route path="/profile_setting" element={<SettingLayout />} >
-              <Route index element={<ProfileSetting />}></Route>
-              <Route path='/account_setting' element={<AccountSetting />}></Route>
+            <Route path="/settings" element={<SettingLayout />} >
+              <Route path='ProfileSetting' element={<ProfileSetting />}></Route>
+              <Route path='AccountSetting' element={<AccountSetting />}></Route>
             </Route>
             {/* <Route path='/show_all_project' element={<ProjectLayput />} /> */}
           </Routes>
