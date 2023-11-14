@@ -2,7 +2,7 @@ import { Layout, Menu } from 'antd'
 import { Link, Outlet, useLocation } from 'react-router-dom'
 
 const { Sider } = Layout
-function SettingLayout () {
+function SettingLayout() {
   const location = useLocation().pathname
   // console.log(location)
 

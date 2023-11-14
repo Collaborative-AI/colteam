@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
 
 
-export default function Login () {
+export default function Login() {
   const { auth, setAuth } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -37,12 +37,9 @@ export default function Login () {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
-        console.log(response.data.user_info.username)
         setAuth({ email: response?.data?.user_info?.username, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
-        console.log("loginaaaaaaaaaa")
         console.log(auth.email)
         navigate('/')
-
       })
       .catch((error) => {
         // Handle errors

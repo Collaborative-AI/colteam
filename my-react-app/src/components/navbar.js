@@ -9,7 +9,7 @@ import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import profile_image from '../images/colteam_logo.png'
 
-function NavbarIns () {
+function NavbarIns() {
   const { auth } = useContext(AuthContext)
 
   const navigate = useNavigate()
@@ -63,7 +63,7 @@ function NavbarIns () {
                 <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
                 <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="action-3">setting</NavDropdown.Item>
+                <NavDropdown.Item eventKey="action-3">My Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item eventKey="action-4">log out</NavDropdown.Item>
               </NavDropdown>
