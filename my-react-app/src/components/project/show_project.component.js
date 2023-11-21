@@ -4,7 +4,7 @@ import AuthContext from '../AuthProvider.component'
 import { useNavigate, Link } from 'react-router-dom'
 
 
-function ShowProject() {
+function ShowProject () {
   const [projects, setProjects] = useState([])
   const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
@@ -30,7 +30,7 @@ function ShowProject() {
     navigate('/profile')
   }
 
-  function handleDelteProject(projectID) {
+  function handleDelteProject (projectID) {
     const data = {
       id: projectID
     }
@@ -59,7 +59,7 @@ function ShowProject() {
   }
 
   return (
-    <div>
+    <div className="auth-inner-large">
       <h1>Projects List</h1>
       <ul>
         {Array.isArray(projects) && projects.map(project => (

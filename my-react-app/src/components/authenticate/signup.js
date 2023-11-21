@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export default function SignUp() {
+export default function SignUp () {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -66,42 +66,44 @@ export default function SignUp() {
 
 
   return (
-    <form onSubmit={handleFormSubmit}>
-      <h3>Sign Up</h3>
-      <div className="mb-3">
-        <label>Email Address</label>
-        <input
-          type="email"
-          className="form-control"
-          placeholder="Enter email"
-          name="email"
-          value={formData.email}
-          onChange={handleInputChange}
-        />
-        {formData.alreadyHasUser && <label>User is already in System!</label>}
-      </div>
-      <div className="mb-3">
-        <label>Password</label>
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Enter password"
-          name="password"
-          value={formData.password}
-          onChange={handleInputChange}
-        />
-      </div>
+    <div className="auth-inner-small">
+      <form onSubmit={handleFormSubmit}>
+        <h3>Sign Up</h3>
+        <div className="mb-3">
+          <label>Email Address</label>
+          <input
+            type="email"
+            className="form-control"
+            placeholder="Enter email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+          {formData.alreadyHasUser && <label>User is already in System!</label>}
+        </div>
+        <div className="mb-3">
+          <label>Password</label>
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Enter password"
+            name="password"
+            value={formData.password}
+            onChange={handleInputChange}
+          />
+        </div>
 
-      <div className="d-grid">
-        <button type="submit" className="btn btn-primary">
-          Sign Up
-        </button>
-      </div>
+        <div className="d-grid">
+          <button type="submit" className="btn btn-primary">
+            Sign Up
+          </button>
+        </div>
 
-      <p className="forgot-password text-right">
-        <Link to='/log_in'>alreay registered?
-        </Link>
-      </p>
-    </form >
+        <p className="forgot-password text-right">
+          <Link to='/log_in'>alreay registered?
+          </Link>
+        </p>
+      </form >
+    </div>
   )
 }

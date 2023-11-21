@@ -5,7 +5,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from users.models import CustomUser
 from rest_framework.pagination import PageNumberPagination
-
+from auths.token_auth import get_token_from_request
+from rest_framework_jwt.utils import jwt_decode_handler
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 10  # 每页显示的数量
@@ -85,3 +86,33 @@ def find_flychat(request):
         # return Response(serializer.data)
     except FlyChat.DoesNotExist:
         return Response({'message': 'FlyChat not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['GET'])
+def join_room(request):
+    # 找到房间
+    room_name = request.data.get('room_name')
+    room = Room.objects.get(name=room_name)
+
+    # 得到已经登录了的用户
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    # 加入房间
+    room.join(user_auth)
+    return Response({'message': 'User join successfully'}, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def leave_room(request):
+    # 找到房间
+    room_name = request.data.get('room_name')
+    room = Room.objects.get(name=room_name)
+
+    # 得到已经登录了的用户
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    # 加入房间
+    room.leave(user_auth)
+    return Response({'message': 'User leave successfully'}, status=status.HTTP_200_OK)

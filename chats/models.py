@@ -18,8 +18,14 @@ class Room(models.Model):
         return self.online.count()
 
     def join(self, user):
-        self.online.add(user)
-        self.save()
+        try:
+            self.online.get(id=user.id)
+        except CustomUser.DoesNotExist:
+            # 如果不存在，将其添加到在线用户列表中
+            self.online.add(user)
+            self.save()
+        # self.online.add(user)
+        # self.save()
 
     def leave(self, user):
         self.online.remove(user)

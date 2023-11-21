@@ -29,7 +29,10 @@ function NewProject () {
   const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
 
+  console.log(auth.email)
+
   const handleSubmit = (e) => {
+    console.log(e)
     e.preventDefault()
     const data = {
       id: auth.email,
@@ -63,7 +66,7 @@ function NewProject () {
   }
 
   return (
-    <div>
+    <div className="auth-inner-large">
       <div className="create-project-header-container">
         <div>
           <img className="logo" src={colteam_logo} alt="" />
