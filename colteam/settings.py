@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'crontab',
     'channels',
+    'django_elasticsearch_dsl',
 ]
 
 MIDDLEWARE = [
@@ -246,5 +247,16 @@ CHANNEL_LAYERS = {
         'CONFIG': {
             "hosts": [('127.0.0.1', 6379)],
         },
+    },
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': [
+            'localhost:9200',
+            'localhost:9201',
+            'localhost:9202',
+        ],
+        'timeout': 20,  # 设置连接超时为20秒
     },
 }
