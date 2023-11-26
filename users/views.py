@@ -124,7 +124,6 @@ def update_user_profile_by_id(request):
 @cache_page(60 * 15)  # 缓存 15 分钟
 def view_user_profile_by_id(request):
     try:
-        json_data = JSONParser().parse(request)
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
