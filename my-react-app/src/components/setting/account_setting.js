@@ -2,13 +2,13 @@ import React, { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
-import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Button from 'react-bootstrap/Button'
 
-export default function AccountSetting() {
+export default function AccountSetting () {
     const { auth } = useContext(AuthContext)
     const [error, setError] = useState(false)
 
@@ -29,20 +29,20 @@ export default function AccountSetting() {
 
     const navigate = useNavigate()
 
-    useEffect(() => {
-        // console.log(`Bearer ${auth.accessToken}`)
-        axios
-            .get("http://localhost:8000/users/password/change/", {
-                headers: {
-                    Authorization: `Bearer ${auth.accessToken}`
-                },
-            })
-            .then((response) => {
-                console.log(response)
-                //setUserData
-            })
-            .catch((error) => console.error('Error fetching user data:', error))
-    }, [])
+    // useEffect(() => {
+    //     // console.log(`Bearer ${auth.accessToken}`)
+    //     axios
+    //         .get("http://localhost:8000/users/password/change/", {
+    //             headers: {
+    //                 Authorization: `Bearer ${auth.accessToken}`
+    //             },
+    //         })
+    //         .then((response) => {
+    //             console.log(response)
+    //             //setUserData
+    //         })
+    //         .catch((error) => console.error('Error fetching user data:', error))
+    // }, [])
 
     const handleResetPasswd = (event) => {
         event.preventDefault()

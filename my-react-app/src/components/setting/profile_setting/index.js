@@ -1,9 +1,10 @@
 import { useEffect, useContext, useState } from 'react'
 import AuthContext from '../../AuthProvider.component'
 import axios from 'axios'
-import { Avatar } from 'antd'
+// import { Avatar } from 'antd'
 import colteam_logo from '../../../images/colteam_logo.png'
 import Address from '../profile_setting/home_address'
+import Button from 'react-bootstrap/Button'
 
 function ProfileSetting () {
   const { auth } = useContext(AuthContext)
@@ -47,6 +48,7 @@ function ProfileSetting () {
     })
   }
 
+
   //get profile info 
   useEffect(() => {
     console.log(`Bearer ${auth.accessToken}`)
@@ -63,11 +65,36 @@ function ProfileSetting () {
       .catch((error) => console.error('Error fetching user data:', error))
   }, [])
 
-  return (
+  const handleAllChange = (event) => {
+    event.preventDefault()
 
+    const data = {
+      email: userData.email,
+      Avatar: userData.Avatar,
+      research_interests: userData.research_interests,
+      home_address: userData.home_addressail,
+      GitHub_link: userData.GitHub_link,
+    }
+    const config = {
+      headers: {
+        Authorization: "Bearer " + auth.accessToken
+      }
+    }
+    // Send POST request to Django backend's to change profile info
+    axios
+      .post('http://localhost:8000/user/users/password/change/', data, config)
+      .then((response) => {
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.error('Error:', error.message)
+      })
+  }
+
+  return (
     <div>
       <h3>Profile settings</h3>
-      <form onSubmit={() => { }}>
+      <form onSubmit={handleAllChange} style={{ marginTop: '40px' }}>
         <p>
           <lable for="email">Email</lable><br></br>
           <input
@@ -89,7 +116,7 @@ function ProfileSetting () {
             onChange={(e) => handleChangeAvatar(e.target.files[0])}>
           </input>
         </p>
-        <lable for="emresearch_interestsail">research interests</lable><br></br>
+        <lable for="research_interests">research interests</lable><br></br>
         <input
           type="text"
           id="research_interests"
@@ -97,7 +124,11 @@ function ProfileSetting () {
           value={userData.research_interests}
           onChange={(e) => handleChangeResearchInterests(e.target.value)}>
         </input>
-        <Address onAddressUpdate={handleAddressChange}></Address>
+        <Address onAddssUpdate={handleAddressChange}></Address>
+        <p></p>
+        <Button variant="primary" type="submit">
+          Save Changes
+        </Button>
       </form>
     </div>
 
