@@ -127,7 +127,7 @@ def view_user_profile_by_id(request):
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
-        serializer = CustomUserSerializer(user, many=True)
+        serializer = CustomUserSerializer(user, many=False)
         return JsonResponse(serializer.data, status=status.HTTP_200_OK)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
