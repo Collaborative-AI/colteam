@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'projects.apps.ProjectsConfig',
     'chats.apps.ChatsConfig',
+    'forum.apps.ForumConfig',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
