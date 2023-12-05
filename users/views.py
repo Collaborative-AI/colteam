@@ -57,8 +57,17 @@ class RegisterView(TokenViewBase):
             request = request.copy()
             # 判断是否已经包含此用户名
             user = CustomUser.objects.filter(email=request.get('username')).first()
-            if user is not None and user.is_active:
-                return JsonResponse({'Duplicated': 'User already exists!'}, status=status.HTTP_409_CONFLICT)
+            if user is not None:
+                if user.is_active:
+                    return JsonResponse({'Duplicated': 'User already exists!'}, status=status.HTTP_409_CONFLICT)
+                else:
+                    verification_code = generate_verification_code()
+                    user.verify_code = verification_code
+                    user.send_code_time = timezone.now()
+                    user.save()
+
+                    send_verify_email.delay(user.username, verification_code)
+                    return JsonResponse(user.username, status=status.HTTP_200_OK, safe=False)
             elif user is None:
                 request.__setitem__('email', request.get('username'))
                 request.__setitem__('password', make_password(request.get('password')))
@@ -276,7 +285,9 @@ def activate_account(request, token):
 def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
+        print('xxxxxxx!!!!!!')
         user = CustomUser.objects.get(username=user_data['email'])       
+        
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
         
