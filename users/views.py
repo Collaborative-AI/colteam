@@ -273,9 +273,7 @@ def activate_account(request, token):
             return JsonResponse({'message': str('verify code expired')}, status=status.HTTP_400_BAD_REQUEST)
         user.is_active = True
         user.save()
-        return HttpResponseRedirect('http://localhost:3000/sign_up')
-        return JsonResponse("Your account is activated, Thank you!", status=status.HTTP_200_OK, safe=False)
-
+        return HttpResponseRedirect('http://localhost:3000/log_in')
     except CustomUser.DoesNotExist:
         return JsonResponse('Verification failed, please try again.', status=status.HTTP_400_BAD_REQUEST, safe=False)
     # 收到验证消息失败的时候的时候前端再跳转回注册页面
