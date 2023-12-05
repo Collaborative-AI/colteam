@@ -28,6 +28,7 @@ from django.core import signing
 from django.utils.html import format_html
 from .forms import SearchForm
 from django.utils import timezone
+from django.http import HttpResponseRedirect
 from celery import Celery
 app = Celery('users', broker=CELERY_BROKER_URL)
 
@@ -272,6 +273,7 @@ def activate_account(request, token):
             return JsonResponse({'message': str('verify code expired')}, status=status.HTTP_400_BAD_REQUEST)
         user.is_active = True
         user.save()
+        return HttpResponseRedirect('http://localhost:3000/sign_up')
         return JsonResponse("Your account is activated, Thank you!", status=status.HTTP_200_OK, safe=False)
 
     except CustomUser.DoesNotExist:
