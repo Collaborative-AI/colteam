@@ -61,7 +61,7 @@ export default function AccountSetting () {
         }
         // Send POST request to Django backend's change passwd API
         axios
-            .post('http://localhost:8000/user/users/password/change/', data, config)
+            .post('http://localhost:8000/users/password/change/', data, config)
             .then((response) => {
                 console.log(response.data)
                 navigate('/log_in')

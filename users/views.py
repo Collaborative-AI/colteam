@@ -18,6 +18,7 @@ from datetime import timedelta
 from enums.messageEnums import *
 from rest_framework.request import Request
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.hashers import check_password
 from rest_framework_jwt.utils import jwt_decode_handler
 from django.http import QueryDict
 import random
@@ -88,7 +89,6 @@ class RegisterView(TokenViewBase):
                     return JsonResponse(user_info, status=status.HTTP_201_CREATED)
                 return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             else:
-
                 verification_code = generate_verification_code()
                 user.verify_code = verification_code
                 user.password = make_password(request.get('password'))
@@ -116,20 +116,27 @@ class RegisterView(TokenViewBase):
 def update_user_profile_by_id(request):
     try:
         update_data = JSONParser().parse(request)
-        serializer = CustomUserSerializer(data=update_data)
-        if serializer.is_valid():
+        # serializer = CustomUserSerializer(data=update_data)
+        # if serializer.is_valid():  
             # get user id from access token
-            user_token = get_token_from_request(request)
-            user_id = jwt_decode_handler(user_token)['user_id']
-            user = CustomUser.objects.get(id=user_id)
-            serializer.update(user, request.data)
-            return JsonResponse({'code': MessageType.UPDATE_SUCCESSFULLY.value},
-                                status=status.HTTP_200_OK)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user_token = get_token_from_request(request)
+        user_id = jwt_decode_handler(user_token)['user_id']
+        user = CustomUser.objects.get(id=user_id)
+        if 'home_address' in update_data:
+            user.location =  update_data['home_address']
+        if 'research_interests' in update_data:
+            user.research_interests = update_data['research_interests']
+        user.save()
+        user_info = {
+            'username': user.username,
+            'home_address': user.location,
+            'research_interests': user.research_interests
+        }
+        return JsonResponse(user_info, status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-
+# TODO: serializer没变
 @api_view(['GET'])
 @cache_page(60 * 15)  # 缓存 15 分钟
 def view_user_profile_by_id(request):
@@ -138,7 +145,7 @@ def view_user_profile_by_id(request):
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
         serializer = CustomUserSerializer(user, many=False)
-        return JsonResponse(serializer.data, status=status.HTTP_200_OK)
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -150,8 +157,13 @@ def change_password(request):
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
-        user.password = make_password(json_data['password'])
-        user.save()
+        is_password_correct = check_password(json_data['old_password'], user.password)
+        if is_password_correct:
+            user.password = make_password(json_data['new_password'])
+            user.save()
+            return JsonResponse('You have successfully changed your password', status=status.HTTP_200_OK, safe=False)
+        else:
+            return JsonResponse('Old password is incorrect, please try again', status=status.HTTP_401_UNAUTHORIZED, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 

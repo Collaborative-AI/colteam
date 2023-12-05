@@ -82,7 +82,7 @@ function ProfileSetting () {
     }
     // Send POST request to Django backend's to change profile info
     axios
-      .post('http://localhost:8000/user/users/password/change/', data, config)
+      .post('http://localhost:8000/users/profile/update/', data, config)
       .then((response) => {
         console.log(response.data)
       })
