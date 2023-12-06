@@ -11,4 +11,7 @@ urlpatterns = [
     path('create_post/', views.create_post, name='create_post'),
     path('find_thread/', views.find_thread, name='find_thread'),
     path('find_post/', views.find_post, name='find_post'),
+    path('find_related_post/', views.find_related_post, name='find_related_post'),
+
+    
 ]

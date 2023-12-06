@@ -19,10 +19,6 @@ class ThreadSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
 
-    user = CustomUserSerializer(read_only=True)
-    
-    thread = ThreadSerializer(read_only=True)
-
     class Meta:
         model = Post
         fields = "__all__"
