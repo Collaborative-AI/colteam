@@ -126,11 +126,14 @@ def update_user_profile_by_id(request):
             user.location =  update_data['home_address']
         if 'research_interests' in update_data:
             user.research_interests = update_data['research_interests']
+        if 'phone_number' in update_data:
+            user.phone_number = update_data['phone_number']
         user.save()
         user_info = {
             'username': user.username,
             'home_address': user.location,
-            'research_interests': user.research_interests
+            'research_interests': user.research_interests,
+            'phone_number': user.phone_number
         }
         return JsonResponse(user_info, status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
