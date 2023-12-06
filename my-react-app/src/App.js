@@ -20,6 +20,7 @@ import ProjectLayout from './components/project/allproject/projectLayout/'
 import SettingLayout from './components/setting/layout'
 import AccountSetting from './components/setting/account_setting'
 import ProfileSetting from './components/setting/profile_setting'
+import Messages from './components/messages/messages'
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             <Route path="/data" element={<Data />} />
             <Route path="/team" element={<Team />} />
             <Route path="/project" element={<ProjectLayout />} />
+            <Route path="/messages" element={<Messages />} />
             <Route path="/log_in" element={<Login />} />
             <Route path="/sign_up" element={<SignUp />} />
             <Route path="/forget_passwd" element={<ForgetPasswd />} />

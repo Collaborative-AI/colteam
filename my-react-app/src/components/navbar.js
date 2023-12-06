@@ -59,14 +59,22 @@ function NavbarIns() {
               </Link>
             </li>
             {auth.success ? (
-              <NavDropdown title="Profile" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
-                <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
-                <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="action-3">My Profile</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item eventKey="action-4">log out</NavDropdown.Item>
-              </NavDropdown>
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/messages'}>
+                    Messages
+                  </Link>
+                </li>
+
+                <NavDropdown title="Profile" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
+                  <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
+                  <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item eventKey="action-3">My Profile</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item eventKey="action-4">log out</NavDropdown.Item>
+                </NavDropdown>
+              </>
             ) : (
               <>
                 < li className="nav-item">
