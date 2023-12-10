@@ -12,7 +12,8 @@ function ProfileSetting () {
   const [userData, setUserData] = useState({
     email: auth.email,
     Avatar: colteam_logo,
-    research_interests: "Machine Learning",
+    research_interests: "",
+    phone_number: "",
     home_address: {
       street_address: '',
       city: '',
@@ -22,10 +23,10 @@ function ProfileSetting () {
     GitHub_link: "https://github.com/Collaborative-AI",
   })
 
-  const handleChangeEmail = (value) => {
+  const handleChangePhoneNumber = (value) => {
     setUserData({
       ...userData,
-      email: value
+      phone_number: value
     })
   }
   const handleChangeResearchInterests = (value) => {
@@ -57,14 +58,24 @@ function ProfileSetting () {
         headers: {
           Authorization: `Bearer ${auth.accessToken}`
         },
+        params: {
+          t: new Date().getTime()
+        }
       })
       .then((response) => {
-        console.log(response)
+        console.log("info get")
+        console.log(response.data)
         //setUserData
+        setUserData({
+          ...userData,
+          research_interests: response.data.research_interests
+        })
       })
       .catch((error) => console.error('Error fetching user data:', error))
   }, [])
 
+
+  //update change to back end
   const handleAllChange = (event) => {
     event.preventDefault()
 
@@ -84,6 +95,7 @@ function ProfileSetting () {
     axios
       .post('http://localhost:8000/users/profile/update/', data, config)
       .then((response) => {
+        console.log("update change to back end")
         console.log(response.data)
       })
       .catch((error) => {
@@ -102,7 +114,20 @@ function ProfileSetting () {
             id="email"
             name='email'
             value={userData.email}
-            onChange={(e) => handleChangeEmail(e.target.value)}>
+          // onChange={(e) => handleChangeEmail(e.target.value)}
+          // onChange={onChange}
+          // readOnly={onChange == null}
+          />
+        </p>
+        <p>
+          <lable for="phone_number">Phone Number</lable><br></br>
+          <input
+            type='type'
+            id='phone_number'
+            name="phone_number"
+            value={userData.phone_number}
+            onChange={(e) => handleChangePhoneNumber(e.target.value)}
+          >
           </input>
         </p>
         <p>
