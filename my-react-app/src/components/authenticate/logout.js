@@ -2,6 +2,7 @@ import axios from 'axios'
 import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
+import { removeToken } from '../../utils'
 
 
 export default function LogOut () {
@@ -21,6 +22,7 @@ export default function LogOut () {
             .then((response) => {
                 console.log(response.data)
                 setAuth({ email: '', roles: '', accessToken: '', success: false })
+                localStorage.clear()
                 navigate('/')
             })
             .catch((error) => {

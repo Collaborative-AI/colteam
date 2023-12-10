@@ -2,9 +2,9 @@ import axios from 'axios'
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import AuthContext from '../AuthProvider.component'
+import { setToken, setUserEmail, setUserRole } from '../../utils/'
 
-
-export default function Login() {
+export default function Login () {
   const { auth, setAuth } = useContext(AuthContext)
 
   const [formData, setFormData] = useState({
@@ -37,8 +37,17 @@ export default function Login() {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
-        setAuth({ email: response?.data?.user_info?.username, roles: response?.data?.roles, accessToken: response?.data?.access, success: true })
-        console.log(auth.email)
+        setAuth({
+          email: response?.data?.user_info?.username,
+          roles: response?.data?.roles,
+          accessToken: response?.data?.access,
+          success: true
+        })
+        // console.log(auth.email)
+        // console.log(response?.data?.user_info?.username,)
+        setToken(response?.data?.access)
+        setUserEmail(response?.data?.user_info?.username)
+        setUserRole(response?.data?.roles)
         navigate('/')
       })
       .catch((error) => {
