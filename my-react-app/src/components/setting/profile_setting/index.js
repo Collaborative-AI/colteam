@@ -8,6 +8,10 @@ import Button from 'react-bootstrap/Button'
 
 function ProfileSetting () {
   const { auth } = useContext(AuthContext)
+
+  const [count, setCount] = useState({
+
+  })
   //initialize a state for userData
   const [userData, setUserData] = useState({
     email: auth.email,
@@ -15,10 +19,10 @@ function ProfileSetting () {
     research_interests: "",
     phone_number: "",
     home_address: {
-      street_address: '',
-      city: '',
-      state: '',
-      zip_code: ''
+      street_address: "",
+      city: "",
+      state: "",
+      zip_code: ""
     },
     GitHub_link: "https://github.com/Collaborative-AI",
   })
@@ -43,10 +47,16 @@ function ProfileSetting () {
     })
   }
   const handleAddressChange = (newAddress) => {
+    // console.log("profile page")
+    // console.log(newAddress)
     setUserData({
       ...userData,
       home_address: newAddress
     })
+    // console.log({
+    //   ...userData,
+    //   home_address: newAddress
+    // })
   }
 
 
@@ -66,9 +76,18 @@ function ProfileSetting () {
         console.log("info get")
         console.log(response.data)
         //setUserData
+        console.log(response.data.location)
+        // console.log(typeof response.data.location)
+        // const addressInJason =
+        //   "{'street_address': ''}".replace(/'/g, '"')
+        const addressInJasonFormat = response.data.location.replace(/'/g, '"')
+        console.log(JSON.parse(addressInJasonFormat))
+        // console.log(JSON.parse(response.data.location).zip_code)
         setUserData({
           ...userData,
-          research_interests: response.data.research_interests
+          research_interests: response.data.research_interests,
+          phone_number: response.data.phone_number,
+          home_address: JSON.parse(addressInJasonFormat)//JSON.parse(response.data.location),
         })
       })
       .catch((error) => console.error('Error fetching user data:', error))
@@ -81,9 +100,10 @@ function ProfileSetting () {
 
     const data = {
       email: userData.email,
+      phone_number: userData.phone_number,
       Avatar: userData.Avatar,
       research_interests: userData.research_interests,
-      home_address: userData.home_addressail,
+      home_address: userData.home_address,
       GitHub_link: userData.GitHub_link,
     }
     const config = {
@@ -95,8 +115,8 @@ function ProfileSetting () {
     axios
       .post('http://localhost:8000/users/profile/update/', data, config)
       .then((response) => {
-        console.log("update change to back end")
-        console.log(response.data)
+        // console.log("update change to back end")
+        // console.log(response.data)
       })
       .catch((error) => {
         console.error('Error:', error.message)
@@ -122,10 +142,22 @@ function ProfileSetting () {
         <p>
           <lable for="phone_number">Phone Number</lable><br></br>
           <input
-            type='type'
+            type='tel'
             id='phone_number'
             name="phone_number"
+            pattern="^1[3-9]\d{9}$"
             value={userData.phone_number}
+            // rules={[
+            //   {
+            //     required: true,
+            //     message: 'please inpute your phone number!',
+            //   },
+            //   {
+            //     patetrn: /^1[3-9]\d{9}$/,
+            //     message: 'mobile phone number is wrong',
+            //     validateTrigger: 'onBlur'
+            //   }
+            // ]}
             onChange={(e) => handleChangePhoneNumber(e.target.value)}
           >
           </input>
@@ -149,13 +181,13 @@ function ProfileSetting () {
           value={userData.research_interests}
           onChange={(e) => handleChangeResearchInterests(e.target.value)}>
         </input>
-        <Address onAddssUpdate={handleAddressChange}></Address>
+        <Address onAddressUpdate={handleAddressChange} home_address1={userData.home_address} count={count}></Address>
         <p></p>
         <Button variant="primary" type="submit">
           Save Changes
         </Button>
       </form>
-    </div>
+    </div >
 
   )
 }
