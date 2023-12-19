@@ -17,7 +17,6 @@ install(){
   pip show celery || pip install celery
   pip show crontab || pip install crontab
   pip show django-crontab || pip install django-crontab
-  pip show celery || pip install celery
   pip show django-cors-headers || pip install django-cors-headers
   pip show channels==3.0.4 || pip install channels==3.0.4
   pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
