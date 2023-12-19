@@ -1,7 +1,9 @@
 
 from django.db import models
 from users.models import CustomUser
+from projects.models import ProjectDetail
 class Thread(models.Model):
+    project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE,related_name="project_belong")
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):

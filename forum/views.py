@@ -9,7 +9,8 @@ from rest_framework.permissions import AllowAny
 from rest_framework_jwt.utils import jwt_decode_handler
 from .models import Thread, Post
 from rest_framework.pagination import PageNumberPagination
-
+from projects.models import ProjectDetail
+from projects.serializers import ProjectDetailSerializer
 
 
 class CustomPageNumberPagination(PageNumberPagination):
@@ -51,7 +52,7 @@ def create_post(request):
 
 
 @api_view(['GET'])
-def find_thread(request):
+def get_thread_by_id(request):
     try:
         thread_id = request.data.get('thread_id')  # 从请求数据中获取话题id
         thread = Thread.objects.get(id=thread_id)
@@ -61,7 +62,7 @@ def find_thread(request):
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
     
 @api_view(['GET'])
-def find_post(request):
+def get_post_by_id(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
@@ -94,3 +95,62 @@ def find_related_post(request):
     except Exception as e:
         return Response({"message": str(e)}, status=500)
 
+# 找出该项目对应的主题
+@api_view(['GET'])
+def find_related_thread(request):
+    try:
+        # 在 Thread 模型中查找给定话题ID的帖子
+        project_id = request.data.get('project_id') 
+        project = ProjectDetail.objects.get(id=project_id)
+        related_project = ProjectDetail.objects.filter(project=project).order_by("id")
+
+        # 不使用分页器分页, 使用 PostSerializer 序列化帖子对象
+        serializer = ProjectDetailSerializer(related_project, many=True)
+        return Response(serializer.data)
+
+    except Thread.DoesNotExist:
+        return Response({"message": "Project not found"}, status=404)
+    except Exception as e:
+        return Response({"message": str(e)}, status=500)
+
+
+@api_view(['POST'])
+def search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                results = Thread.objects.filter(title=search_term)
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+# 模糊查询
+@api_view(['POST'])
+def fuzzy_search(request):
+    try:
+        form = SearchForm(request.GET)
+        results = []
+
+        if form.is_valid():
+            search_term = form.cleaned_data['search_term']
+            if search_term:
+                # 只返回前十个
+                results = Thread.objects.filter(title__icontains=search_term)[:10]
+
+        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def find_threads_by_project(request):
+    try:
+        project_id = request.data.get('project_id')
+        results = []
+        results = Thread.objects.filter(project__id=project_id)
+        return JsonResponse({'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
