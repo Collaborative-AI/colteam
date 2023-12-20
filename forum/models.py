@@ -6,6 +6,7 @@ class Thread(models.Model):
     project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE,related_name="project_belong")
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL,related_name="owner_of_thread")
     def __str__(self):
         return '(%s, %s)' % (self.id, self.title)
 

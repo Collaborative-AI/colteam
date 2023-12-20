@@ -20,12 +20,26 @@ class CustomPageNumberPagination(PageNumberPagination):
 
 @api_view(['POST'])
 def create_thread(request):
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
 
-    serializer = ThreadSerializer(data=request.data)
+    project_id = request.data.get('project_id')
+
+    request_data = {
+        'title': request.data.get('title'),  # Adjust this based on your actual field names
+        'user': user_auth.pk,
+        'project': project_id,
+    }
+
+    serializer = ThreadSerializer(data=request_data)
+    print('!!!!!11')
     if serializer.is_valid():
+
         thread = serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
+        print('!!!33333')
         return Response({'message': 'thread create failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -148,9 +162,14 @@ def fuzzy_search(request):
 @api_view(['POST'])
 def find_threads_by_project(request):
     try:
-        project_id = request.data.get('project_id')
-        results = []
-        results = Thread.objects.filter(project__id=project_id)
-        return JsonResponse({'results': results}, status=status.HTTP_200_OK)
+        json_data = JSONParser().parse(request)
+        project_id = json_data['project_id']
+        threads = Thread.objects.filter(project__id=project_id)
+        serializer = ThreadSerializer(threads, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+    
+# @api_view(['POST'])
+# def add_project_to_thread(request):
+    
