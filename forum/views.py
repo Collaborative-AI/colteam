@@ -23,23 +23,18 @@ def create_thread(request):
     user_token_auth = get_token_from_request(request)
     user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
     user_auth = CustomUser.objects.get(id=user_id_auth)
-
     project_id = request.data.get('project_id')
-
     request_data = {
         'title': request.data.get('title'),  # Adjust this based on your actual field names
         'user': user_auth.pk,
         'project': project_id,
     }
-
     serializer = ThreadSerializer(data=request_data)
-    print('!!!!!11')
     if serializer.is_valid():
 
         thread = serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        print('!!!33333')
         return Response({'message': 'thread create failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -111,16 +106,21 @@ def find_related_post(request):
 
 # 找出该项目对应的主题
 @api_view(['GET'])
-def find_related_thread(request):
+def find_threads_by_project(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
         project_id = request.data.get('project_id') 
         project = ProjectDetail.objects.get(id=project_id)
-        related_project = ProjectDetail.objects.filter(project=project).order_by("id")
+        related_project = Thread.objects.filter(project=project).order_by("id")
 
         # 不使用分页器分页, 使用 PostSerializer 序列化帖子对象
-        serializer = ProjectDetailSerializer(related_project, many=True)
-        return Response(serializer.data)
+        # serializer = ThreadSerializer(related_project, many=True)
+        # return Response(serializer.data)
+        paginator = CustomPageNumberPagination()
+        result_record = paginator.paginate_queryset(related_project, request)
+        serializer = ThreadSerializer(result_record, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
 
     except Thread.DoesNotExist:
         return Response({"message": "Project not found"}, status=404)
@@ -158,18 +158,3 @@ def fuzzy_search(request):
         return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
-@api_view(['POST'])
-def find_threads_by_project(request):
-    try:
-        json_data = JSONParser().parse(request)
-        project_id = json_data['project_id']
-        threads = Thread.objects.filter(project__id=project_id)
-        serializer = ThreadSerializer(threads, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Exception as exc:
-        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-    
-# @api_view(['POST'])
-# def add_project_to_thread(request):
-    
