@@ -20,5 +20,6 @@ class CustomUser(AbstractUser):
     verify_code = models.TextField("verify code", default='', blank=True)
     send_code_time = models.DateTimeField("code send time", auto_now=False, default=datetime.now)
     research_interests = models.CharField("research interests", max_length=100, default='', blank=True)
+
     def __str__(self):
         return self.username

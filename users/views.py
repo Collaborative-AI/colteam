@@ -31,6 +31,7 @@ from .forms import SearchForm
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from celery import Celery
+
 app = Celery('users', broker=CELERY_BROKER_URL)
 
 
@@ -118,12 +119,12 @@ def update_user_profile_by_id(request):
         update_data = JSONParser().parse(request)
         # serializer = CustomUserSerializer(data=update_data)
         # if serializer.is_valid():  
-            # get user id from access token
+        # get user id from access token
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
         if 'home_address' in update_data:
-            user.location =  update_data['home_address']
+            user.location = update_data['home_address']
         if 'research_interests' in update_data:
             user.research_interests = update_data['research_interests']
         if 'phone_number' in update_data:
@@ -138,6 +139,7 @@ def update_user_profile_by_id(request):
         return JsonResponse(user_info, status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
 
 # TODO: serializer没变
 @api_view(['GET'])
@@ -166,7 +168,8 @@ def change_password(request):
             user.save()
             return JsonResponse('You have successfully changed your password', status=status.HTTP_200_OK, safe=False)
         else:
-            return JsonResponse('Old password is incorrect, please try again', status=status.HTTP_401_UNAUTHORIZED, safe=False)
+            return JsonResponse('Old password is incorrect, please try again', status=status.HTTP_401_UNAUTHORIZED,
+                                safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -301,11 +304,11 @@ def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
         print('xxxxxxx!!!!!!')
-        user = CustomUser.objects.get(username=user_data['email'])       
-        
+        user = CustomUser.objects.get(username=user_data['email'])
+
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
-        
+
         email_from = settings.EMAIL_HOST_USER
         recipient_list = [user.username]
         user_id = signing.dumps(user.id)
@@ -314,7 +317,7 @@ def send_reset_password_email(request):
         reset_link = f"http://127.0.0.1:3000/reset_passwd/{user_id}/"
         suffix_first = 'Sincerely,'
         suffix = "Colteam."
-        
+
         html_message = format_html(
             "<html><body><h4>Thank you for visiting Collaborative-AI, here is the link to reset your password:</h4>"
             "<p>Please click <a href='{}'>here</a> to reset your password.</p>"
@@ -326,7 +329,7 @@ def send_reset_password_email(request):
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST, safe=False)
-    
+
 
 @api_view(['POST'])
 @permission_classes([AllowAny])

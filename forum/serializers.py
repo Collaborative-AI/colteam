@@ -4,10 +4,7 @@ from users.models import CustomUser
 from users.serializers import CustomUserSerializer
 
 
-
-
 class ThreadSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Thread
         fields = "__all__"
@@ -17,8 +14,8 @@ class ThreadSerializer(serializers.ModelSerializer):
             }
         }
 
-class PostSerializer(serializers.ModelSerializer):
 
+class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"

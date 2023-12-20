@@ -11,12 +11,14 @@ from .models import Thread, Post
 from rest_framework.pagination import PageNumberPagination
 from projects.models import ProjectDetail
 from projects.serializers import ProjectDetailSerializer
+from tags.tag import Tag
 
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 20  # 每页显示的数量
     page_size_query_param = 'page_size'
     max_page_size = 100
+
 
 @api_view(['POST'])
 def create_thread(request):
@@ -29,10 +31,17 @@ def create_thread(request):
         'user': user_auth.pk,
         'project': project_id,
     }
+    tags_data = ProjectDetail.objects.get(id=project_id)
     serializer = ThreadSerializer(data=request_data)
     if serializer.is_valid():
-
         thread = serializer.save()
+        # add project tags
+        tags = []
+        for tag_name in tags_data:
+            tag = Tag.objects.create(name=tag_name)
+            tags.append(tag)
+        thread.tags.set(tags)
+        thread.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response({'message': 'thread create failed'}, status=status.HTTP_400_BAD_REQUEST)
@@ -69,7 +78,8 @@ def get_thread_by_id(request):
         return Response(serializer.data)
     except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
+
 @api_view(['GET'])
 def get_post_by_id(request):
     try:
@@ -80,12 +90,13 @@ def get_post_by_id(request):
     except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
 # 找出该话题对应的帖子
 @api_view(['GET'])
 def find_related_post(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
-        thread_id = request.data.get('thread_id') 
+        thread_id = request.data.get('thread_id')
         thread = Thread.objects.get(id=thread_id)
         related_posts = Post.objects.filter(thread=thread).order_by("id")
 
@@ -104,12 +115,13 @@ def find_related_post(request):
     except Exception as e:
         return Response({"message": str(e)}, status=500)
 
+
 # 找出该项目对应的主题
 @api_view(['GET'])
 def find_threads_by_project(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
-        project_id = request.data.get('project_id') 
+        project_id = request.data.get('project_id')
         project = ProjectDetail.objects.get(id=project_id)
         related_project = Thread.objects.filter(project=project).order_by("id")
 
@@ -142,6 +154,7 @@ def search(request):
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
+
 # 模糊查询
 @api_view(['POST'])
 def fuzzy_search(request):
@@ -156,5 +169,40 @@ def fuzzy_search(request):
                 results = Thread.objects.filter(title__icontains=search_term)[:10]
 
         return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def add_tags(request):
+    try:
+        thread_id = request.data.get('thread_id')
+        thread = Thread.objects.get(id=thread_id)
+        exist_tags = thread.tags
+        for tag in request.data.get('tags'):
+            if tag not in exist_tags:
+                t = Tag.objects.create(name=tag)
+                thread.tags.add(t)
+        serializer = ThreadSerializer(data=thread)
+        if serializer.is_valid():
+            thread = serializer.save()
+            return Response({'message': 'Add tags successfully'}, status=status.HTTP_201_CREATED)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def remove_tags(request):
+    try:
+        thread_id = request.data.get('thread_id')
+        thread = Thread.objects.get(id=thread_id)
+        exist_tags = thread.tags
+        for tag in request.data.get('tags'):
+            if tag in exist_tags:
+                thread.tags.filter(name=tag).delete()
+        serializer = ThreadSerializer(data=thread)
+        if serializer.is_valid():
+            thread = serializer.save()
+            return Response({'message': 'Delete tags successfully'}, status=status.HTTP_201_CREATED)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
