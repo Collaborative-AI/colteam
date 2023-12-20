@@ -16,6 +16,6 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('fuzzy_search/', views.fuzzy_search, name='fuzzy_search'),
     path('find_threads_by_project/', views.find_threads_by_project, name='find_threads_by_project'),
-
-    
+    path('add_tags/', views.add_tags, name='add_tags'),
+    path('remove_tags/', views.remove_tags, name='remove_tags'),
 ]
