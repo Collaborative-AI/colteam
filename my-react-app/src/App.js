@@ -21,8 +21,9 @@ import SettingLayout from './components/setting/layout'
 import AccountSetting from './components/setting/account_setting'
 import ProfileSetting from './components/setting/profile_setting'
 import Messages from './components/messages/messages'
+import ChatBox from './components/messages/chatBox'
 
-function App() {
+function App () {
   return (
     <Router>
       <div className="App">
@@ -33,7 +34,7 @@ function App() {
             <Route path="/data" element={<Data />} />
             <Route path="/team" element={<Team />} />
             <Route path="/project" element={<ProjectLayout />} />
-            <Route path="/messages" element={<Messages />} />
+            {/* <Route path="/messages" element={<Messages />} /> */}
             <Route path="/log_in" element={<Login />} />
             <Route path="/sign_up" element={<SignUp />} />
             <Route path="/forget_passwd" element={<ForgetPasswd />} />
@@ -48,6 +49,9 @@ function App() {
             <Route path="/settings" element={<SettingLayout />} >
               <Route path='ProfileSetting' element={<ProfileSetting />}></Route>
               <Route path='AccountSetting' element={<AccountSetting />}></Route>
+            </Route>
+            <Route path="/messages" element={<Messages />} >
+              <Route path='ChatBox' element={<ChatBox />}></Route>
             </Route>
             {/* <Route path='/show_all_project' element={<ProjectLayput />} /> */}
           </Routes>
