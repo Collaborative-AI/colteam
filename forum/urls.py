@@ -9,6 +9,7 @@ from . import views
 urlpatterns = [
     path('create_thread/', views.create_thread, name="create_thread"),
     path('create_post/', views.create_post, name='create_post'),
+    path('delete_post/', views.delete_post, name='delete_post'),
     path('get_thread_by_id/', views.get_thread_by_id, name='get_thread_by_id'),
     path('get_post_by_id/', views.get_post_by_id, name='get_post_by_id'),
     path('find_related_post/', views.find_related_post, name='find_related_post'),

@@ -79,6 +79,16 @@ def get_thread_by_id(request):
     except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
+@api_view(['GET'])
+def delete_post(request):
+    try:
+        post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
+        post = Post.objects.get(id=post_id)
+        post.content = "The post has been deleted"
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
+    except Thread.DoesNotExist:
+        return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def get_post_by_id(request):

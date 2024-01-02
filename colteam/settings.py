@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'crontab',
     'channels',
     'django_elasticsearch_dsl',
+    'tags.apps.TagConfig'
 ]
 
 MIDDLEWARE = [
