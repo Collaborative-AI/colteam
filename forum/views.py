@@ -84,7 +84,7 @@ def delete_post(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
-        post.content = "The post has been deleted"
+        post.visible = False
         serializer = PostSerializer(post)
         return Response(serializer.data)
     except Thread.DoesNotExist:

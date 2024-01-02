@@ -1,0 +1,1 @@
+如果visible为false， 返回“content invisible”
