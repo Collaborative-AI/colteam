@@ -64,13 +64,13 @@ def create_post(request):
     serializer = PostSerializer(data=request_data)
     if serializer.is_valid():
         post = serializer.save()
-        return Response({'message': 'Create post successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response({'message': 'post create failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
-def get_thread_by_id(request):
+def get_thread_by_threadId(request):
     try:
         thread_id = request.data.get('thread_id')  # 从请求数据中获取话题id
         thread = Thread.objects.get(id=thread_id)
@@ -91,7 +91,7 @@ def delete_post(request):
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def get_post_by_id(request):
+def get_post_by_postId(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
@@ -103,7 +103,7 @@ def get_post_by_id(request):
 
 # 找出该话题对应的帖子
 @api_view(['GET'])
-def find_related_post(request):
+def get_posts_by_threadId(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
         thread_id = request.data.get('thread_id')
@@ -128,7 +128,7 @@ def find_related_post(request):
 
 # 找出该项目对应的主题
 @api_view(['GET'])
-def find_threads_by_project(request):
+def get_threads_by_projectId(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
         project_id = request.data.get('project_id')
@@ -151,14 +151,14 @@ def find_threads_by_project(request):
 
 
 @api_view(['POST'])
-def search(request):
+def precise_search_by_title(request):
     try:
         form = SearchForm(request.GET)
         results = []
         if form.is_valid():
-            search_term = form.cleaned_data['search_term']
-            if search_term:
-                results = Thread.objects.filter(title=search_term)
+            search_title = form.cleaned_data['title']
+            if search_title:
+                results = Thread.objects.filter(title=search_title)
 
         return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
     except Exception as exc:
@@ -167,16 +167,16 @@ def search(request):
 
 # 模糊查询
 @api_view(['POST'])
-def fuzzy_search(request):
+def fuzzy_search_by_title(request):
     try:
         form = SearchForm(request.GET)
         results = []
 
         if form.is_valid():
-            search_term = form.cleaned_data['search_term']
-            if search_term:
+            title_key_words = form.cleaned_data['title_key_words']
+            if title_key_words:
                 # 只返回前十个
-                results = Thread.objects.filter(title__icontains=search_term)[:10]
+                results = Thread.objects.filter(title__icontains=title_key_words)[:10]
 
         return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
     except Exception as exc:
