@@ -145,7 +145,7 @@ return{
 <!-- 7. like_thread() -->
 <!-- 8. like_post() -->
 <!-- 9. dislike_post() -->
-10. add_thread_in_collector()
+<!-- 10. add_thread_in_collector() -->
 11. add thread view number function
 12. add preview function
 //user
