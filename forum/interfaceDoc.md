@@ -136,8 +136,8 @@ return{
 
 <!-- TODO: -->
 //forum
-1. get_thread_by_postId()
-2. delete_thread()
+<!-- 1. get_thread_by_postId() -->
+<!-- 2. delete_thread() -->
 3. edit_post_by_postId()
 4. get_thread_by_tags()
 5. add visible condition in all "get" functions: thread add thead, post add thread&post

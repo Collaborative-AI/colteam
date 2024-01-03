@@ -19,4 +19,5 @@ urlpatterns = [
     path('add_tags/', views.add_tags, name='add_tags'),
     path('remove_tags/', views.remove_tags, name='remove_tags'),
     path('get_thread_by_postId/', views.get_thread_by_postId, name='get_thread_by_postId'),
+    path('delete_thread/', views.delete_thread, name='delete_thread'),
 ]
