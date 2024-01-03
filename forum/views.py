@@ -2,12 +2,14 @@ from django.shortcuts import render
 from users.views import *
 from rest_framework.decorators import api_view
 from .serializers import ThreadSerializer, PostSerializer
+from .serializers import Thread_DislikeSerializer, Thread_LikeSerializer
+from .serializers import Post_DislikeSerializer, Post_LikeSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework_jwt.utils import jwt_decode_handler
-from .models import Thread, Post
+from .models import *
 from rest_framework.pagination import PageNumberPagination
 from projects.models import ProjectDetail
 from projects.serializers import ProjectDetailSerializer
@@ -250,3 +252,85 @@ def delete_thread(request):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
+
+@api_view(['POST'])
+def like_thread(request):
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    thread_id = request.data.get('thread_id')
+    thread = Thread.objects.get(id=thread_id)
+    if Thread_Like.objects.filter(user=user_auth, thread=thread).exists():
+        return Response({'message': 'You have already liked this thread'}, status=status.HTTP_400_BAD_REQUEST)
+
+    request_data = {
+        'user': user_auth.pk,
+        'thread': thread_id,
+    }
+
+    serializer = Thread_LikeSerializer(data=request_data)
+    if serializer.is_valid():
+        Thread_Like = serializer.save()
+        thread.like_count += 1
+        thread.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'You can not like this thread yet.'}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def dislike_thread(request):
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    thread_id = request.data.get('thread_id')
+    thread = Thread.objects.get(id=thread_id)
+    if Thread_Dislike.objects.filter(user=user_auth, thread=thread).exists():
+        return Response({'message': 'You have already disliked this thread'}, status=status.HTTP_400_BAD_REQUEST)
+
+    request_data = {
+        'user': user_auth.pk,
+        'thread': thread_id,
+    }
+
+    serializer = Thread_DislikeSerializer(data=request_data)
+    if serializer.is_valid():
+        Thread_Dislike = serializer.save()
+        thread.dislike_count += 1
+        thread.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'You can not like this thread yet.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['POST'])
+def like_post(request):
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    post_id = request.data.get('post_id')
+    post = Post.objects.get(id=post_id)
+    if Post_Like.objects.filter(user=user_auth, post=post).exists():
+        return Response({'message': 'You have already liked this post'}, status=status.HTTP_400_BAD_REQUEST)
+
+    request_data = {
+        'user': user_auth.pk,
+        'post': post_id,
+    }
+
+    serializer = Post_LikeSerializer(data=request_data)
+    if serializer.is_valid():
+        Post_Like = serializer.save()
+        post.like_count += 1
+        post.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    else:
+        return Response({'message': 'You can not like this post yet.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# @api_view(['POST'])
+# def add_thread_in_collector(request):
+#     user_token_auth = get_token_from_request(request)
+#     user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+#     user_auth = CustomUser.objects.get(id=user_id_auth)
