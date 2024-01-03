@@ -40,7 +40,7 @@ class Thread_DislikeSerializer(serializers.ModelSerializer):
         model = Thread_Dislike
         fields = ['user', 'thread']
 
-class CollectorSerualizer(serializers.ModelSerializer):
+class CollectorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Collector
         fields = ['user', 'threads']

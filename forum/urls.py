@@ -23,4 +23,5 @@ urlpatterns = [
     path('like_thread/', views.like_thread, name='like_thread'),
     path('dislike_thread/', views.dislike_thread, name='dislike_thread'),
     path('like_post/', views.like_post, name='like_post'),
+    path('add_thread_in_collector/', views.add_thread_in_collector, name='add_thread_in_collector'),
 ]

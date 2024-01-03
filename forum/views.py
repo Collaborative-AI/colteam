@@ -1,9 +1,7 @@
 from django.shortcuts import render
 from users.views import *
 from rest_framework.decorators import api_view
-from .serializers import ThreadSerializer, PostSerializer
-from .serializers import Thread_DislikeSerializer, Thread_LikeSerializer
-from .serializers import Post_DislikeSerializer, Post_LikeSerializer
+from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes
@@ -329,8 +327,24 @@ def like_post(request):
         return Response({'message': 'You can not like this post yet.'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-# @api_view(['POST'])
-# def add_thread_in_collector(request):
-#     user_token_auth = get_token_from_request(request)
-#     user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
-#     user_auth = CustomUser.objects.get(id=user_id_auth)
+@api_view(['POST'])
+def add_thread_in_collector(request):
+    user_token_auth = get_token_from_request(request)
+    user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+    user_auth = CustomUser.objects.get(id=user_id_auth)
+
+    try:
+        thread_id = request.data.get('thread_id')
+        thread = Thread.objects.get(id=thread_id)
+    except Thread.DoesNotExist:
+        return Response({'message': 'Thread does not exist'}, status=status.HTTP_404_NOT_FOUND)
+    
+    collector, created = Collector.objects.get_or_create(user=user_auth)
+
+    if collector.threads.filter(id=thread.id).exists():
+        return Response({'message': 'Thread is already in collector'}, status=status.HTTP_400_BAD_REQUEST)
+
+    collector.threads.add(thread)
+    serializer = CollectorSerializer(collector)
+    serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
