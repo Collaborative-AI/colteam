@@ -22,6 +22,7 @@ pip show channels==3.0.4 || pip install channels==3.0.4
 pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
 pip show elasticsearch || pip install elasticsearch
 pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
+pip show minio || pip install minio
 
 :: server
 python manage.py makemigrations
