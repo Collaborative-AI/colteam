@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from projects.models import ProjectDetail
 from projects.serializers import ProjectDetailSerializer
 from tags.tag import Tag
-
+from django.utils import timezone
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 20  # 每页显示的数量
@@ -73,10 +73,10 @@ def create_post(request):
 def get_thread_by_threadId(request):
     try:
         thread_id = request.data.get('thread_id')  # 从请求数据中获取话题id
-        thread = Thread.objects.get(id=thread_id)
+        thread = Thread.objects.get(id=thread_id, visible=True) 
         serializer = ThreadSerializer(thread)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    except thread.DoesNotExist:
+    except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
@@ -84,20 +84,24 @@ def delete_post(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
-        serializer = PostSerializer(post, data={'visible': False}, partial=True)
+        update_data = {
+            'visible': False,
+            'last_modified_time': timezone.now()
+        }
+        serializer = PostSerializer(post, data=update_data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except post.DoesNotExist:
+    except Post.DoesNotExist:
         return Response({'message': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def get_post_by_postId(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
-        post = Post.objects.get(id=post_id)
+        post = Post.objects.get(id=post_id, visible=True) 
         serializer = PostSerializer(post)
         return Response(serializer.data, status=status.HTTP_200_OK)
     except Thread.DoesNotExist:
@@ -110,8 +114,8 @@ def get_posts_by_threadId(request):
     try:
         # 在 Thread 模型中查找给定话题ID的帖子
         thread_id = request.data.get('thread_id')
-        thread = Thread.objects.get(id=thread_id)
-        related_posts = Post.objects.filter(thread=thread).order_by("id")
+        thread = Thread.objects.get(id=thread_id, visible=True) 
+        related_posts = Post.objects.filter(thread=thread, visible=True).order_by("id")
 
         # 不使用分页器分页, 使用 PostSerializer 序列化帖子对象
         # serializer = PostSerializer(related_posts, many=True)
@@ -136,7 +140,7 @@ def get_threads_by_projectId(request):
         # 在 Thread 模型中查找给定话题ID的帖子
         project_id = request.data.get('project_id')
         project = ProjectDetail.objects.get(id=project_id)
-        related_project = Thread.objects.filter(project=project).order_by("id")
+        related_project = Thread.objects.filter(project=project, visible=True).order_by("id")
 
         # 不使用分页器分页, 使用 PostSerializer 序列化帖子对象
         # serializer = ThreadSerializer(related_project, many=True)
@@ -145,15 +149,15 @@ def get_threads_by_projectId(request):
         result_record = paginator.paginate_queryset(related_project, request)
         serializer = ThreadSerializer(result_record, many=True)
         return paginator.get_paginated_response(serializer.data)
-
-
+    except ProjectDetail.DoesNotExist:
+            return Response({"message": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
     except Thread.DoesNotExist:
-        return Response({"message": "Project not found"}, status=404)
+        return Response({"message": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
-        return Response({"message": str(e)}, status=500)
+        return Response({"message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def precise_search_by_title(request):
     try:
         form = SearchForm(request.GET)
@@ -161,9 +165,13 @@ def precise_search_by_title(request):
         if form.is_valid():
             search_title = form.cleaned_data['title']
             if search_title:
-                results = Thread.objects.filter(title=search_title)
-
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+                results = Thread.objects.filter(title=search_title, visible=True) 
+                serializer = ThreadSerializer(results, many=True)
+                return Response({'results': serializer.data}, status=status.HTTP_200_OK)
+            else:
+                results = Thread.objects.filter(visible=True).order_by('last_modified_time')[:10]
+                return Response({'results': serializer.data}, status=status.HTTP_200_OK)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -179,9 +187,13 @@ def fuzzy_search_by_title(request):
             title_key_words = form.cleaned_data['title_key_words']
             if title_key_words:
                 # 只返回前十个
-                results = Thread.objects.filter(title__icontains=title_key_words)[:10]
-
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+                results = Thread.objects.filter(title__icontains=title_key_words, visible=True)[:10]
+                serializer = ThreadSerializer(results, many=True)
+                return Response({'results': serializer.data}, status=status.HTTP_200_OK)
+            else:
+                results = Thread.objects.filter(visible=True).order_by('last_modified_time')[:10]
+                return Response({'results': serializer.data}, status=status.HTTP_200_OK)
+        return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -224,31 +236,33 @@ def remove_tags(request):
 def get_thread_by_postId(request):
     try:
         post_id = request.query_params.get('post_id')
-        post = Post.objects.get(id=post_id)
-        correspond_thread = Thread.objects.filter(post=post.thread) 
-        if not correspond_thread.exists():
-            return Response({'message': 'No corresponding thread found.'}, status=status.HTTP_404_NOT_FOUND)
-   
-        if correspond_thread.visible is False:
-            return Response({'message': 'This thread has been deleted.'}, status=status.HTTP_200_OK)
-        else:
-            serializer = ThreadSerializer(data=correspond_thread)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        _post = Post.objects.get(id=post_id)
+        correspond_thread = Thread.objects.get(post=_post, visible=True) 
+        serializer = ThreadSerializer(data=correspond_thread)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Post.DoesNotExist:
+        return Response({'message': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Thread.DoesNotExist:
+        return Response({'message': 'No corresponding thread found.'}, status=status.HTTP_404_NOT_FOUND)
     except Exception as exc:
-        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
 def delete_thread(request):
     try:
         thread_id = request.data.get('thread_id')  # 从请求数据中获取帖子id
         thread = Thread.objects.get(id=thread_id)
-        serializer = ThreadSerializer(thread, data={'visible': False}, partial=True)
+        update_data = {
+            'visible': False,
+            'last_modified_time': timezone.now()
+        }
+        serializer = ThreadSerializer(thread, data=update_data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    except thread.DoesNotExist:
+    except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['POST'])
@@ -348,3 +362,35 @@ def add_thread_in_collector(request):
     serializer = CollectorSerializer(collector)
     serializer.save()
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def edit_post_by_postId(request):
+    try:
+        post_id = request.data.get('post_id')
+        post = Post.objects.get(id=post_id)
+        post_content = request.data.get('content')
+        update_data = {
+            'content': post_content,
+            'last_modified_time': timezone.now()
+        }
+        serializer = PostSerializer(post, data=update_data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    except Post.DoesNotExist:
+        return Response({'message': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as exc:
+        return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_thread_by_tagIds(request):
+    try:
+        tag_ids = request.data.get('tag_ids')
+        threads = Thread.objects.filter(tags__id__in=tag_ids, visible=True).distinct().order_by('last_modified_time')
+        if threads.exists():
+            serializer = ThreadSerializer(threads, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'No thread was found'}, status=status.HTTP_404_NOT_FOUND)
+    except Exception as exc:
+        return Response({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)

@@ -138,9 +138,9 @@ return{
 //forum
 <!-- 1. get_thread_by_postId() -->
 <!-- 2. delete_thread() -->
-3. edit_post_by_postId()
-4. get_thread_by_tags()
-5. add visible condition in all "get" functions: thread add thead, post add thread&post
+<!-- 3. edit_post_by_postId() -->
+<!-- 4. get_thread_by_tagIds() -->
+<!-- 5. add visible condition in all "get" functions: thread add thead, post add thread&post -->
 6. add ordered by in "get" functions
 <!-- 7. like_thread() -->
 <!-- 8. like_post() -->

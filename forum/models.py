@@ -13,6 +13,7 @@ class Thread(models.Model):
     visible = models.BooleanField(default = True)
     like_count = models.IntegerField(default=0)
     dislike_count = models.IntegerField(default=0)
+    last_modified_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return '(%s, %s)' % (self.id, self.title)
@@ -25,6 +26,7 @@ class Post(models.Model):
     user = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL, related_name="user_belong")
     visible = models.BooleanField(default = True)
     like_count = models.IntegerField(default=0)
+    last_modified_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return '(%s, %s, %s, %s)' % (self.id, self.content, self.user.id, self.thread.id)
