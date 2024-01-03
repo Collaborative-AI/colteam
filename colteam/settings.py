@@ -262,3 +262,19 @@ ELASTICSEARCH_DSL = {
         'timeout': 20,  # 设置连接超时为20秒
     },
 }
+
+MINIO_ACCESS_KEY = 'your-minio-access-key'
+MINIO_SECRET_KEY = 'your-minio-secret-key'
+MINIO_ENDPOINT = 'http://your-minio-server:9000'
+MINIO_USE_SSL = False  # 根据你的实际情况配置是否使用 SSL
+
+DEFAULT_FILE_STORAGE = 'storages.backends.minio.MinioStorage'
+STATICFILES_STORAGE = 'storages.backends.minio.MinioStorage'
+MINIO_STORAGE_ACCESS_KEY = 'your-minio-access-key'
+MINIO_STORAGE_SECRET_KEY = 'your-minio-secret-key'
+MINIO_STORAGE_ENDPOINT = 'http://your-minio-server:9000'
+MINIO_STORAGE_USE_SSL = False  # 根据你的实际情况配置是否使用 SSL
+MINIO_STORAGE_MEDIA_BUCKET_NAME = 'your-media-bucket'
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+MINIO_STORAGE_STATIC_BUCKET_NAME = 'your-static-bucket'
+MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
