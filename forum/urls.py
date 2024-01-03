@@ -20,4 +20,7 @@ urlpatterns = [
     path('remove_tags/', views.remove_tags, name='remove_tags'),
     path('get_thread_by_postId/', views.get_thread_by_postId, name='get_thread_by_postId'),
     path('delete_thread/', views.delete_thread, name='delete_thread'),
+    path('like_thread/', views.like_thread, name='like_thread'),
+    path('dislike_thread/', views.dislike_thread, name='dislike_thread'),
+    path('like_post/', views.like_post, name='like_post'),
 ]
