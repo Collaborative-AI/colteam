@@ -18,4 +18,5 @@ urlpatterns = [
     path('fuzzy_search_by_title/', views.fuzzy_search_by_title, name='fuzzy_search_by_title'),
     path('add_tags/', views.add_tags, name='add_tags'),
     path('remove_tags/', views.remove_tags, name='remove_tags'),
+    path('get_thread_by_postId/', views.get_thread_by_postId, name='get_thread_by_postId'),
 ]

@@ -75,20 +75,23 @@ def get_thread_by_threadId(request):
         thread_id = request.data.get('thread_id')  # 从请求数据中获取话题id
         thread = Thread.objects.get(id=thread_id)
         serializer = ThreadSerializer(thread)
-        return Response(serializer.data)
-    except Thread.DoesNotExist:
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def delete_post(request):
     try:
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
-        post.visible = False
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
-    except Thread.DoesNotExist:
-        return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = PostSerializer(post, data={'visible': False}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except post.DoesNotExist:
+        return Response({'message': 'Post not found'}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
 def get_post_by_postId(request):
@@ -96,7 +99,7 @@ def get_post_by_postId(request):
         post_id = request.data.get('post_id')  # 从请求数据中获取帖子id
         post = Post.objects.get(id=post_id)
         serializer = PostSerializer(post)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     except Thread.DoesNotExist:
         return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -216,3 +219,34 @@ def remove_tags(request):
             return Response({'message': 'Delete tags successfully'}, status=status.HTTP_201_CREATED)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def get_thread_by_postId(request):
+    try:
+        post_id = request.query_params.get('post_id')
+        post = Post.objects.get(id=post_id)
+        correspond_thread = Thread.objects.filter(post=post.thread) 
+        if not correspond_thread.exists():
+            return Response({'message': 'No corresponding thread found.'}, status=status.HTTP_404_NOT_FOUND)
+   
+        if correspond_thread.visible is False:
+            return Response({'message': 'This thread has been deleted.'}, status=status.HTTP_200_OK)
+        else:
+            serializer = ThreadSerializer(data=correspond_thread)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+def delete_thread(request):
+    try:
+        thread_id = request.data.get('thread_id')  # 从请求数据中获取帖子id
+        thread = Thread.objects.get(id=thread_id)
+        serializer = ThreadSerializer(thread, data={'visible': False}, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except thread.DoesNotExist:
+        return Response({'message': 'Thread not found'}, status=status.HTTP_404_NOT_FOUND)
