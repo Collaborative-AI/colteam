@@ -26,6 +26,8 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
 function NewProject () {
   const [projectName, setProjectName] = useState("")
   const [description, setDescription] = useState("")
+  const [website, setWebsite] = useState("")
+
   const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
 
@@ -35,9 +37,10 @@ function NewProject () {
     console.log(e)
     e.preventDefault()
     const data = {
-      id: auth.email,
+      email: auth.email,
       title: projectName,
-      description: description
+      description: description,
+      website: website
     }
     const config = {
       headers: {
@@ -75,7 +78,7 @@ function NewProject () {
         <div className="create-project-subtitle-text">A repository contains all model files, including the revision history.</div>
       </div>
       <InputItem
-        name="Owner"
+        name="email"
         value={auth.email}
       />
       <InputItem
@@ -83,6 +86,13 @@ function NewProject () {
         value={projectName}
         onChange={(e) => setProjectName(e.target.value)}
         placeholder="please input your project name"
+      />
+
+      <InputItem
+        name="website"
+        value={website}
+        onChange={(e) => setWebsite(e.target.value)}
+        placeholder="please input website"
       />
 
       <InputItem
