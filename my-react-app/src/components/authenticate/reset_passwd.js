@@ -40,6 +40,7 @@ export default function ResetPasswd() {
             .post('http://localhost:8000/users/resetPassword/', data)
             .then((response) => {
                 console.log(response.data)
+                localStorage.setUserStatus(false)
                 navigate('/log_in')
             })
             .catch((error) => {
