@@ -10,11 +10,11 @@ import Button from 'react-bootstrap/Button'
 
 export default function AccountSetting () {
     const { auth } = useContext(AuthContext)
-    const [error, setError] = useState(false)
 
     const [formData, setFormData] = useState({
         old_password: '',
         new_password: '',
+        new_password_confirm: '',
     })
 
     const handlePasswordChange = (event) => {
@@ -23,36 +23,22 @@ export default function AccountSetting () {
             ...formData,
             [name]: value,
         })
-        // setError({ error: false })
     }
 
 
     const navigate = useNavigate()
 
-    // useEffect(() => {
-    //     // console.log(`Bearer ${auth.accessToken}`)
-    //     axios
-    //         .get("http://localhost:8000/users/password/change/", {
-    //             headers: {
-    //                 Authorization: `Bearer ${auth.accessToken}`
-    //             },
-    //         })
-    //         .then((response) => {
-    //             console.log(response)
-    //             //setUserData
-    //         })
-    //         .catch((error) => console.error('Error fetching user data:', error))
-    // }, [])
-
     const handleResetPasswd = (event) => {
         event.preventDefault()
-        // if (formData.new_password !== formData.new_passwd_confirm) {
-        //     setError({ error: true })
-        // }
+        if(!formData.old_password || !formData.new_password || !formData.new_password_confirm){
+            alert("Please make sure you filled all passwords.")
+        }
+        else if(formData.new_password !== formData.new_password_confirm){
+            alert("Passwords do not match. Please check and try again.")
+        }
         const data = {
             old_password: formData.old_password,
             new_password: formData.new_password,
-            new_passwd_confirm: formData.new_passwd_confirm,
         }
         const config = {
             headers: {
@@ -113,11 +99,6 @@ export default function AccountSetting () {
                         />
                     </Form.Group>
                 </Row>
-                {/* {error && (
-                    <p style={{ fontSize: '12px', color: 'red', marginTop: '10px' }}>
-                        Passwords do not match. Please check and try again.
-                    </p>
-                )} */}
                 <Button variant="primary" type="submit">
                     Save Changes
                 </Button>

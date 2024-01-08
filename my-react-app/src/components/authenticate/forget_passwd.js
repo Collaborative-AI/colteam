@@ -5,8 +5,6 @@ import axios from 'axios'
 export default function ForgetPasswd() {
     const [formData, setFormData] = useState({
         email: '',
-        new_password: '',
-        new_password_verify: '',
     })
 
     const handleInputChange = (event) => {
@@ -25,8 +23,6 @@ export default function ForgetPasswd() {
         // Build data object to be sent to the backend
         const data = {
             email: formData.email,
-            new_password: formData.new_password,
-            new_password_verify: formData.new_password_verify,
         }
 
         const toEmailVerification = () => {
