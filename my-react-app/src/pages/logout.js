@@ -1,19 +1,17 @@
 import axios from 'axios'
-import React, { useContext } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import AuthContext from '../AuthProvider.component'
-import { removeToken } from '../../utils'
+import { getToken } from '../utils'
 
 
 export default function LogOut () {
-    const { auth, setAuth } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleLogOut = (event) => {
         event.preventDefault()
         const config = {
             headers: {
-                Authorization: "Bearer " + auth.accessToken,
+                Authorization: "Bearer " + getToken,
             }
         }
 
@@ -21,13 +19,16 @@ export default function LogOut () {
             .post('http://localhost:8000/users/logout/', null, config)
             .then((response) => {
                 console.log(response.data)
-                setAuth({ email: '', roles: '', accessToken: '', success: false })
                 localStorage.clear()
                 navigate('/')
             })
             .catch((error) => {
                 console.error('Error:', error.message)
             })
+    }
+
+    const handleCancelLogOut = (event) => {
+        navigate('/')
     }
 
     return (
@@ -38,7 +39,7 @@ export default function LogOut () {
                     <button type="submit" className="btn btn-primary mx-5" onClick={handleLogOut}>
                         Yes
                     </button>
-                    <button type="submit" className="btn btn-primary mx-5" >
+                    <button type="submit" className="btn btn-primary mx-5" onClick={handleCancelLogOut}>
                         No
                     </button>
                 </div>

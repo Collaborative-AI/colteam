@@ -8,7 +8,9 @@ import {
   setUserEmail,
   getUserEmail,
   setUserRole,
-  getUserRole
+  getUserRole,
+  setUserStatus,
+  getUserStatus
 } from './userInfo'
 
 
@@ -19,5 +21,7 @@ export {
   setUserEmail,
   getUserEmail,
   setUserRole,
-  getUserRole
+  getUserRole,
+  setUserStatus,
+  getUserStatus
 }

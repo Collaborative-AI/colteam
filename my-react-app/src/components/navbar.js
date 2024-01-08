@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form'
 import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
-import profile_image from '../images/colteam_logo.png'
+import profile_image from '../assets/images/colteam_logo.png'
 
 function NavbarIns() {
   const { auth } = useContext(AuthContext)

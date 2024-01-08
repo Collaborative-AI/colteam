@@ -10,21 +10,9 @@ export const AuthProvider = ({ children }) => {
         // ...FormData,
         roles: getUserRole || '',
         accessToken: getToken() || '',
-        success: getToken() != null && getToken() != '',
+        // success: getToken() != null && getToken() != '',
+        success: true
     })
-    // console.log("aafrom AuthProvider" + auth.accessToken)
-    // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaafrom AuthProvider for userInfo" + auth.email)
-
-    // if (auth.accessToken) {
-    //     return (
-    //         <AuthContext.Provider value={{ auth, setAuth }}>
-    //             {children}
-    //         </AuthContext.Provider>
-    //     )
-    // } else {
-    //     return <Navigate to="/login" replace={true} />
-    // }
-
 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>

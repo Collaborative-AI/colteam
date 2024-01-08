@@ -1,12 +1,10 @@
 import axios from 'axios'
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from '../AuthProvider.component'
-import { setToken, setUserEmail, setUserRole } from '../../utils/'
+import AuthContext from '../components/AuthProvider.component'
+import { setToken, setUserEmail, setUserRole, setUserStatus, getUserStatus } from '../utils/'
 
 export default function Login () {
-  const { auth, setAuth } = useContext(AuthContext)
-
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -37,17 +35,10 @@ export default function Login () {
       .then((response) => {
         // Actions to perform after successful login, e.g., saving token
         console.log(response.data)
-        setAuth({
-          email: response?.data?.user_info?.username,
-          roles: response?.data?.roles,
-          accessToken: response?.data?.access,
-          success: true
-        })
-        // console.log(auth.email)
-        // console.log(response?.data?.user_info?.username,)
         setToken(response?.data?.access)
         setUserEmail(response?.data?.user_info?.username)
         setUserRole(response?.data?.roles)
+        setUserStatus(true)
         navigate('/')
       })
       .catch((error) => {
@@ -64,7 +55,7 @@ export default function Login () {
 
   return (
     <div className="auth-inner-small">
-      {auth.success ? (
+      {getUserStatus ? (
         <section>
           {/* TBD: show profile */}
           <h1>You are logged in !</h1>
@@ -109,6 +100,5 @@ export default function Login () {
         </section>
       )}
     </div>
-
   )
 }

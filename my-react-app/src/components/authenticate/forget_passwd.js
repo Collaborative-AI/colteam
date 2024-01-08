@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
-export default function ForgetPasswd () {
+export default function ForgetPasswd() {
     const [formData, setFormData] = useState({
         email: '',
+        new_password: '',
+        new_password_verify: '',
     })
 
     const handleInputChange = (event) => {
@@ -23,6 +25,12 @@ export default function ForgetPasswd () {
         // Build data object to be sent to the backend
         const data = {
             email: formData.email,
+            new_password: formData.new_password,
+            new_password_verify: formData.new_password_verify,
+        }
+
+        const toEmailVerification = () => {
+            navigate('/email_verification', { state: { username: formData.email } })
         }
 
         // Send POST request to Django backend's forget passwd API
@@ -31,8 +39,7 @@ export default function ForgetPasswd () {
             .then((response) => {
                 // Handle successful email check, then reset passwd
                 console.log(response.data)
-                // navigate('/reset_passwd', { state: { user_id: response.user_id } })
-                // navigate('/reset_passwd')
+                toEmailVerification()
             })
             .catch((error) => {
                 // TBD: Don't show error reason for safety

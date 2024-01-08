@@ -40,7 +40,6 @@ export default function SignUp () {
         // Handle successful registration, e.g., show success message
         console.log(response.status)
         //收到201， 跳转到提示页面
-        // navigate('/email_verification')
         toEmailVerification()
       })
       .catch((error) => {

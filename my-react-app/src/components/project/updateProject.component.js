@@ -1,6 +1,6 @@
 import { React, useState, useContext } from 'react'
 import '../../index.css'
-import colteam_logo from '../../images/colteam_logo.png'
+import colteam_logo from '../../assets/images/colteam_logo.png'
 import AuthContext from '../AuthProvider.component'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'

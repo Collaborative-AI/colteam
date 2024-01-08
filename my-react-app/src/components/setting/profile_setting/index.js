@@ -2,7 +2,7 @@ import { useEffect, useContext, useState } from 'react'
 import AuthContext from '../../AuthProvider.component'
 import axios from 'axios'
 // import { Avatar } from 'antd'
-import colteam_logo from '../../../images/colteam_logo.png'
+import colteam_logo from '../../../assets/images/colteam_logo.png'
 import Address from '../profile_setting/home_address'
 import Button from 'react-bootstrap/Button'
 

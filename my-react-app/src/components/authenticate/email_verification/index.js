@@ -64,7 +64,7 @@ function EmailVerification () {
         </Button>
       </Space>
       <div className="hint-container">
-        <div className="hint-text ">Please check your email to active your account</div>
+        <div className="text-right">Please check your email to active your account</div>
         <div className="hint-text ">already activated your account?</div>
       </div>
       <Space direction="vertical" style={{ width: '100%' }}>
