@@ -7,8 +7,6 @@ const { Sider } = Layout
 const Messages = () => {
     const location = useLocation().pathname
 
-    // const [show, setShow] = useState(false);
-    // const handleShow = () => setShow(true);
     return (
         <Layout>
             <Sider width={200} className="site-layout-background">
@@ -24,6 +22,10 @@ const Messages = () => {
 
                     <Menu.Item key='/messages/createRoom'>
                       <Link to={'/messages/createRoom'}>Create Room</Link>
+                    </Menu.Item>
+
+                    <Menu.Item key='/messages/addChat'>
+                      <Link to={'/messages/addChat'}>Add Chat</Link>
                     </Menu.Item>
                 </Menu>
             </Sider>

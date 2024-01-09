@@ -23,6 +23,7 @@ import ProfileSetting from './components/setting/profile_setting'
 import Messages from './components/messages/messages'
 import ChatBox from './components/messages/chatBox'
 import CreateRoom from './components/messages/createRoom'
+import AddChat from './components/messages/addChat'
 
 function App () {
   return (
@@ -54,6 +55,7 @@ function App () {
             <Route path="/messages" element={<Messages />} >
               <Route path='ChatBox' element={<ChatBox />}></Route>
               <Route path='CreateRoom' element={<CreateRoom />}></Route>
+              <Route path='AddChat' element={<AddChat />}></Route>
             </Route>
             {/* <Route path='/show_all_project' element={<ProjectLayput />} /> */}
           </Routes>
