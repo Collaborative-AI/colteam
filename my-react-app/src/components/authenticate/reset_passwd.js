@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useParams, useNavigate } from 'react-router-dom'
-
+import { setUserStatus } from '../../utils/userInfo'
 export default function ResetPasswd() {
     const { user_id } = useParams()
 
@@ -40,7 +40,7 @@ export default function ResetPasswd() {
             .post('http://localhost:8000/users/resetPassword/', data)
             .then((response) => {
                 console.log(response.data)
-                localStorage.setUserStatus(false)
+                setUserStatus(false)
                 navigate('/log_in')
             })
             .catch((error) => {
