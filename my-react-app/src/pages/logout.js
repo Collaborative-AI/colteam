@@ -11,7 +11,7 @@ export default function LogOut () {
         event.preventDefault()
         const config = {
             headers: {
-                Authorization: "Bearer " + getToken,
+                Authorization: "Bearer " + getToken(),
             }
         }
 
@@ -19,11 +19,13 @@ export default function LogOut () {
             .post('http://localhost:8000/users/logout/', null, config)
             .then((response) => {
                 console.log(response.data)
-                localStorage.clear()
-                navigate('/')
             })
             .catch((error) => {
                 console.error('Error:', error.message)
+            })
+            .finally(() => {
+                localStorage.clear()
+                navigate('/')
             })
     }
 

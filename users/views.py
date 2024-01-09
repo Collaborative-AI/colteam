@@ -303,14 +303,8 @@ def activate_account(request, token):
 def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
-<<<<<<< HEAD
-        print('xxxxxxx!!!!!!')
-        user = CustomUser.objects.get(username=user_data['email'])
-
-=======
         user = CustomUser.objects.get(username=user_data['email'])       
         
->>>>>>> 65c0010d (print)
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 

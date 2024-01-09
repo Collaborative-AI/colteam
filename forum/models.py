@@ -9,7 +9,7 @@ class Thread(models.Model):
     project = models.ForeignKey(ProjectDetail, on_delete=models.CASCADE, related_name="project_belong")
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
-    tags = models.ManyToManyField(Tag, related_name="threads")
+    tags = models.ManyToManyField(Tag, related_name="threads_tags")
     visible = models.BooleanField(default = True)
     like_count = models.IntegerField(default=0)
     dislike_count = models.IntegerField(default=0)
