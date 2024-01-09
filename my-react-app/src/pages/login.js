@@ -55,7 +55,7 @@ export default function Login () {
 
   return (
     <div className="auth-inner-small">
-      {getUserStatus ? (
+      {getUserStatus() ? (
         <section>
           {/* TBD: show profile */}
           <h1>You are logged in !</h1>

@@ -23,7 +23,7 @@ const setUserStatus = (login_status) => {
 }
 
 const getUserStatus = () => {
-  return window.localStorage.removeItem(keyStatus)
+  return window.localStorage.getItem(keyStatus)
 }
 
 export {

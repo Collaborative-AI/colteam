@@ -91,7 +91,7 @@ function ProfileSetting () {
         })
       })
       .catch((error) => console.error('Error fetching user data:', error))
-  }, [])
+  }, [auth.accessToken,userData])
 
 
   //update change to back end
