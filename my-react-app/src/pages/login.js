@@ -52,7 +52,7 @@ export default function Login () {
         }
       })
   }
-  
+
   return (
     <div className="auth-inner-small">
       {getUserStatus()==true? (

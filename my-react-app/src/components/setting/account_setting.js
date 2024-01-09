@@ -60,49 +60,57 @@ export default function AccountSetting () {
 
 
     return (
-        <Container >
-            <h4>Account Setting</h4>
-            <Form onSubmit={handleResetPasswd} style={{ marginTop: '40px' }}>
-                <Row className="mb-3">
-                    <Form.Group as={Col} xs="12" sm="6" md="4">
-                        <Form.Label>Old Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Enter old password"
-                            name="old_password"
-                            value={formData.old_password}
-                            onChange={handlePasswordChange}
-                        />
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} xs="12" sm="6" md="4">
-                        <Form.Label>New Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Enter new password"
-                            name="new_password"
-                            value={formData.new_password}
-                            onChange={handlePasswordChange}
-                        />
-                    </Form.Group>
-                </Row>
-                <Row className="mb-3">
-                    <Form.Group as={Col} xs="12" sm="6" md="4">
-                        <Form.Label>Confirm New Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            placeholder="Confirm new password"
-                            name="new_password_confirm"
-                            value={formData.new_password_confirm}
-                            onChange={handlePasswordChange}
-                        />
-                    </Form.Group>
-                </Row>
-                <Button variant="primary" type="submit">
-                    Save Changes
-                </Button>
-            </Form >
-        </ Container >
+        <div>
+            <h3>Account Setting</h3>
+            <div style={{ width: '65%', margin: 'auto' }}>
+                <Form onSubmit={handleResetPasswd} style={{ marginTop: '40px' }}>
+                    <Row className="mb-3">
+                        <Form.Group>
+                            <Form.Label style={{ fontSize: '26px' }}>Old Password</Form.Label>
+                            <Form.Control
+                                style={{ fontSize: '24px' }}
+                                type="password"
+                                placeholder="Enter old password"
+                                name="old_password"
+                                value={formData.old_password}
+                                onChange={handlePasswordChange}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
+                        <Form.Group>
+                            <Form.Label style={{ fontSize: '26px' }}>New Password</Form.Label>
+                            <Form.Control
+                                style={{ fontSize: '24px' }}
+                                type="password"
+                                placeholder="Enter new password"
+                                name="new_password"
+                                value={formData.new_password}
+                                onChange={handlePasswordChange}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Row className="mb-3">
+                        <Form.Group>
+                            <Form.Label style={{ fontSize: '26px' }}>Confirm New Password</Form.Label>
+                            <Form.Control
+                                style={{ fontSize: '24px' }}
+                                type="password"
+                                placeholder="Confirm new password"
+                                name="new_password_confirm"
+                                value={formData.new_password_confirm}
+                                onChange={handlePasswordChange}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Row style={{ marginTop: '45px', marginBottom: '45px', display: 'flex', justifyContent: 'center'}}>
+                        <Button variant="primary" type="submit" style={{ fontSize: '26px', width: '500px'}}>
+                            Save Changes
+                        </Button>
+                    </Row>
+                    
+                </Form >
+            </div>
+        </div >
     )
 };
