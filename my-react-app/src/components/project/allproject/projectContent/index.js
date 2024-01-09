@@ -18,10 +18,6 @@ function AllProject () {
     per_page: 10
   })
 
-  // data.forEach(function (data) {
-  //   data
-  // })
-
 
   useEffect(() => {
     axios

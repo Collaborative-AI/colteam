@@ -1,11 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Layout, Menu } from 'antd'
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import Button from 'react-bootstrap/Button'
 
 const { Sider } = Layout
 const Messages = () => {
     const location = useLocation().pathname
 
+    // const [show, setShow] = useState(false);
+    // const handleShow = () => setShow(true);
     return (
         <Layout>
             <Sider width={200} className="site-layout-background">
@@ -18,12 +21,18 @@ const Messages = () => {
                     <Menu.Item key='/messages/chatBox'>
                         <Link to={'/messages/chatBox'}>chatBox</Link>
                     </Menu.Item>
+
+                    <Menu.Item key='/messages/createRoom'>
+                      <Link to={'/messages/createRoom'}>Create Room</Link>
+                    </Menu.Item>
                 </Menu>
             </Sider>
+
             <Layout className="layout-content" style={{ padding: 20 }}>
                 <Outlet />
             </Layout>
         </Layout>
+
     )
 
 }
