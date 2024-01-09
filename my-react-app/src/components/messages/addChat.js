@@ -46,7 +46,14 @@ function AddChat(props){
     const handleClose = () => {setChatShow(false);}
 
     return (
-      <Modal show={chatshow} onHide={handleClose}>
+      <Modal 
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      show={chatshow} 
+      onHide={handleClose}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Add New Chat</Modal.Title>
         </Modal.Header>

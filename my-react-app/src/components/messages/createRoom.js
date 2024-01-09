@@ -6,14 +6,14 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 function CreateRoom(props){
-    const [formData, setFormData] = useState({
+    const [FormData, setFormData] = useState({
         room_name: '',
       })
     
       const handleInputChange = (event) => {
         const { name, value } = event.target
         setFormData({
-          ...formData,
+          ...FormData,
           [name]: value,
         })
       }
@@ -22,7 +22,7 @@ function CreateRoom(props){
       const handleCreateRoom = (event) => {
         event.preventDefault()
         const data = {
-          room_name: formData.room_name,
+          room_name: FormData.room_name,
         }
     
         axios.post('http://localhost:8000/chats/create_room/', data)
@@ -41,9 +41,16 @@ function CreateRoom(props){
     const handleClose = () => {setShow(false);}
 
     return (
-      <Modal show={show} onHide={handleClose}>
+      <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      show={show} 
+      onHide={handleClose}
+      >
         <Modal.Header closeButton>
-          <Modal.Title>Create New Chat Room</Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">Create New Chat Room</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -54,6 +61,7 @@ function CreateRoom(props){
                 placeholder="what is your room name?"
                 autoFocus
                 value={FormData.room_name}
+                onChange={handleInputChange}
               />
             </Form.Group>
             <Form.Group
