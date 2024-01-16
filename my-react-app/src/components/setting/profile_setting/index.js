@@ -95,15 +95,15 @@ function ProfileSetting () {
         const addressInJasonFormat = response.data.location.replace(/'/g, '"')
         console.log(JSON.parse(addressInJasonFormat))
         // console.log(JSON.parse(response.data.location).zip_code)
-        setUserData({
-          ...userData,
+        setUserData(currentUserData=>({
+          ...currentUserData,
           research_interests: response.data.research_interests,
           phone_number: response.data.phone_number,
           home_address: JSON.parse(addressInJasonFormat)//JSON.parse(response.data.location),
-        })
+        }));
       })
       .catch((error) => console.error('Error fetching user data:', error))
-  }, [])
+  }, [auth.accessToken])
 
 
   //update change to back end
