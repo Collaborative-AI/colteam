@@ -17,15 +17,17 @@ const Messages = () => {
                     style={{ height: '100%', borderRight: 0 }}
                 >
                     <Menu.Item key='/messages/chatBox'>
-                        <Link to={'/messages/chatBox'}>chatBox</Link>
+                        <Link to={'/messages/chatBox'}>ChatBox</Link>
                     </Menu.Item>
 
                     <Menu.Item key='/messages/createRoom'>
                       <Link to={'/messages/createRoom'}>Create Room</Link>
                     </Menu.Item>
-
+                    <Menu.Item key='/messages/joinRoom'>
+                      <Link to={'/messages/joinRoom'}>Join Room</Link>
+                    </Menu.Item>
                     <Menu.Item key='/messages/addChat'>
-                      <Link to={'/messages/addChat'}>Add Chat</Link>
+                      <Link to={'/messages/addChat'}>Create Chat</Link>
                     </Menu.Item>
                 </Menu>
             </Sider>
