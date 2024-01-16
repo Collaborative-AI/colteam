@@ -27,6 +27,18 @@ function NavbarIns() {
       case 'action-4':
         navigate('/log_out')
         break
+      case 'action-5':
+        navigate('/messages')
+        break
+      case 'action-6':
+        navigate('/messages/createRoom')
+        break
+      case 'action-7':
+        navigate('/messages/joinRoom')
+        break
+      case 'action-8':
+        navigate('/messages/addChat')
+        break
       default:
         break
     }
@@ -60,11 +72,19 @@ function NavbarIns() {
             </li>
             {auth.success ? (
               <>
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link className="nav-link" to={'/messages'}>
                     Messages
                   </Link>
-                </li>
+                </li> */}
+                <NavDropdown title="Messages" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
+                  <NavDropdown.Item eventKey="action-5">My messages</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item eventKey="action-6">Create Room</NavDropdown.Item>
+                  <NavDropdown.Item eventKey="action-7">Join Room</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item eventKey="action-8">Create Chat</NavDropdown.Item>
+                </NavDropdown>
 
                 <NavDropdown title="Profile" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
                   <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
