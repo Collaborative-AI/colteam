@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from './AuthProvider.component'
+// import AuthContext from './AuthProvider.component'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
@@ -8,9 +8,11 @@ import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import profile_image from '../assets/images/colteam_logo.png'
+import { getUserStatus } from '../utils'
+
 
 function NavbarIns() {
-  const { auth } = useContext(AuthContext)
+  // const { auth } = useContext(AuthContext)
 
   const navigate = useNavigate()
   const handleDropdownSelect = (eventKey) => {
@@ -70,7 +72,7 @@ function NavbarIns() {
                 Project
               </Link>
             </li>
-            {auth.success ? (
+            {getUserStatus() == true? (
               <>
                 {/* <li className="nav-item">
                   <Link className="nav-link" to={'/messages'}>

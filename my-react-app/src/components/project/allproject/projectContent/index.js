@@ -1,13 +1,10 @@
 import { Table, Tag, Card } from 'antd'
 import axios from 'axios'
 import { useEffect, useState, useContext } from 'react'
-import AuthContext from '../../../AuthProvider.component'
+import { getToken } from '../../../../utils'
 
 
 function AllProject () {
-
-  const { auth } = useContext(AuthContext)
-
   const [projectList, setProjectList] = useState({
     list: [],
     count: 0,
@@ -23,7 +20,7 @@ function AllProject () {
     axios
       .get(`http://localhost:8000/projects/detail/view_all`, {
         headers: {
-          Authorization: `Bearer ${auth.accessToken}`
+          Authorization: `Bearer ${getToken()}`
         }
       })
       .then((response) => {

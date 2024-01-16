@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import AuthContext from '../AuthProvider.component'
 import { useNavigate, Link } from 'react-router-dom'
+import { getToken, getUserEmail, setUserStatus } from '../../utils'
 
 
 function ShowProject () {
   const [projects, setProjects] = useState([])
-  const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
   useEffect(() => {
     // URL
     const backendURL = 'http://localhost:8000'
     axios.get(`${backendURL}/projects/detail/view_my`, {
       params: {
-        id: auth.username
+        id: getUserEmail()
       },
       headers: {
-        Authorization: "Bearer " + auth.accessToken
+        Authorization: "Bearer " + getToken()
       }
     })
       .then(response => {
@@ -36,7 +35,7 @@ function ShowProject () {
     }
     const config = {
       headers: {
-        Authorization: "Bearer " + auth.accessToken
+        Authorization: "Bearer " + getToken()
       }
     }
     axios.post(`http://localhost:8000/projects/delete/`, data, config)
@@ -46,7 +45,7 @@ function ShowProject () {
         setProjects(projects.filter(project => project.id !== projectID))
       })
       .catch((error) => {
-        setAuth({ success: false })
+        setUserStatus(false)
         if (error.response) {
           console.error('Status Code:', error.response.status)
 

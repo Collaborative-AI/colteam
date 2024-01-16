@@ -1,5 +1,4 @@
 import { useEffect, useContext, useState } from 'react'
-import AuthContext from '../../AuthProvider.component'
 import axios from 'axios'
 // import { Avatar } from 'antd'
 import colteam_logo from '../../../assets/images/colteam_logo.png'
@@ -8,16 +7,17 @@ import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row';
+import { getToken, getUserEmail } from '../../../utils'
 
 function ProfileSetting () {
-  const { auth } = useContext(AuthContext)
+  // const { auth } = useContext(AuthContext)
 
   const [count, setCount] = useState({
 
   })
   //initialize a state for userData
   const [userData, setUserData] = useState({
-    email: auth.email,
+    email: getUserEmail(),
     Avatar: colteam_logo,
     research_interests: "",
     phone_number: "",
@@ -74,11 +74,11 @@ function ProfileSetting () {
 
   //get profile info 
   useEffect(() => {
-    console.log(`Bearer ${auth.accessToken}`)
+    console.log(`Bearer ${getToken()}`)
     axios
       .get("http://localhost:8000/users/profile/view/", {
         headers: {
-          Authorization: `Bearer ${auth.accessToken}`
+          Authorization: `Bearer ${getToken()}`
         },
         params: {
           t: new Date().getTime()
@@ -103,7 +103,7 @@ function ProfileSetting () {
         }));
       })
       .catch((error) => console.error('Error fetching user data:', error))
-  }, [auth.accessToken])
+  }, [getToken()])
 
 
   //update change to back end
@@ -120,7 +120,7 @@ function ProfileSetting () {
     }
     const config = {
       headers: {
-        Authorization: "Bearer " + auth.accessToken
+        Authorization: "Bearer " + getToken()
       }
     }
     // Send POST request to Django backend's to change profile info
@@ -136,11 +136,11 @@ function ProfileSetting () {
   }
 
   const handleCancel = () => {
-    console.log(`Bearer ${auth.accessToken}`)
+    console.log(`Bearer ${getToken()}`)
     axios
       .get("http://localhost:8000/users/profile/view/", {
         headers: {
-          Authorization: `Bearer ${auth.accessToken}`
+          Authorization: `Bearer ${getToken()}`
         },
         params: {
           t: new Date().getTime()

@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
-import AuthContext from '../AuthProvider.component'
 import { Link } from 'react-router-dom'
+import { getToken } from '../../utils'
 
 
 function ProjectDetail ({ match }) {
   const projectId = match.params.id
   const [project, setProject] = useState(null)
-  const { auth } = useContext(AuthContext)
 
   useEffect(() => {
     // URL
@@ -15,14 +14,14 @@ function ProjectDetail ({ match }) {
     axios
       .get(`${backendURL}/projects/${projectId}`, {
         headers: {
-          Authorization: `Bearer ${auth.accessToken}`
+          Authorization: `Bearer ${getToken()}`
         },
       })
       .then((response) => {
         setProject(response.data)
       })
       .catch((error) => console.error('Error fetching project data:', error))
-  }, [projectId, auth.accessToken])
+  }, [projectId, getToken()])
 
   if (!project) {
     // Loading Information

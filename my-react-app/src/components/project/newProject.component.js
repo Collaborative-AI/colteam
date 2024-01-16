@@ -2,9 +2,9 @@ import React from 'react'
 import { useState, useContext } from 'react'
 import '../../index.css'
 import colteam_logo from '../../assets/images/colteam_logo.png'
-import AuthContext from '../AuthProvider.component'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { getToken, getUserEmail, setUserStatus } from '../../utils'
 
 const InputItem = ({ name, onChange, value, placeholder }) => {
   return (
@@ -28,23 +28,22 @@ function NewProject () {
   const [description, setDescription] = useState("")
   const [website, setWebsite] = useState("")
 
-  const { auth, setAuth } = useContext(AuthContext)
   const navigate = useNavigate()
 
-  console.log(auth.email)
+  console.log(getUserEmail())
 
   const handleSubmit = (e) => {
     console.log(e)
     e.preventDefault()
     const data = {
-      email: auth.email,
+      email: getUserEmail(),
       title: projectName,
       description: description,
       website: website
     }
     const config = {
       headers: {
-        Authorization: "Bearer " + auth.accessToken
+        Authorization: "Bearer " + getToken()
       }
     }
 
@@ -55,7 +54,7 @@ function NewProject () {
         navigate('/show_project')
       })
       .catch((error) => {
-        setAuth({ success: false })
+        setUserStatus(false)
         if (error.response) {
           console.error('Status Code:', error.response.status)
 
@@ -79,7 +78,7 @@ function NewProject () {
       </div>
       <InputItem
         name="email"
-        value={auth.email}
+        value={getUserEmail()}
       />
       <InputItem
         name="Project name"

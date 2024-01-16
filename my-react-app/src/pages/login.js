@@ -1,7 +1,6 @@
 import axios from 'axios'
-import React, { useState, useContext } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import AuthContext from '../components/AuthProvider.component'
 import { setToken, setUserEmail, setUserRole, setUserStatus, getUserStatus } from '../utils/'
 
 export default function Login () {
@@ -55,7 +54,7 @@ export default function Login () {
 
   return (
     <div className="auth-inner-small">
-      {getUserStatus()==true? (
+      {getUserStatus() == true? (
         <section>
           {/* TBD: show profile */}
           <h1>You are logged in !</h1>

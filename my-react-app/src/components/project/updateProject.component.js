@@ -1,9 +1,9 @@
 import { React, useState, useContext } from 'react'
 import '../../index.css'
 import colteam_logo from '../../assets/images/colteam_logo.png'
-import AuthContext from '../AuthProvider.component'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { getToken, getUserEmail, setUserStatus } from '../../utils'
 
 const InputItem = ({ name, onChange, value, placeholder }) => {
     return (
@@ -24,19 +24,18 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
 function UpdateProject () {
     const [projectName, setProjectName] = useState("")
     const [description, setDescription] = useState("")
-    const { auth, setAuth } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
         const data = {
-            id: auth.email,
+            id: getUserEmail(),
             title: projectName,
             description: description
         }
         const config = {
             headers: {
-                Authorization: "Bearer " + auth.accessToken
+                Authorization: "Bearer " + getToken()
             }
         }
 
@@ -48,7 +47,7 @@ function UpdateProject () {
                 navigate('/projects/view_all')
             })
             .catch((error) => {
-                setAuth({ success: false })
+                setUserStatus(false)
                 if (error.response) {
                     console.error('Status Code:', error.response.status)
 
@@ -70,7 +69,7 @@ function UpdateProject () {
             </div>
             <InputItem
                 name="Owner"
-                value={auth.email}
+                value={getUserEmail()}
             />
             <InputItem
                 name="Project name"

@@ -1,11 +1,11 @@
 
 import { useEffect, useContext, useState } from 'react'
-import AuthContext from '../AuthProvider.component'
+import { getToken } from '../../utils'
 import axios from 'axios'
 import './chatBox.scss'
 
 const CharBox = () => {
-  const { auth } = useContext(AuthContext)
+  // const { auth } = useContext(AuthContext)
 
   const [chatHistory, setChatHistory] = useState({
     list: [{}], //data: {id, message, date}
@@ -28,11 +28,11 @@ const CharBox = () => {
 
   //load chst history
   useEffect(() => {
-    console.log(`Bearer ${auth.accessToken}`)
+    console.log(`Bearer ${getToken()}`)
     axios
       .get("http://localhost:8000/forum/get_thread_by_id/", {
         headers: {
-          Authorization: `Bearer ${auth.accessToken}`
+          Authorization: `Bearer ${getToken()}`
         },
         params: {
           t: new Date().getTime()

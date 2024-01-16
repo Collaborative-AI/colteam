@@ -1,15 +1,13 @@
 import React, { useState, useContext, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-import AuthContext from '../AuthProvider.component'
 import Form from 'react-bootstrap/Form'
-import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import Button from 'react-bootstrap/Button'
+import { getToken } from '../../utils'
 
 export default function AccountSetting () {
-    const { auth } = useContext(AuthContext)
+    // const { auth } = useContext(AuthContext)
 
     const [formData, setFormData] = useState({
         old_password: '',
@@ -42,7 +40,7 @@ export default function AccountSetting () {
         }
         const config = {
             headers: {
-                Authorization: "Bearer " + auth.accessToken
+                Authorization: "Bearer " + getToken()
             }
         }
         // Send POST request to Django backend's change passwd API
