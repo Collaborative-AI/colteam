@@ -15,12 +15,12 @@ class ProjectDetail(models.Model):
     group_member = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
                                      related_name="members")
     # tags
-    tags = models.ManyToManyField(Tag, related_name="project_detail_tags")
+    tags = models.ManyToManyField(Tag, related_name="project_detail_tags", default='')
     website = models.URLField(max_length=200)
     # contact information: Email, name
     email = models.EmailField("contact email", max_length=254)
     qualification = models.TextField("qualifications", default='')
-
+    category = models.TextField("qualifications", default='')
     def __str__(self):
         return '(%s, %s)' % (self.owner.username, self.title)
 
