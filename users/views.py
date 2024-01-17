@@ -3,7 +3,7 @@ from django.core.cache import cache
 import enums
 from auths.token_auth import get_token_from_request
 from colteam.settings import CELERY_BROKER_URL
-from .models import CustomUser
+from .models import CustomUser, ApiKey
 from rest_framework import generics
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
@@ -31,6 +31,7 @@ from .forms import SearchForm
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from celery import Celery
+import secrets
 
 app = Celery('users', broker=CELERY_BROKER_URL)
 
@@ -347,3 +348,17 @@ def reset_password(request):
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+# @api_view(['GET'])
+# def api_get(request):
+#     try:
+#         return JsonResponse('Your successfully create a api.',
+#                             status=status.HTTP_200_OK, safe=False)
+#     except Exception as exc:
+#         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+# TODO: need to add user id into the api key
+# TODO: add the permission into the api key
+def generate_api_key():
+    return secrets.token_urlsafe(32)
+
