@@ -8,7 +8,7 @@ from rest_framework import generics
 from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import permission_classes
-from .serializers import CustomUserSerializer, MyTokenObtainPairSerializer, LoginSerializer
+from .serializers import *
 from rest_framework.decorators import api_view
 from django.http.response import JsonResponse
 from rest_framework.parsers import JSONParser
@@ -31,7 +31,7 @@ from .forms import SearchForm
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from celery import Celery
-import secrets
+import secrets,uuid, hashlib, time, os
 
 app = Celery('users', broker=CELERY_BROKER_URL)
 
@@ -349,16 +349,45 @@ def reset_password(request):
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-# @api_view(['GET'])
-# def api_get(request):
-#     try:
-#         return JsonResponse('Your successfully create a api.',
-#                             status=status.HTTP_200_OK, safe=False)
-#     except Exception as exc:
-#         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
 # TODO: need to add user id into the api key
 # TODO: add the permission into the api key
-def generate_api_key():
-    return secrets.token_urlsafe(32)
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def generate_api_key(request):
+    try:
+        # get user id from access token
+        user_token_auth = get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
+        # create api key
+        key = create_api_key(user_auth.username)
+        # save api key into database
+        api_key = ApiKey(user=user_auth, key=key)
+        api_key.save()
+        return JsonResponse('Your successfully create a api.',
+                            status=status.HTTP_200_OK, safe=False)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+    # return secrets.token_urlsafe(32)
 
+# create random api key which is related to the user
+def create_api_key(username):
+    random_str = os.urandom(16)
+    raw_key = username.encode('utf-8') + random_str
+    return hashlib.sha256(raw_key).hexdigest()
+
+@api_view(['GET'])
+def list_api_key(request):
+    try:
+        # get user id from access token
+        user_token_auth = get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
+        # find all api key related to the user
+        api_key_list = ApiKey.objects.filter(user=user_auth)
+        serializer = ApiKeySerializer(api_key_list, many=True)
+        # return api key list
+        return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)

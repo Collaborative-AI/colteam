@@ -23,4 +23,6 @@ urlpatterns = [
     path('resendVerify/', views.resend_verify_email, name='resend_email'),
     path('sendResetPasswordEmail/', views.send_reset_password_email, name='send_reset_password_email'),
     path('resetPassword/', views.reset_password, name='reset_password'),
+    path('apiKey/generate/', views.generate_api_key, name='generate_api_key'),
+    path('apiKey/list/', views.list_api_key, name='list_api_key'),
 ]

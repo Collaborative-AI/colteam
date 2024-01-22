@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'chats.apps.ChatsConfig',
     'forum.apps.ForumConfig',
     'rest_framework',
+    'rest_framework_api_key',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'crontab',
@@ -108,7 +109,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'auths.token_auth.TokenValidationMiddleware',
-        'auths.api_key_auth.ApiKeyBackend',
+        'auths.api_key_auth.ApiKeyValidationMiddleware',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
