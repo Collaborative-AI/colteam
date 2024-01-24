@@ -365,7 +365,6 @@ def generate_api_key(request):
         # save api key into database
         api_key = ApiKey(user=user_auth, key=key)
         api_key.save()
-        # TODO:delete this api key
         data = {"key": key}
         return JsonResponse(data, status=status.HTTP_200_OK)
         # return JsonResponse('Your successfully create a api.',
