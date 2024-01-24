@@ -378,7 +378,8 @@ def generate_api_key(request):
 # create random api key which is related to the user
 def create_api_key(username):
     random_str = os.urandom(16)
-    raw_key = username.encode('utf-8') + random_str
+    current_time = timezone.now().strftime('%Y%m%d%H%M%S').encode('utf-8')
+    raw_key = username.encode('utf-8') + random_str + current_time
     return hashlib.sha256(raw_key).hexdigest()
 
 
@@ -394,5 +395,22 @@ def list_api_key(request):
         serializer = ApiKeySerializer(api_key_list, many=True)
         # return api key list
         return JsonResponse(serializer.data, status=status.HTTP_200_OK, safe=False)
+    except Exception as exc:
+        return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def delete_api_key(request):
+    try:
+        # get user id from access token
+        user_token_auth = get_token_from_request(request)
+        user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
+        user_auth = CustomUser.objects.get(id=user_id_auth)
+
+        key = request.data.get('api_key')
+        key_data = ApiKey.objects.get(user=user_auth, key=key)
+        key_data.delete()
+        return Response({'message': 'Delete API key successfully'}, status=status.HTTP_200_OK)
+
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)

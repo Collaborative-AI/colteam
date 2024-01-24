@@ -9,7 +9,7 @@ class ApiKeyValidationMiddleware(authentication.BaseAuthentication):
         key = get_key_from_request(request)
         if key:
             try:
-                api_key = ApiKey.objects.get(key = key)
+                api_key = ApiKey.objects.get(key=key)
                 if api_key.is_active:
                     return api_key.user, None
                 else:
@@ -21,7 +21,7 @@ class ApiKeyValidationMiddleware(authentication.BaseAuthentication):
 
 
 def get_key_from_request(request):
-    authorization_header = request.META.get('HTTP_AUTHORIZATION', '')
+    authorization_header = request.META.get('APIKEY', '')
     if not authorization_header:
         return None
     try:
