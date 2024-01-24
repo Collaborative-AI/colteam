@@ -409,8 +409,9 @@ def delete_api_key(request):
 
         key = request.data.get('api_key')
         key_data = ApiKey.objects.get(user=user_auth, key=key)
-        key_data.delete()
-        return Response({'message': 'Delete API key successfully'}, status=status.HTTP_200_OK)
+        if key_data:
+            key_data.delete()
+            return Response({'message': 'Delete API key successfully'}, status=status.HTTP_200_OK)
 
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
