@@ -29,7 +29,7 @@ class ApiKey(models.Model):
     key = models.CharField(max_length=255, unique=True)
     # permissions = models.JSONField(default=dict)
     # created_at = models.DateTimeField(auto_now_add=True)
-    # is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         return f"API key for {self.user.username}"
