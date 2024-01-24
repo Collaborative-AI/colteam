@@ -31,7 +31,7 @@ from .forms import SearchForm
 from django.utils import timezone
 from django.http import HttpResponseRedirect
 from celery import Celery
-import secrets,uuid, hashlib, time, os
+import secrets, uuid, hashlib, time, os
 from rest_framework.response import Response
 
 app = Celery('users', broker=CELERY_BROKER_URL)
@@ -305,8 +305,8 @@ def activate_account(request, token):
 def send_reset_password_email(request):
     try:
         user_data = JSONParser().parse(request)
-        user = CustomUser.objects.get(username=user_data['email'])       
-        
+        user = CustomUser.objects.get(username=user_data['email'])
+
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
@@ -374,11 +374,13 @@ def generate_api_key(request):
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
     # return secrets.token_urlsafe(32)
 
+
 # create random api key which is related to the user
 def create_api_key(username):
     random_str = os.urandom(16)
     raw_key = username.encode('utf-8') + random_str
     return hashlib.sha256(raw_key).hexdigest()
+
 
 @api_view(['GET'])
 def list_api_key(request):
