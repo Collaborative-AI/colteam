@@ -32,6 +32,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect
 from celery import Celery
 import secrets,uuid, hashlib, time, os
+from rest_framework.response import Response
 
 app = Celery('users', broker=CELERY_BROKER_URL)
 
@@ -353,7 +354,6 @@ def reset_password(request):
 # TODO: need to add user id into the api key
 # TODO: add the permission into the api key
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def generate_api_key(request):
     try:
         # get user id from access token
@@ -365,8 +365,11 @@ def generate_api_key(request):
         # save api key into database
         api_key = ApiKey(user=user_auth, key=key)
         api_key.save()
-        return JsonResponse('Your successfully create a api.',
-                            status=status.HTTP_200_OK, safe=False)
+        # TODO:delete this api key
+        data = {"key": key}
+        return JsonResponse(data, status=status.HTTP_200_OK)
+        # return JsonResponse('Your successfully create a api.',
+        #                     status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
     # return secrets.token_urlsafe(32)

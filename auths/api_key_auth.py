@@ -5,14 +5,21 @@ from rest_framework import status
 
 
 class ApiKeyValidationMiddleware(authentication.BaseAuthentication):
-    def api_key_authentication(self, request):
-        try:
-            key = get_key_from_request(request)
-            api_key = ApiKey.objects.get(key = key)
-            return api_key.user
-        except ApiKey.DoesNotExist:
-            return Response({"Unauthorized": "Token is blacklisted."}, status=status.HTTP_401_UNAUTHORIZED)
-        
+    def authenticate(self, request):
+        key = get_key_from_request(request)
+        if key:
+            try:
+                api_key = ApiKey.objects.get(key = key)
+                if api_key.is_active:
+                    return api_key.user, None
+                else:
+                    return Response({"Unauthorized": "Api Key is not active."}, status=status.HTTP_401_UNAUTHORIZED)
+            except ApiKey.DoesNotExist:
+                return Response({"Unauthorized": "Api Key is not available."}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            None
+
+
 def get_key_from_request(request):
     authorization_header = request.META.get('HTTP_AUTHORIZATION', '')
     if not authorization_header:
