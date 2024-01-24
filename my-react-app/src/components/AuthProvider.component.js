@@ -10,8 +10,8 @@ export const AuthProvider = ({ children }) => {
         // ...FormData,
         roles: getUserRole || '',
         accessToken: getToken() || '',
-        // success: getToken() != null && getToken() != '',
-        success:true
+        success: getToken() !== null && getToken() !== '',
+        // success:true
     })
 
 
