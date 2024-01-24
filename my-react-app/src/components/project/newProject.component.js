@@ -4,7 +4,7 @@ import '../../index.css'
 import colteam_logo from '../../assets/images/colteam_logo.png'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { getToken, getUserEmail, setUserStatus } from '../../utils'
+import { getToken, getUserEmail} from '../../utils'
 
 const InputItem = ({ name, onChange, value, placeholder }) => {
   return (
@@ -54,7 +54,6 @@ function NewProject () {
         navigate('/show_project')
       })
       .catch((error) => {
-        setUserStatus(false)
         if (error.response) {
           console.error('Status Code:', error.response.status)
 

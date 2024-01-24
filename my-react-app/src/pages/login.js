@@ -1,9 +1,11 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { setToken, setUserEmail, setUserRole, setUserStatus, getUserStatus } from '../utils/'
+import { setToken, setUserEmail, setUserRole} from '../utils/'
+import AuthContext from '../components/AuthProvider.component'
 
 export default function Login () {
+  const { auth, setAuth } = useContext(AuthContext)
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -37,7 +39,8 @@ export default function Login () {
         setToken(response?.data?.access)
         setUserEmail(response?.data?.user_info?.username)
         setUserRole(response?.data?.roles)
-        setUserStatus(true)
+        setAuth(true)
+        // setUserStatus(true)
         navigate('/')
       })
       .catch((error) => {
@@ -54,7 +57,7 @@ export default function Login () {
 
   return (
     <div className="auth-inner-small">
-      {getUserStatus() === true? (
+      {auth.success === true? (
         <section>
           {/* TBD: show profile */}
           <h1>You are logged in !</h1>

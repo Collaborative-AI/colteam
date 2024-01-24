@@ -1,10 +1,13 @@
 import axios from 'axios'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getToken } from '../utils'
+import AuthContext from '../components/AuthProvider.component'
 
 
 export default function LogOut () {
+    const { auth, setAuth } = useContext(AuthContext)
+
     const navigate = useNavigate()
 
     const handleLogOut = (event) => {
@@ -25,6 +28,7 @@ export default function LogOut () {
             })
             .finally(() => {
                 localStorage.clear()
+                setAuth(false)
                 navigate('/')
             })
     }

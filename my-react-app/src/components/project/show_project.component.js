@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import { useNavigate, Link } from 'react-router-dom'
-import { getToken, getUserEmail, setUserStatus } from '../../utils'
+import { getToken, getUserEmail } from '../../utils'
 import { Table, Tag, Card } from 'antd'
 
 
@@ -51,7 +51,7 @@ function ShowProject () {
         setProjects(projects.filter(project => project.id !== projectID))
       })
       .catch((error) => {
-        setUserStatus(false)
+        // setUserStatus(false)
         if (error.response) {
           console.error('Status Code:', error.response.status)
 
