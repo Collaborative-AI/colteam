@@ -100,7 +100,7 @@ ASGI_APPLICATION = 'colteam.asgi.application'
 REST_FRAMEWORK = {
     # 指定使用的权限类
     # a.在全局指定默认的权限类（当认证通过之后，可以获取何种权限）
-    'DEFAULT_PERMISSION_CLASSES': [
+    'DEFAULT_': [
         # AllowAny 不管是否有认证成功，都能获取所有权限
         # IsAdminUser 管理员（管理员需要登录）具备所有权限
         # IsAuthenticated 只要登录，就具备所有权限

@@ -25,4 +25,5 @@ urlpatterns = [
     path('resetPassword/', views.reset_password, name='reset_password'),
     path('apiKey/generate/', views.generate_api_key, name='generate_api_key'),
     path('apiKey/list/', views.list_api_key, name='list_api_key'),
+    path('apiKey/test/', views.test, name='test_api_key'),
 ]

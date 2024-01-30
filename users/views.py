@@ -414,3 +414,16 @@ def delete_api_key(request):
 
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def test(request):
+    authorization_header = request.META.get('HTTP_API_KEY', '')#APIKEY
+    print("here==="+authorization_header)
+    auth_type, key = authorization_header.split()
+    if auth_type.lower() == 'apikey':
+        print("test==="+key)
+    api_key = ApiKey.objects.get(key=key)
+    if api_key.is_active:
+        print("active==="+api_key.user.username)
+    return Response({'message': 'test successfully'}, status=status.HTTP_200_OK)

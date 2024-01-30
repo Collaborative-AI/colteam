@@ -7,11 +7,12 @@ from .serializers import ProjectDetailSerializer
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from .models import ProjectDetail
-from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.decorators import authentication_classes, permission_classes 
 from rest_framework.permissions import AllowAny
 from rest_framework_jwt.utils import jwt_decode_handler
 from rest_framework.pagination import PageNumberPagination
 from django.views.decorators.cache import cache_page
+from rest_framework.permissions import IsAuthenticated
 
 
 class CustomPageNumberPagination(PageNumberPagination):
