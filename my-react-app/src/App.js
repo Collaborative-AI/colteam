@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Login from './pages/login'
 import SignUp from './pages/signup'
 import Data from './components/data/data'
+import ApiKeys from './components/apiKeys/apiKeys'
 import Team from './components/team/team'
 import Home from './pages/home'
 import Navbar from './components/navbar'
@@ -35,6 +36,7 @@ function App () {
           <Routes>
             <Route exact path="/" element={<Home />} />
             <Route path="/data" element={<Data />} />
+            <Route path="/apiKeys" element={<ApiKeys />} />
             <Route path="/team" element={<Team />} />
             <Route path="/project" element={<ProjectLayout />} />
             {/* <Route path="/messages" element={<Messages />} /> */}

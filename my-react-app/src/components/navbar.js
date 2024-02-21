@@ -41,6 +41,9 @@ function NavbarIns() {
       case 'action-8':
         navigate('/messages/addChat')
         break
+      case 'action-9':
+        navigate('/apiKeys')
+        break
       default:
         break
     }
@@ -91,6 +94,8 @@ function NavbarIns() {
                 <NavDropdown title="Profile" id="navbarScrollingDropdown" onSelect={handleDropdownSelect}>
                   <NavDropdown.Item eventKey="action-1">New Project</NavDropdown.Item>
                   <NavDropdown.Item eventKey="action-2">My Project</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item eventKey="action-9">My API Keys</NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item eventKey="action-3">My Profile</NavDropdown.Item>
                   <NavDropdown.Divider />
