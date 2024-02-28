@@ -39,7 +39,10 @@ export default function Login () {
         setToken(response?.data?.access)
         setUserEmail(response?.data?.user_info?.username)
         setUserRole(response?.data?.roles)
-        setAuth(true)
+        // setAuth(true)
+        setAuth({
+          success: true
+        })
         // setUserStatus(true)
         navigate('/')
       })
