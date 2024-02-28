@@ -47,29 +47,44 @@ class ApiKeysList extends Component {
   render() {
     const { apiKeys, isLoading } = this.state;
     return (
-      <div>
+      <div class="full-screen-container">
+       <div class = "top-left-title">
         <h4>Existing API Keys</h4>
-        <button onClick={this.handleApplyApiKey}>Apply for API Key</button>
+       </div>
+       
+        <div class = "container-30pad pad-left-20">
+          <p class="fw-medium fs-5 text-body-secondary">
+          Your API keys are listed below. Please do not share your API key with others.
+          </p>
+         
+        <div class = "container-30pad ">
+        <button class ="btn btn-secondary fw-medium fs-5" onClick={this.handleApplyApiKey}>Apply for API Key</button>
+       
         {isLoading ? (
           <p>Loading...</p>
         ) : (
-          <table>
+          <table class="container-30pad">
             <thead>
               <tr>
-                <th>Key</th>
-                <th>Active</th>
+                <th class = "fw-semibolds fs-5" style={{padding: '10px', borderBottom: '1.5px solid #dcdcdc'}} >Key</th>
+                <th class = "fw-semibold fs-5" style={{padding: '10px' , borderBottom: '1.5px solid #dcdcdc'}}>Active</th>
               </tr>
+              
+
             </thead>
             <tbody>
               {apiKeys.map((apiKey, index) => (
                 <tr key={index}>
-                  <td>{apiKey.key}</td>
-                  <td>{apiKey.is_active ? 'Yes' : 'No'}</td>
+                  <td class = "text-body-secondary fw-semibolds fs-5" style={{ padding: '10px' }}>{apiKey.key}</td>
+                  <td class = "text-body-secondary fw-semibolds fs-5" style={{ padding: '10px' }}>{apiKey.is_active ? 'Yes' : 'No'}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
+        </div>
+        
+      </div>
       </div>
     );
   }

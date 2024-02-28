@@ -2,5 +2,5 @@
 
 # cache
 /__pycache__
-
+/ migration
 
