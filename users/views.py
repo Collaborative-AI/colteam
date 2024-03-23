@@ -118,19 +118,18 @@ class RegisterView(TokenViewBase):
 @api_view(['POST'])
 def update_user_profile_by_id(request):
     try:
-        update_data = JSONParser().parse(request)
-        # serializer = CustomUserSerializer(data=update_data)
-        # if serializer.is_valid():  
         # get user id from access token
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
-        if 'home_address' in update_data:
-            user.location = update_data['home_address']
-        if 'research_interests' in update_data:
-            user.research_interests = update_data['research_interests']
-        if 'phone_number' in update_data:
-            user.phone_number = update_data['phone_number']
+        
+        user.location = request.data.get('home_address')
+        user.research_interests =  request.data.get('research_interests')
+        user.phone_number = request.data.get('phone_number')
+        # if 'research_interests' in update_data:
+        #     user.research_interests = update_data['research_interests']
+        # if 'phone_number' in update_data:
+        #     user.phone_number = update_data['phone_number']
         user.save()
         user_info = {
             'username': user.username,
@@ -160,13 +159,12 @@ def view_user_profile_by_id(request):
 @api_view(['POST'])
 def change_password(request):
     try:
-        json_data = JSONParser().parse(request)
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
-        is_password_correct = check_password(json_data['old_password'], user.password)
+        is_password_correct = check_password(request.data.get('old_password'), user.password)
         if is_password_correct:
-            user.password = make_password(json_data['new_password'])
+            user.password = make_password(request.data.get('new_password'))
             user.save()
             return JsonResponse('You have successfully changed your password', status=status.HTTP_200_OK, safe=False)
         else:
@@ -265,8 +263,7 @@ def send_verify_email(user_info, verification_code):
 @permission_classes([AllowAny])
 def resend_verify_email(request):
     try:
-        user_data = JSONParser().parse(request)
-        user = CustomUser.objects.get(username=user_data['username'])
+        user = CustomUser.objects.get(username=request.data.get('username'))
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
         verification_code = generate_verification_code()
@@ -304,9 +301,7 @@ def activate_account(request, token):
 @permission_classes([AllowAny])
 def send_reset_password_email(request):
     try:
-        user_data = JSONParser().parse(request)
-        user = CustomUser.objects.get(username=user_data['email'])
-
+        user = CustomUser.objects.get(username=request.data.get('email'))
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_400_BAD_REQUEST, safe=False)
 
@@ -338,12 +333,11 @@ def send_reset_password_email(request):
 @permission_classes([AllowAny])
 def reset_password(request):
     try:
-        json_data = JSONParser().parse(request)
-        user_id = signing.loads(json_data['userid'])
+        user_id = signing.loads(request.data.get('userid'))
         user = CustomUser.objects.get(id=user_id)
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
-        user.password = make_password(json_data['new_password'])
+        user.password = make_password(request.data.get('new_password'))
         user.save()
         return JsonResponse('Your password has been successfully reset.',
                             status=status.HTTP_200_OK, safe=False)
