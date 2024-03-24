@@ -12,8 +12,9 @@ class ProjectDetail(models.Model):
     post_date = models.DateTimeField("post data", default=timezone.now)
     end_date = models.DateTimeField("project deadline", default=timezone.now() + timezone.timedelta(days=7))
     description = models.TextField(blank=True, default='')
-    group_member = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
-                                     related_name="members")
+    content = models.TextField(blank=True, default='')
+    group_member = models.ManyToManyField(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
+                                          related_name="members")
     # tags
     tags = models.ManyToManyField(Tag, related_name="project_detail_tags", default='')
     website = models.URLField(max_length=200)
@@ -21,6 +22,7 @@ class ProjectDetail(models.Model):
     email = models.EmailField("contact email", max_length=254)
     qualification = models.TextField("qualifications", default='')
     category = models.TextField("qualifications", default='')
+
     def __str__(self):
         return '(%s, %s)' % (self.owner.username, self.title)
 
