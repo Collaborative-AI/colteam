@@ -27,17 +27,17 @@ install(){
 }
 
 # server
-python3 manage.py makemigrations
-python3 manage.py migrate
+python manage.py makemigrations
+python manage.py migrate
 res="$?"
 while [ "$res" != "0" ]
 do
     sleep 3;
-    python3 manage.py migrate
+    python manage.py migrate
     res="$?"
 done
 echo "STARTING COLTEAM SERVER"
-nohup python3 manage.py runserver 0.0.0.0:8000 &
+nohup python manage.py runserver 0.0.0.0:8000 &
 
 # redis
 echo "INSTALLING REDIS SERVER"
