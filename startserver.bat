@@ -5,7 +5,7 @@ set /p "yn=Proceed? [Y/n] : "
 if /I "%yn%"=="Y" (
     call :install
 )
-goto :EOF
+goto :skip_install
 
 :install
 python -m pip install --upgrade pip
@@ -25,6 +25,8 @@ pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
 pip show minio || pip install minio
 pip show django-storages boto3 || pip install django-storages boto3
 
+
+:skip_install
 :: server
 python manage.py makemigrations
 python manage.py migrate
