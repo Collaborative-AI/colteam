@@ -14,6 +14,9 @@ Go check ```http://localhost:3000/```
 
 ### Backend
 Install packages:
+```
+pip install -r requirements.txt
+```
 pip, django, djongo, ...
 Run application 
 ```
