@@ -13,8 +13,7 @@ class ProjectDetail(models.Model):
     end_date = models.DateTimeField("project deadline", default=timezone.now() + timezone.timedelta(days=7))
     description = models.TextField(blank=True, default='')
     content = models.TextField(blank=True, default='')
-    group_member = models.ManyToManyField(CustomUser, on_delete=models.CASCADE, null=True, blank=True,
-                                          related_name="members")
+    group_member = models.ManyToManyField(CustomUser, null=True, blank=True, related_name="members")
     # tags
     tags = models.ManyToManyField(Tag, related_name="project_detail_tags", default='')
     website = models.URLField(max_length=200)

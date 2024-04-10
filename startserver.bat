@@ -24,6 +24,7 @@ pip show elasticsearch || pip install elasticsearch
 pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
 pip show minio || pip install minio
 pip show django-storages boto3 || pip install django-storages boto3
+pip show django-storages djangorestframework-api-key || pip install djangorestframework-api-key
 
 
 :skip_install

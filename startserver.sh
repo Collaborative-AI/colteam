@@ -28,17 +28,17 @@ case $yn in
 esac
 
 # server
-python manage.py makemigrations
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
 res="$?"
 while [ "$res" != "0" ]
 do
     sleep 3;
-    python manage.py migrate
+    python3 manage.py migrate
     res="$?"
 done
 echo "STARTING COLTEAM SERVER"
-nohup python manage.py runserver 0.0.0.0:8000 &
+nohup python3 manage.py runserver 0.0.0.0:8000 &
 
 # redis
 echo "INSTALLING REDIS SERVER"
