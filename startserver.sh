@@ -3,7 +3,7 @@ echo "PACKAGES WILL BE INSTALLED. THIS MAY BREAK YOUR EXISTING TOOLCHAIN."
 echo "YOU ACCEPT ALL RESPONSIBILITY BY PROCEEDING."
 
 install(){
-#  python.exe -m pip install --upgrade pip
+  python -m pip install --upgrade pip
   pip show django || pip install django
   pip show djangorestframework || pip install djangorestframework
   pip show djangorestframework-jwt || pip install djangorestframework-jwt
