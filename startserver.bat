@@ -25,6 +25,9 @@ pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
 pip show minio || pip install minio
 pip show django-storages boto3 || pip install django-storages boto3
 pip show django-storages djangorestframework-api-key || pip install djangorestframework-api-key
+pip show redis || pip install redis
+pip show django-redis || pip install django-redis
+pip show pymongo==3.12.3 || pip install pymongo==3.12.3
 
 
 :skip_install
