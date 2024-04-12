@@ -4,25 +4,7 @@ echo "YOU ACCEPT ALL RESPONSIBILITY BY PROCEEDING."
 
 install(){
   python -m pip install --upgrade pip
-  pip show django || pip install django
-  pip show djangorestframework || pip install djangorestframework
-  pip show djangorestframework-jwt || pip install djangorestframework-jwt
-  pip show djangorestframework-simplejwt || pip install djangorestframework-simplejwt
-  pip show djongo || pip install djongo
-  pip show celery || pip install celery
-  pip show crontab || pip install crontab
-  pip show django-crontab || pip install django-crontab
-  pip show django-cors-headers || pip install django-cors-headers
-  pip show channels==3.0.4 || pip install channels==3.0.4
-  pip show channels_redis==3.3.1 || pip install channels_redis==3.3.1
-  pip show elasticsearch || pip install elasticsearch
-  pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
-  pip show minio || pip install minio
-  pip show django-storages boto3 || pip install django-storages boto3
-  pip show django-storages djangorestframework-api-key || pip install djangorestframework-api-key
-  pip show redis || pip install redis
-  pip show django-redis || pip install django-redis
-  pip show pymongo==3.12.3 || pip install pymongo==3.12.3
+  pip install -r requirements.txt
 }
 
 read -r -p "Proceed? [Y/n] : " yn
