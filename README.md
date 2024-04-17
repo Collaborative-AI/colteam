@@ -20,7 +20,7 @@ pip install -r requirements.txt
 pip, django, djongo, ...
 Run application 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 Go check ```http://localhost:8000/```
 The order of start the backend is:
