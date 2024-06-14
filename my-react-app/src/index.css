@@ -1,16 +1,14 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: PingFang SC, HarmonyOS_Medium, Helvetica Neue, Microsoft YaHei, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
+} */
 
 @import url('https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800');
 
@@ -25,20 +23,8 @@ body {
   min-height: 100vh;
   display: flex;
   font-weight: 400;
-  font-family: 'Fira Sans', sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-label,
-span {
-  font-weight: 500;
-  font-family: 'Fira Sans', sans-serif;
-}
 
 body,
 html,
@@ -46,7 +32,7 @@ html,
 #root,
 .auth-wrapper {
   width: 100%;
-  height: 100%;
+  display: flex;
 }
 
 .navbar-light {
@@ -54,13 +40,6 @@ html,
   box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
 }
 
-.auth-wrapper {
-  display: flex;
-  /* justify-content: center; */
-  /* top: 60px; */
-  flex-direction: column;
-  text-align: left;
-}
 
 .auth-inner {
   width: 1900px;
@@ -89,13 +68,18 @@ html,
   font-weight: 400;
 }
 
-.forgot-password,
-.forgot-password a {
+.active-font,
+.active-font a {
   text-align: right;
   font-size: 13px;
   padding-top: 10px;
-  color: #7f7d7d;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
   margin: 0;
+}
+.active-font:hover{
+  color: #ffde00 !important;
 }
 
 .forgot-password a {
@@ -128,9 +112,7 @@ html,
 }
 
 .create-project-header-container {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  text-align: center;
 }
 
 .project-button-container {
@@ -157,19 +139,16 @@ html,
 
 .create-project-title-text {
   justify-content: center;
-  font-family: 'Times New Roman', Times, serif;
   font-size: 25px;
   font-weight: bold;
 }
 
 .create-project-subtitle-text {
-  font-family: 'Times New Roman', Times, serif;
   font-size: 18px;
   font-weight: lighter;
 }
 
 .create-project-info-text {
-  font-family: 'Times New Roman', Times, serif;
   font-size: 18px;
   font-weight: lighter;
 }
@@ -185,8 +164,6 @@ html,
   color: #24292e;
   cursor: pointer;
   display: inline-block;
-  font-family: -apple-system, system-ui, 'Segoe UI', Helvetica, Arial,
-    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
@@ -242,13 +219,28 @@ html,
 }
 
 .auth-inner-small {
+  position: relative;
   width: 500px;
   margin: auto;
+  -webkit-box-align: center;
   background: #ffffff;
   box-shadow: 0px 14px 80px rgba(34, 35, 58, 0.2);
-  padding: 40px 55px 45px 55px;
+  padding: 80px 55px 45px 55px;
   border-radius: 15px;
   transition: all 0.3s;
+}
+.auth-inner-logo { 
+  position: absolute;
+  top: -45px;
+  left: 200px;
+  width: 92px;
+  height: 92px; 
+  background: #ffde00;
+  font-weight: bold;
+  border-radius: 50%;
+  line-height: 92px;
+  text-align: center;
+  font-size: 24px 
 }
 
 .auth-inner-large {
