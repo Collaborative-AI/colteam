@@ -5,7 +5,7 @@ set /p "yn=Proceed? [Y/n] : "
 if /I "%yn%"=="Y" (
     call :install
 )
-goto :skip_install
+goto :EOF
 
 :install
 python -m pip install --upgrade pip
@@ -24,13 +24,7 @@ pip show elasticsearch || pip install elasticsearch
 pip show django-elasticsearch-dsl || pip install django-elasticsearch-dsl
 pip show minio || pip install minio
 pip show django-storages boto3 || pip install django-storages boto3
-pip show django-storages djangorestframework-api-key || pip install djangorestframework-api-key
-pip show redis || pip install redis
-pip show django-redis || pip install django-redis
-pip show pymongo==3.12.3 || pip install pymongo==3.12.3
 
-
-:skip_install
 :: server
 python manage.py makemigrations
 python manage.py migrate

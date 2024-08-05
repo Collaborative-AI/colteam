@@ -179,37 +179,6 @@ def fuzzy_search(request):
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
-# TODO: haven't tested
-@api_view(['POST'])
-def apply(request):
-    """
-    apply a project by project id (get a project by ID)
-    """
-    try:
-        project_id = request.data.get('id')
-        project = ProjectDetail.objects.get(id=project_id)
-        email_destination = project.data.get('email')
-        email_source = settings.EMAIL_HOST_USER
-
-        # get pdf file from request
-        pdf_file = request.FILES.get('pdf')
-        if not pdf_file:
-            return Response({'message': 'No PDF file provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # send email from email_source to email_destination
-        email = EmailMessage(
-            subject='Apply to join project ' + project.title,
-            body='Please find the attached PDF file for the application.',
-            from_email=email_source,
-            to=[email_destination],
-        )
-        email.attach(pdf_file.name, pdf_file.read(), 'application/pdf')
-        email.send()
-        return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
-    except ProjectDetail.DoesNotExist:
-        return Response({'message': 'Project not found'}, status=status.HTTP_404_NOT_FOUND)
-    except Exception as e:
-        return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class ProjectApiView(APIView):
     permission_classes = [permissions.IsAuthenticated]
