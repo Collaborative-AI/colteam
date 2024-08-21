@@ -17,24 +17,27 @@ export default function LogOut () {
                 Authorization: "Bearer " + getToken(),
             }
         }
-
+        console.log(33);
         axios
             .post('http://localhost:8000/users/logout/', null, config)
             .then((response) => {
                 console.log(response.data)
+                console.log(44);
             })
             .catch((error) => {
                 console.error('Error:', error.message)
+                console.log(66);
             })
             .finally(() => {
                 localStorage.clear()
                 setAuth(false)
-                navigate('/')
+                console.log(55);
+                navigate('/log_in')
             })
     }
 
     const handleCancelLogOut = (event) => {
-        navigate('/')
+        // navigate('/log_in')
     }
 
     return (

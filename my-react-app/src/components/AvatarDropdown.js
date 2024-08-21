@@ -16,6 +16,11 @@ export default ({loginOut}) => {
             label: '个人设置',
         },
         {
+            key: 'my_project',
+            icon: <UserOutlined />,
+            label: '我的项目',
+        },
+        {
             type: 'divider',
         },
         {

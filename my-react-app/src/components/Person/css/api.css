@@ -1,0 +1,17 @@
+.api-title{
+    font-size: 32px;
+}
+.api-desc{
+    /* font-size: 20px; */
+    margin-top: 15px;
+    text-indent: 32px;
+}
+.list{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+.line{
+    border: 1px solid #333;
+}

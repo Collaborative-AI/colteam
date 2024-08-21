@@ -44,14 +44,13 @@ export default function Project() {
     const [loading, setLoading] = useState(false);
     const getList = (current, pageSize) => {
         setLoading(true);
-        axios('').then(res => {
+        axios('http://localhost:8000/projects/detail/view_all').then(res => {
             setLoading(false);
-            setCurrent(res?.current);
-            setList([...list, ...wantArray(res?.data)]);
+            // setCurrent(res?.current);
+            setList([...list, ...wantArray(res?.data.results)]);
             if (current >= Math.round(res.total / pageSize)) { setIsMore(false) };
         }).catch(err => {
             setLoading(false);
-            console.log(err);
         })
     }
     useEffect(() => { getList(current, pageSize) }, []);
@@ -122,21 +121,36 @@ export default function Project() {
                 />
             </div>
             <div className='project-detail' style={{padding: '0 46px'}}>
-                <Spin size="large" spinning={loading} tip="加载中...">
+                <Spin size="large" spinning={loading} >
                     {/* {list.length === 0 && <Empty />} */}
                     <Flex gap={28} wrap="wrap">
-                        {Array.from({ length: 24 }, (_, i) => (
-                            <Card
+                        {
+                        list.map((item,index)=>{
+                            return (
+                                <Card
+                                key={item.id}
                                 hoverable
                                 style={{ width: 210 }}
-                                onClick={() => navigate('/project_detail/123')}
+                                onClick={() => navigate('/project_detail/'+item.id)}
                                 cover={<img alt="example" src={nature} style={{ height: '120px' }} />}
                             >
-                                <Card.Meta description={<div><p>www.instagram.com</p></div>} />
+                                <Card.Meta description={<div><p>{item.website}</p></div>} />
                             </Card>
-                        ))}
+                            )
+                        })
+                        // Array.from({ length: 24 }, (_, i) => (
+                        //     <Card
+                        //         hoverable
+                        //         style={{ width: 210 }}
+                        //         onClick={() => navigate('/project_detail/123')}
+                        //         cover={<img alt="example" src={nature} style={{ height: '120px' }} />}
+                        //     >
+                        //         <Card.Meta description={<div><p>www.instagram.com</p></div>} />
+                        //     </Card>
+                        // ))
+                        }
                     </Flex>
-                    <LoadMore status={loadMoreStatus} hidden={list.length === 0} />
+                    {/* <LoadMore status={loadMoreStatus} hidden={list.length === 0} /> */}
                 </Spin>
             </div>
         </div>

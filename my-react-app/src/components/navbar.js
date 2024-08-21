@@ -194,7 +194,7 @@ const App = () => {
       .finally(() => {
         localStorage.clear()
         setAuth(false)
-        navigate('/')
+        navigate('/log_in')
       })
   }
   return (
@@ -216,7 +216,7 @@ const App = () => {
           />
         </div>
         {
-          auth.success ?
+          !auth.success ?
             <div>
               <div onClick={() => navigate('/log_in')} style={{ fontWeight: 'bold', borderRadius: '12px', height: '32px', width: '62px', textAlign: 'center', lineHeight: '32px', background: colorPrimary, cursor: 'pointer' }}>登录</div>
             </div> :

@@ -30,6 +30,7 @@
     "react-router-dom": "^6.15.0",
     "react-scripts": "5.0.1",
     "stream-chat": "^8.14.4",
+    "react-jwchat":"",
     "stream-chat-react": "^11.1.2",
     "swiper": "^11.0.7",
     "update": "^0.7.4",

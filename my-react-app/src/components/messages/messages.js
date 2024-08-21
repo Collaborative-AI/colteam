@@ -16,10 +16,17 @@ const Messages = () => {
                     style={{ height: '80%', borderRight: 0 }}
                 >
                     <Menu.Item key='/messages/chatBox'>
-                        <Link to={'/messages/chatBox'}>ChatBox</Link>
+                        <Link to={'/messages/chatBox'}>我的好友</Link>
                     </Menu.Item>
-
-                    
+                    <Menu.Item key='/messages/groupChat'>
+                        <Link to={'/messages/groupChat'}>我的群聊</Link>
+                    </Menu.Item>
+                    <Menu.Item key='/messages/comment'>
+                        <Link to={'/messages/comment'}>评论和@</Link>
+                    </Menu.Item>
+                    <Menu.Item key='/messages/notice'>
+                        <Link to={'/messages/notice'}>系统通知</Link>
+                    </Menu.Item>
                 </Menu>
                 {/* <Menu
                 mode="inline"
