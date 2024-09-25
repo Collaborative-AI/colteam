@@ -23,22 +23,12 @@ import { getToken, getUserEmail } from '../../utils';
 const { TextArea } = Input;
 function NewProject() {
   // 路由信息
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
   const [form] = Form.useForm();
-  const [formData,setFormData] = useState({
-    title:'',
-    owner:'',
-    website:'',
-    end_date:null,
-    description:'',
-    email:'',
-    qualification:'',
-    category:'',
-    group_member:[],
-  })
-  const [show,setShow] = useState(false)
-  const [title,setTitle] = useState("Create a new project")
-  const navigate = useNavigate()
+  const [formData,setFormData] = useState({});
+  const [show,setShow] = useState(false);
+  const [title,setTitle] = useState("Create a new project");
+  const navigate = useNavigate();
 
   const items = [
     {
@@ -68,29 +58,37 @@ function NewProject() {
       children: <Input />,
     }
   ];
+  const getData = () => {
+    axios
+      .post("http://localhost:8000/projects/detail/find",{"id":searchParams.get("id")})
+      .then((res) => {
+        console.log(res.data[0]);
+        setFormData({
+          id: res.data[0].id,
+          title: res.data[0].title,
+          "post_date": res.data[0].post_date,
+          "end_date": res.data[0].end_date,
+          "description": res.data[0].description,
+          "website": res.data[0].website,
+          "email": res.data[0].email,
+          "qualification": res.data[0].qualification,
+          "category": res.data[0].category,
+          "owner": res.data[0].owner,
+          "group_member": res.data[0].group_member,
+      });
+      })
+      .catch((err) => {});
+  };
   // 如果有id，查询详情赋值，目前接口异常，写固定值
   useEffect(()=>{
     console.log(searchParams.get("id"));
     if(searchParams.get("id")){
-      setFormData({
-        "id": 25,
-      "title": "444",
-      "post_date": "2024-07-29T17:51:04.598000",
-      "end_date": "2024-12-22T12:12:32",
-      "description": "2",
-      "content": "",
-      "website": "http://localhost:3000/new_project",
-      "email": "2443453@qq.com",
-      "qualification": "2",
-      "category": "2",
-      "owner": 166,
-      "group_member": [],
-      "tags": []
-      })
-      setTitle("Update project")
+      setTitle("Update project");
+      getData();
     }
-setShow(true)
-  },[])
+    setShow(true);
+    console.log(formData)
+  },[]);
   const handleSubmit = (e) => {
     e.preventDefault()
     const config = {
@@ -100,7 +98,7 @@ setShow(true)
     }
     if(formData.id){
       axios
-        .post('http://localhost:8000/projects/update', formData, config)
+        .post('http://localhost:8000/projects/update/', formData, config)
         .then((response) => {
           console.log(response,66);
           if(response.status == 201 || response.status == 200){
@@ -111,11 +109,9 @@ setShow(true)
         .catch((error) => {
         })
     }else{
-
       axios
         .post('http://localhost:8000/projects/create/', formData, config)
         .then((response) => {
-          console.log(response,66);
           if(response.status == 201 || response.status == 200){
             navigate('/project')
           }
@@ -135,7 +131,7 @@ setShow(true)
     }
 
     axios
-        .post('http://localhost:8000/projects/delete', {id:searchParams.get("id")}, config)
+        .post('http://localhost:8000/projects/delete/', {id:searchParams.get("id")}, config)
         .then((response) => {
           console.log(response,66);
           if(response.status == 201 || response.status == 200){
@@ -154,10 +150,18 @@ setShow(true)
         end_date:time
       })
     }else{
-      setFormData({
-        ...formData,
-        [e.target.name]:e.target.value
-      })
+      if(e.target.name == "tags"){
+        setFormData({
+          ...formData,
+          ["tags"]:[e.target.value]
+        })
+      }else{
+        setFormData({
+          ...formData,
+          [e.target.name]:e.target.value
+        })
+      }
+      
     }
   }
   return (
@@ -183,12 +187,15 @@ setShow(true)
                   marginTop: '24px'
                 }}
             >
-                <Form.Item name="owner" label="作者">
-                    <Input name="owner" defaultValue={formData.owner} onChange={handleChange} />
+                <Form.Item label="作者">
+                    <Input name="owner" value={formData.owner} onChange={handleChange} />
                 </Form.Item>
-                <Form.Item name="title"  label="标题">
-                    <Input name="title" defaultValue={formData.title} onChange={handleChange}/>
+                <Form.Item label="标题">
+                    <Input name="title" value={formData.title} onChange={handleChange}/>
                 </Form.Item>
+                {/* <Form.Item label="标签">
+                    <Input name="tags" value={formData.tags} onChange={handleChange}/>
+                </Form.Item> */}
                 <Form.Item label="截止时间">
                 <DatePicker style={{width:"100%"}}
                 name="end_date"
@@ -196,7 +203,7 @@ setShow(true)
                       format: 'YYYY-MM-DD HH:mm:ss',
                       type: 'mask',
                     }}
-                    defaultValue={dayjs(formData.end_date,"YYYY-MM-DD HH:mm:ss") }
+                    value={dayjs(formData.end_date,"YYYY-MM-DD HH:mm:ss") }
                     onChange={handleChange}
                   />
                     {/* <Input value={end_date}  onChange={e=>setEndTime(e.target.value)}/> */}
@@ -205,19 +212,19 @@ setShow(true)
                     <Input value={group_member} onChange={e=>setGroupMember(e.target.value)}/>
                 </Form.Item> */}
                 <Form.Item label="目录">
-                    <Input name="category" defaultValue={formData.category} onChange={handleChange}/>
+                    <Input name="category" value={formData.category} onChange={handleChange}/>
                 </Form.Item>
                 <Form.Item label="网址">
-                    <Input name="website" defaultValue={formData.website}  onChange={handleChange}/>
+                    <Input name="website" value={formData.website}  onChange={handleChange}/>
                 </Form.Item>
                 <Form.Item label="邮箱">
-                    <Input name="email" defaultValue={formData.email}  onChange={handleChange}/>
+                    <Input name="email" value={formData.email}  onChange={handleChange}/>
                 </Form.Item>
                 <Form.Item label="资格">
-                    <Input name="qualification" defaultValue={formData.qualification}  onChange={handleChange}/>
+                    <Input name="qualification" value={formData.qualification}  onChange={handleChange}/>
                 </Form.Item>
                 <Form.Item label="项目描述">
-                    <TextArea name="description" defaultValue={formData.description}  onChange={handleChange}/>
+                    <TextArea name="description" value={formData.description}  onChange={handleChange}/>
                 </Form.Item>
                 {/* <Form.Item label="Select">
                     <Select>
