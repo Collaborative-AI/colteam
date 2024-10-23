@@ -85,48 +85,19 @@ def view_one_project(request):
 @api_view(['POST'])
 def update_project(request):
     try:
-        print(request.data)
-        # Get the authenticated user
+        # 得到已经登录了的用户
         user_token_auth = get_token_from_request(request)
         user_id_auth = jwt_decode_handler(user_token_auth)['user_id']
         user_auth = CustomUser.objects.get(id=user_id_auth)
-
-        # Get the project
+        # 拿到项目
         project_id = request.data.get('id')
         project = ProjectDetail.objects.get(id=project_id)
 
         if user_auth.id == project.owner.id:
-            # Exclude 'owner' from request data, but keep 'tags'
             request_data = {key: value for key, value in request.data.items() if key != 'owner'}
-
-            # Use a single serializer for updating the project details
             serializer = ProjectDetailSerializer(instance=project, data=request_data, partial=True)
-
             if serializer.is_valid():
-                # Update the project with the validated data (except 'tags')
                 serializer.update(project, request_data)
-
-                # Handle 'tags' field separately, allowing for both existing and new tags
-                if 'tags' in request.data:
-                    tags_data = request.data.get('tags', [])
-                    valid_tags = []
-
-                    for tag in tags_data:
-                        if isinstance(tag, int):
-                            # If tag is an integer, assume it's an existing tag ID
-                            try:
-                                existing_tag = Tag.objects.get(pk=tag)
-                                valid_tags.append(existing_tag)
-                            except Tag.DoesNotExist:
-                                return Response({'message': f'Invalid tag id "{tag}" - object does not exist.'}, status=status.HTTP_400_BAD_REQUEST)
-                        else:
-                            # If it's a string, assume it's a new tag name and create it
-                            new_tag, created = Tag.objects.get_or_create(name=tag)
-                            valid_tags.append(new_tag)
-
-                    # Update the project's tags (replace existing tags with new ones)
-                    project.tags.set(valid_tags)
-
                 return Response({'message': 'Update project successfully'}, status=status.HTTP_200_OK)
             else:
                 print(serializer.errors)
@@ -135,7 +106,7 @@ def update_project(request):
             return Response({'message': 'You can only update your project'}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         error_message = str(e)
-        return Response({'message': error_message}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'Invalid project id'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
