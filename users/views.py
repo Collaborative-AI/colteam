@@ -272,7 +272,7 @@ def send_verify_email(user_info, verification_code):
 @permission_classes([AllowAny])
 def resend_verify_email(request):
     try:
-        user_data = JSONParser().parse(request)
+        user_data = request.data
         user = CustomUser.objects.get(username=user_data['username'])
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
@@ -280,8 +280,7 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
-
-        send_verify_email.delay(user.username, verification_code)
+        send_verify_email(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
@@ -311,7 +310,7 @@ def activate_account(request, token):
 @permission_classes([AllowAny])
 def send_reset_password_email(request):
     try:
-        user_data = JSONParser().parse(request)
+        user_data = request.data
         user = CustomUser.objects.get(username=user_data['email'])
 
         if user is None:
