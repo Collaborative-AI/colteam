@@ -73,6 +73,7 @@ def view_one_project(request):
     view a specific project and its details (get a project by ID)
     """
     try:
+        print(request.data)
         project_id = request.data.get('id')
         project = ProjectDetail.objects.filter(id=project_id)
         serializer = ProjectDetailSerializer(project, many=True)
@@ -149,33 +150,47 @@ def all_projects(request):
 @api_view(['POST'])
 def search(request):
     try:
-        form = SearchForm(request.GET)
+        # Initialize the form with request data
+        form = SearchForm(request.data)  # Changed from GET to POST as you are using POST API
         results = []
 
         if form.is_valid():
+            # Get the cleaned search term
             search_term = form.cleaned_data['search_term']
             if search_term:
-                results = ProjectDetail.objects.filter(username=search_term)
+                # Adjust this query to use the correct field, e.g., 'title' or 'description'
+                results = ProjectDetail.objects.filter(title=search_term).values('id', 'title', 'description', 'owner', 'post_date')
 
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+        # Return a JSON response with the form data and results
+        return JsonResponse({
+            'form': form.cleaned_data,  # Only return cleaned data, which is JSON serializable
+            'results': list(results)    # Convert results queryset to a list of dictionaries
+        }, status=status.HTTP_200_OK)
+
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 # 模糊查询
 @api_view(['POST'])
 def fuzzy_search(request):
     try:
-        form = SearchForm(request.GET)
+        # Initialize the form with request data
+        form = SearchForm(request.data)
         results = []
 
         if form.is_valid():
+            # Get the cleaned search term
             search_term = form.cleaned_data['search_term']
             if search_term:
-                # 只返回前十个
-                results = ProjectDetail.objects.filter(title__icontains=search_term)[:10]
+                # Fuzzy search on multiple fields (title and description as an example)
+                results = ProjectDetail.objects.filter(title__icontains=search_term).values('id', 'title', 'description', 'owner', 'post_date')[:10]
 
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+        # Return a JSON response with the form data and results
+        return JsonResponse({
+            'form': form.cleaned_data,  # Only return cleaned data, which is JSON serializable
+            'results': list(results)    # Convert results queryset to a list of dictionaries
+        }, status=status.HTTP_200_OK)
+
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 

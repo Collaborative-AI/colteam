@@ -43,32 +43,30 @@ function ProjectDetail() {
   const projectId = params.id;
   const getData = () => {
     axios
-      .post("http://localhost:8000/projects/detail/find?id=" + projectId)
+      .post("http://localhost:8000/projects/detail/find",{"id":projectId})
       .then((res) => {
-        // setList([...list, ...wantArray(res?.data.results)]);
+        setProject({
+          "id": projectId,
+          "title": res.data[0].title,
+          "post_date": res.data[0].post_date,
+          "end_date": res.data[0].end_date,
+          "description": res.data[0].description,
+          "website": res.data[0].website,
+          "email": res.data[0].email,
+          "qualification": res.data[0].qualification,
+          "category": res.data[0].category,
+          "owner": res.data[0].owner,
+          "group_member": res.data[0].group_member,
+          "tags": res.data[0].tags
+      });
       })
       .catch((err) => {});
   };
-  // useEffect(() => {
-  //   getData();
-  // }, []);
   useEffect(() => {
-    setProject({
-      "id": 25,
-      "title": "444",
-      "post_date": "2024-07-29T17:51:04.598000",
-      "end_date": "2022-12-12T12:12:32",
-      "description": "2",
-      "content": "",
-      "website": "http://localhost:3000/new_project",
-      "email": "2443453@qq.com",
-      "qualification": "2",
-      "category": "2",
-      "owner": 166,
-      "group_member": [],
-      "tags": []
-  });
+    getData();
   }, []);
+  // useEffect(() => {
+  // }, []);
 
   const navigate = useNavigate();
   return (
@@ -139,6 +137,7 @@ function ProjectDetail() {
         >
           <Descriptions.Item label="标题">{project.title}</Descriptions.Item>
           <Descriptions.Item label="作者">{project.owner}</Descriptions.Item>
+          <Descriptions.Item label="标签">{project.tags}</Descriptions.Item>
           <Descriptions.Item label="截止时间">
             {project.end_date}
           </Descriptions.Item>

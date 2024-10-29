@@ -198,15 +198,19 @@ def logout(request):
 @api_view(['POST'])
 def search(request):
     try:
-        form = SearchForm(request.GET)
+        form = SearchForm(request.data)
         results = []
 
         if form.is_valid():
             search_term = form.cleaned_data['search_term']
             if search_term:
-                results = CustomUser.objects.filter(username=search_term)
+                # Serialize the queryset to a list of dictionaries
+                results = list(CustomUser.objects.filter(username=search_term).values('id', 'username', 'email'))
 
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+        return JsonResponse({
+            'form_errors': form.errors if not form.is_valid() else None,
+            'results': results
+        }, status=status.HTTP_200_OK)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -215,16 +219,19 @@ def search(request):
 @api_view(['POST'])
 def fuzzy_search(request):
     try:
-        form = SearchForm(request.GET)
+        form = SearchForm(request.data)
         results = []
 
         if form.is_valid():
             search_term = form.cleaned_data['search_term']
             if search_term:
-                # 只返回前十个
-                results = CustomUser.objects.filter(username__icontains=search_term)[:10]
+                # Serialize the queryset to a list of dictionaries and limit to 10 results
+                results = list(CustomUser.objects.filter(username__icontains=search_term).values('id', 'username', 'email')[:10])
 
-        return JsonResponse({'form': form, 'results': results}, status=status.HTTP_200_OK)
+        return JsonResponse({
+            'form_errors': form.errors if not form.is_valid() else None,
+            'results': results
+        }, status=status.HTTP_200_OK)
     except Exception as exc:
         return JsonResponse({'error': str(exc)}, status=status.HTTP_400_BAD_REQUEST)
 
