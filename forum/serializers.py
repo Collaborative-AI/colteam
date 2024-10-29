@@ -11,6 +11,9 @@ class ThreadSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'id': {
                 'required': True
+            },
+            'tags': {
+                'required': False  # 将 tags 字段设置为非必填
             }
         }
 
