@@ -31,20 +31,30 @@ def create_thread(request):
         'user': user_auth.pk,
         'project': project_id,
     }
-    tags_data = ProjectDetail.objects.get(id=project_id)
+    
+    try:
+        project_detail = ProjectDetail.objects.get(id=project_id)
+        tags_data = project_detail.tags.all()  # 使用 tags.all() 方法获取标签
+    except ProjectDetail.DoesNotExist:
+        return Response({"error": "Project not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    # tags_data = ProjectDetail.objects.get(id=project_id)
     serializer = ThreadSerializer(data=request_data)
     if serializer.is_valid():
         thread = serializer.save()
         # add project tags
         tags = []
-        for tag_name in tags_data:
-            tag = Tag.objects.create(name=tag_name)
-            tags.append(tag)
+        if tags_data:
+            for tag_name in tags_data:
+                tag = Tag.objects.create(name=tag_name)
+                tags.append(tag)
         thread.tags.set(tags)
         thread.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
-        return Response({'message': 'thread create failed'}, status=status.HTTP_400_BAD_REQUEST)
+        # return Response({'message': 'thread create failed'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['POST'])
