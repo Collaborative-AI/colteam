@@ -344,8 +344,8 @@ def send_reset_password_email(request):
 @permission_classes([AllowAny])
 def reset_password(request):
     try:
-        json_data = JSONParser().parse(request)
-        user_id = signing.loads(json_data['userid'])
+        json_data = request.data
+        user_id = json_data['userid']
         user = CustomUser.objects.get(id=user_id)
         if user is None:
             return JsonResponse({'Not Exist': 'User is not exists!'}, status=status.HTTP_401_UNAUTHORIZED, safe=False)
