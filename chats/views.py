@@ -7,6 +7,11 @@ from users.models import CustomUser
 from rest_framework.pagination import PageNumberPagination
 from auths.token_auth import get_token_from_request
 from rest_framework_jwt.utils import jwt_decode_handler
+from django.contrib.auth import get_user_model
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
 
 class CustomPageNumberPagination(PageNumberPagination):
     page_size = 10  # 每页显示的数量
@@ -116,3 +121,45 @@ def leave_room(request):
     # 加入房间
     room.leave(user_auth)
     return Response({'message': 'User leave successfully'}, status=status.HTTP_200_OK)
+
+User = get_user_model()
+
+def register(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Check if the user already exists
+        try:
+            user = User.objects.get(email=email)
+            if user.is_active:
+                return JsonResponse({"message": "User already activated. Please log in."}, status=400)
+            else:
+                # Resend activation email
+                send_activation_email(user)
+                return JsonResponse({"message": "Account exists but not activated. Activation email resent."})
+        except User.DoesNotExist:
+            # Create new user and send activation email
+            user = User.objects.create_user(username=username, email=email, password=password, is_active=False)
+            send_activation_email(user)
+            return JsonResponse({"message": "Registration successful. Please check your email for activation."})
+
+    return JsonResponse({"message": "Invalid request"}, status=400)
+
+def send_activation_email(user):
+    subject = "Activate your account"
+    activation_link = f"http://localhost:8000/activate/{user.id}"
+    message = f"Hi {user.username}, please activate your account by clicking the link: {activation_link}"
+    send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email])
+
+def activate_account(request, user_id):
+    try:
+        user = User.objects.get(id=user_id)
+        if user.is_active:
+            return JsonResponse({"message": "Account already activated."}, status=400)
+        user.is_active = True
+        user.save()
+        return JsonResponse({"message": "Account successfully activated!"})
+    except User.DoesNotExist:
+        return JsonResponse({"message": "Invalid activation link."}, status=400)
