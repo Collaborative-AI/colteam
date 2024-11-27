@@ -59,7 +59,6 @@ class RegisterView(TokenViewBase):
     @classmethod
     def register(cls, request: QueryDict):
         try:
-            request = request.copy()
             # 判断是否已经包含此用户名
             user = CustomUser.objects.filter(email=request.get('username')).first()
             if user is not None:
@@ -71,7 +70,7 @@ class RegisterView(TokenViewBase):
                     user.send_code_time = timezone.now()
                     user.save()
 
-                    send_verify_email.delay(user.username, verification_code)
+                    send_verify_email(user.username, verification_code)
                     return JsonResponse(user.username, status=status.HTTP_200_OK, safe=False)
             elif user is None:
                 request.__setitem__('email', request.get('username'))
@@ -118,7 +117,7 @@ class RegisterView(TokenViewBase):
 @api_view(['POST'])
 def update_user_profile_by_id(request):
     try:
-        update_data = JSONParser().parse(request)
+        update_data = request.data
         # serializer = CustomUserSerializer(data=update_data)
         # if serializer.is_valid():  
         # get user id from access token
@@ -160,7 +159,7 @@ def view_user_profile_by_id(request):
 @api_view(['POST'])
 def change_password(request):
     try:
-        json_data = JSONParser().parse(request)
+        json_data = request.data
         user_token = get_token_from_request(request)
         user_id = jwt_decode_handler(user_token)['user_id']
         user = CustomUser.objects.get(id=user_id)
@@ -263,7 +262,7 @@ def send_verify_email(user_info, verification_code):
         "your account.</p><p>{}</p><p>{}</p></body></html>",
         activation_link, suffix_first, suffix
     )
-    send_mail(subject, "", email_from, recipient_list, html_message=html_message)
+    return send_mail(subject, "", email_from, recipient_list, html_message=html_message)
 
 
 # TODO: 注释需调整
@@ -280,7 +279,6 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
-        send_verify_email(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
