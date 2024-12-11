@@ -26,4 +26,5 @@ urlpatterns = [
     path('apiKey/generate/', views.generate_api_key, name='generate_api_key'),
     path('apiKey/list/', views.list_api_key, name='list_api_key'),
     path('apiKey/test/', views.test, name='test_api_key'),
+	path('apiKey/delete/', views.delete_api_key, name='delete_api_key'),
 ]

@@ -279,6 +279,7 @@ def resend_verify_email(request):
         user.verify_code = verification_code
         user.send_code_time = timezone.now()
         user.save()
+        send_verify_email(user.username, verification_code)
         return JsonResponse('Your verify email has been successfully send, please check your email.',
                             status=status.HTTP_200_OK, safe=False)
     except Exception as exc:
@@ -422,6 +423,7 @@ def delete_api_key(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def test(request):
+    print(request.META)
     authorization_header = request.META.get('HTTP_API_KEY', '')#APIKEY
     print("here==="+authorization_header)
     auth_type, key = authorization_header.split()

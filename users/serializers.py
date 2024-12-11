@@ -49,5 +49,5 @@ class LoginSerializer(TokenObtainPairSerializer):
 class ApiKeySerializer(serializers.ModelSerializer):
     class Meta:
         model = ApiKey
-        fields = ['id', 'user', 'key', 'is_active']
+        fields = ['user', 'key', 'is_active']
         # fields = ['id', 'user', 'key', 'permissions', 'created_at', 'is_active']

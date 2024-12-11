@@ -27,7 +27,7 @@ class CustomUser(AbstractUser):
 
 class ApiKey(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="api key user+")
-    key = models.CharField(max_length=255, unique=True)
+    key = models.CharField(max_length=255, unique=True, primary_key=True)
     # permissions = models.JSONField(default=dict)
     # created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
