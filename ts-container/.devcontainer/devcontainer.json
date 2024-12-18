@@ -1,0 +1,4 @@
+{
+    "name": "ts-devcontainer-demo",
+    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node"
+}
