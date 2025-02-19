@@ -4,11 +4,12 @@ const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
-        email: 'test@test.com',
-        // password: '',
+        email: '',
+        password: '',
+        ...FormData,
         roles: '',
         accessToken: '',
-        success: true,
+        success: false,
     })
 
     return (

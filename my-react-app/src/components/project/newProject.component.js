@@ -23,7 +23,7 @@ const InputItem = ({ name, onChange, value, placeholder }) => {
 }
 
 
-function NewProject() {
+function NewProject () {
   const [projectName, setProjectName] = useState("")
   const [description, setDescription] = useState("")
   const { auth, setAuth } = useContext(AuthContext)
@@ -92,8 +92,8 @@ function NewProject() {
       <div className="create-project-info-text">
         Once your model is created, you can upload your files using the web interface or git.
       </div>
-      <div className="create-project-button-container">
-        <button className="create-project-create-button" onClick={handleSubmit}>Create Your New Project!</button>
+      <div className="project-button-container">
+        <button className="project-button" onClick={handleSubmit}>Create Your New Project!</button>
       </div>
     </div>
 

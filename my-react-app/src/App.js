@@ -14,8 +14,6 @@ import Profile from './components/profile.component'
 import NewProject from './components/project/newProject.component'
 import ShowProject from './components/project/show_project.component'
 import ProjectDetail from './components/project/show_project_detail.component'
-import UpdateProject from './components/project/updateProject.component'
-import LogOut from './components/authenticate/logout.component'
 
 function App() {
   return (
@@ -32,12 +30,10 @@ function App() {
               <Route path="/log-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/forget_passwd" element={<ForgetPasswd />} />
-              <Route path="/log_out" element={<LogOut />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/new_project" element={<NewProject />} />
               <Route path="/show_project" element={<ShowProject />} />
               <Route path="/show_project_detail" element={<ProjectDetail />} />
-              <Route path="/update_project" element={<UpdateProject />} />
             </Routes>
           </div>
         </div>
