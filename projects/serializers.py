@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import ProjectDetail
 from users.models import CustomUser
-from users.serializers import CustomUserSerializer  
+from users.serializers import CustomUserSerializer
+
 
 # class ProjectDetailSerializer(serializers.ModelSerializer):
 #     class Meta:
@@ -14,10 +15,8 @@ from users.serializers import CustomUserSerializer
 #         }
 
 
-
 class ProjectDetailSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
-
+    # user = CustomUserSerializer(read_only=True)
     class Meta:
         model = ProjectDetail
         fields = "__all__"
@@ -26,7 +25,3 @@ class ProjectDetailSerializer(serializers.ModelSerializer):
                 'required': True
             }
         }
-       
-        
-
-

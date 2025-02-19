@@ -1,5 +1,5 @@
 import json
-from .models import CustomUser
+from .models import CustomUser, ApiKey
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import authenticate
@@ -44,3 +44,10 @@ class LoginSerializer(TokenObtainPairSerializer):
 
         data['user_info'] = user_info
         return data
+
+
+class ApiKeySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ApiKey
+        fields = ['user', 'key', 'is_active']
+        # fields = ['id', 'user', 'key', 'permissions', 'created_at', 'is_active']

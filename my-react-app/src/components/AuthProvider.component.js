@@ -1,16 +1,19 @@
 import { createContext, useState } from "react"
+import { getToken, getUserEmail, getUserRole } from '../utils'
 
 const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
     const [auth, setAuth] = useState({
-        email: '',
+        email: getUserEmail() || '',
         password: '',
-        ...FormData,
-        roles: '',
-        accessToken: '',
-        success: false,
+        // ...FormData,
+        roles: getUserRole || '',
+        accessToken: getToken() || '',
+        success: getToken() !== null && getToken() !== '',
+        // success:true
     })
+
 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>

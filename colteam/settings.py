@@ -14,7 +14,6 @@ import os
 import ssl
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,10 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users.apps.UsersConfig',
     'projects.apps.ProjectsConfig',
+    'chats.apps.ChatsConfig',
+    'forum.apps.ForumConfig',
     'rest_framework',
+    'rest_framework_api_key',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'crontab',
+    'channels',
+    'django_elasticsearch_dsl',
+    'tags.apps.TagConfig'
 ]
 
 MIDDLEWARE = [
@@ -90,6 +95,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'colteam.wsgi.application'
+ASGI_APPLICATION = 'colteam.asgi.application'
 
 REST_FRAMEWORK = {
     # 指定使用的权限类
@@ -102,6 +108,8 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
+        'auths.api_key_auth.ApiKeyValidationMiddleware',
+        'auths.token_auth.TokenValidationMiddleware',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
@@ -111,7 +119,7 @@ JWT_AUTH = {
     'JWT_ALGORITHM': 'HS256',  # 选择适合您的加密算法
     'JWT_ALLOW_REFRESH': True,
     'JWT_VERIFY_EXPIRATION': True,  # 验证令牌是否过期
-    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),  # 刷新令牌有效期
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(hours=5),  # 刷新令牌有效期
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
@@ -119,9 +127,9 @@ SIMPLE_JWT = {
     # token有效时长(返回的 access 有效时长)
     'ACCESS_TOKEN_LIFETIME': datetime.timedelta(hours=2),
     # token刷新的有效时间(返回的 refresh 有效时长)
-    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(hours=5),
 
-    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(days=1),  # 滑动刷新令牌的过期时间
+    'SLIDING_TOKEN_REFRESH_LIFETIME': datetime.timedelta(hours=5),  # 滑动刷新令牌的过期时间
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': datetime.timedelta(minutes=5),  # 滑动刷新令牌宽限期
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',  # 滑动刷新令牌的过期时间声明名称
     'BLACKLIST_AFTER_ROTATION': True,
@@ -148,6 +156,18 @@ DATABASES = {
             "authMechanism": "SCRAM-SHA-1",
         },
     }}
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "djongo",
+#         "NAME": "local_database",  # Replace with the name of your database
+#         "CLIENT": {
+#             "host": "127.0.0.1",  # Localhost IP or use "localhost"
+#             "port": 27017,        # Default MongoDB port
+#         },
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -195,5 +215,81 @@ STATICFILES_DIRS = [
 
 # 定时任务
 CRONJOBS = [
-    ('*/30 * * * *', 'users.tasks.clean_expired_tokens'),  # 每30分钟运行一次任务
+    ('*/10 * * * *', 'users.tasks.clean_expired_tokens'),  # 每10分钟运行一次任务
 ]
+
+# Redis缓存
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',  # Redis 地址
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+            # 'PASSWORD': 'colteam',
+        }
+    }
+}
+
+# Email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+# TODO: need finish register
+# EMAIL_HOST_USER = 'colteam.mailbox@gmail.com'  # sender's email-id
+# EMAIL_HOST_PASSWORD = 'qdcldriyjzaahxxh'  # password associated with above email-id
+# test email
+EMAIL_HOST_USER = 'ridol.mailbox@gmail.com'  # sender's email-id
+EMAIL_HOST_PASSWORD = 'pcqg uflt lxrb qkaw'  # password associated with above email-id
+
+ 
+# Celery配置
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/6'  # Redis连接URL
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/8'  # Redis连接URL
+
+# 让celery在启动时加载Django配置
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': [
+            'localhost:9200',
+            'localhost:9201',
+            'localhost:9202',
+        ],
+        'timeout': 20,  # 设置连接超时为20秒
+    },
+}
+
+MINIO_ACCESS_KEY = 'colteam-minio-access-key'
+MINIO_SECRET_KEY = 'colteam-minio-secret-key'
+MINIO_ENDPOINT = 'http://localhost:9000'
+MINIO_USE_SSL = False  # 根据你的实际情况配置是否使用 SSL
+
+DEFAULT_FILE_STORAGE = 'storages.backends.minio.MinioStorage'
+STATICFILES_STORAGE = 'storages.backends.minio.MinioStorage'
+MINIO_STORAGE_ACCESS_KEY = 'colteam-minio-access-key'
+MINIO_STORAGE_SECRET_KEY = 'colteam-minio-secret-key'
+MINIO_STORAGE_ENDPOINT = 'http://localhost:9000'
+MINIO_STORAGE_USE_SSL = False  # 根据你的实际情况配置是否使用 SSL
+
+MINIO_STORAGE_MEDIA_BUCKET_NAME = 'your-media-bucket'
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+MINIO_STORAGE_STATIC_BUCKET_NAME = 'your-static-bucket'
+MINIO_STORAGE_AUTO_CREATE_STATIC_BUCKET = True
