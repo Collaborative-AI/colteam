@@ -92,10 +92,11 @@ def find_flychat(request):
     except FlyChat.DoesNotExist:
         return Response({'message': 'FlyChat not found'}, status=status.HTTP_404_NOT_FOUND)
 
-@api_view(['GET'])
+@api_view(['POST'])
 def join_room(request):
     # 找到房间
     room_name = request.data.get('room_name')
+    print(request, room_name)
     room = Room.objects.get(name=room_name)
 
     # 得到已经登录了的用户

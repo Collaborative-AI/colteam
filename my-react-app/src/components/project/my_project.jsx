@@ -145,7 +145,7 @@ export default function Project() {
       <div className="project-header" style={{ marginBottom: "15px" }}>
         {/* <div className='project-logo'>COIAI</div> */}
         <img className="project-logo" alt="example" src={colteam_logo} />
-        <div style={{ flex: 1 }}>
+        {/* <div style={{ flex: 1 }}>
           <Input
             defaultValue={keyword}
             onChange={(e) => setKeyWord(e.target.value)}
@@ -153,7 +153,7 @@ export default function Project() {
             style={{ width: "380px" }}
             placeholder={f({ id: "projectSearch" })}
           />
-        </div>
+        </div> */}
         {/* <div className='project-create'><Button onClick={() => navigate('/new_project')}>{f({ id: 'projectCreate' })}</Button></div> */}
       </div>
 
@@ -179,7 +179,7 @@ export default function Project() {
                   <Card.Meta
                     description={
                       <div>
-                        <p>{item.website}</p>
+                        <p>{item.title}</p>
                       </div>
                     }
                   />

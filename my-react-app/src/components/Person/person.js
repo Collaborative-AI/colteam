@@ -18,12 +18,12 @@ const Messages = () => {
                     <Menu.Item key='/center/info'>
                         <Link to={'/center/info'}>个人资料</Link>
                     </Menu.Item>
-                    <Menu.Item key='/center/api'>
+                    {/* <Menu.Item key='/center/api'>
                         <Link to={'/center/api'}>API KEYS</Link>
-                    </Menu.Item>
-                    <Menu.Item key='/center/noticeSetting'>
+                    </Menu.Item> */}
+                    {/* <Menu.Item key='/center/noticeSetting'>
                         <Link to={'/center/noticeSetting'}>通知设置</Link>
-                    </Menu.Item>
+                    </Menu.Item> */}
                 </Menu>
                 {/* <Menu
                 mode="inline"

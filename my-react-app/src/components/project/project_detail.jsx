@@ -84,13 +84,13 @@ function ProjectDetail() {
             display: "inline-block",
           }}
         >
-          Project1
+          {project.title}
         </h4>
-        <HeartOutlined key="heart" />
+        {/* <HeartOutlined key="heart" />
         <SettingOutlined
           key="setting"
           onClick={() => navigate("/update_project/123")}
-        />
+        /> */}
       </div>
       <div
         style={{
@@ -99,7 +99,7 @@ function ProjectDetail() {
         }}
       >
         {/* <h4 style={{ textAlign: 'center' }}>项目描述</h4> */}
-        <div
+        {/* <div
           style={{
             width: "300px",
             float: "right",
@@ -124,20 +124,20 @@ function ProjectDetail() {
               </List.Item>
             )}
           />
-        </div>
+        </div> */}
         <Descriptions
           title="项目描述"
           bordered
           column={1}
           style={{
             // marginTop: "18px",
-            width: "calc(100% - 350px)",
+            width: "calc(100%)",
             float: "left",
           }}
         >
           <Descriptions.Item label="标题">{project.title}</Descriptions.Item>
           <Descriptions.Item label="作者">{project.owner}</Descriptions.Item>
-          <Descriptions.Item label="标签">{project.tags}</Descriptions.Item>
+          {/* <Descriptions.Item label="标签">{project.tags}</Descriptions.Item> */}
           <Descriptions.Item label="截止时间">
             {project.end_date}
           </Descriptions.Item>

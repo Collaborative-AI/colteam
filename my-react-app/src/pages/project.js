@@ -42,6 +42,7 @@ export default function Project() {
     const [checked, setChecked] = useState(true);
     const [loadMoreStatus, setLoadMoreStatus] = useState('loadmore');
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const getList = (current, pageSize) => {
         setLoading(true);
         axios('http://localhost:8000/projects/detail/view_all').then(res => {
@@ -67,6 +68,27 @@ export default function Project() {
         isMoreRef.current = isMore;
     }, [isMore]);
 
+    // useEffect(() => {
+    //         try {
+    //             console.log("aaaaaa");
+    //             const response = fetch('http://localhost:8000/projects/fuzzy/search', {
+    //                 method: 'POST', // Adjust to GET if needed
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //                 body: JSON.stringify({ search_term: searchTerm }),
+    //             });
+
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             const data = response.json();
+    //             setList([...list, ...wantArray(data)]);
+    //         } catch (error) {
+    //             console.error('Error fetching search results:', error);
+    //         }
+    // }, [searchTerm]);
+
     // todo 加载更多
     const handleLoadMore = () => {
         if (!loadingRef.current && isMoreRef.current) {
@@ -85,17 +107,21 @@ export default function Project() {
     useTouchBottom(handleLoadMore)
     return (
         <div className='project-content'>
-            <div className='project-header'>
+            <div className='project-header'style={{ marginBottom: "15px" }}>
                 {/* <div className='project-logo'>COIAI</div> */}
                 <img className='project-logo' alt="example" src={colteam_logo} />
-                <div style={{ flex: 1 }}>
-                    <Input suffix={
-                        <SearchOutlined style={{ color: colorPrimary }} />
-                    } style={{ width: '380px' }} placeholder={f({ id: 'projectSearch' })} />
-                </div>
+                {/* <div style={{ flex: 1 }}>
+                    <Input
+                            suffix={<SearchOutlined style={{ color: colorPrimary }} />}
+                            style={{ width: '380px' }}
+                            placeholder={f({ id: 'projectSearch' })}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                </div> */}
                 <div className='project-create'><Button onClick={() => navigate('/new_project')}>{f({ id: 'projectCreate' })}</Button></div>
             </div>
-            <div className='project-tag'>
+            {/* <div className='project-tag'>
                 <Flex gap="4px 0" wrap="wrap" align="center">
                     {tagsData.map((tag) => (
                         <Tag.CheckableTag
@@ -107,8 +133,8 @@ export default function Project() {
                         </Tag.CheckableTag>
                     ))}
                 </Flex>
-            </div>
-            <div className='project-filter' style={{ margin: '6px 0 12px 0' }}>
+            </div> */}
+            {/* <div className='project-filter' style={{ margin: '6px 0 12px 0' }}>
                 <Checkbox checked={checked}>
                     {f({ id: 'projectTop' })}
                 </Checkbox>
@@ -119,8 +145,8 @@ export default function Project() {
                         { value: 'jack', label: 'Jack' }
                     ]}
                 />
-            </div>
-            <div className='project-detail' style={{padding: '0 46px'}}>
+            </div> */}
+            <div className='project-detail' style={{padding: '0 0px'}}>
                 <Spin size="large" spinning={loading} >
                     {/* {list.length === 0 && <Empty />} */}
                     <Flex gap={28} wrap="wrap">
@@ -134,7 +160,7 @@ export default function Project() {
                                 onClick={() => navigate('/project_detail/'+item.id)}
                                 cover={<img alt="example" src={nature} style={{ height: '120px' }} />}
                             >
-                                <Card.Meta description={<div><p>{item.website}</p></div>} />
+                                <Card.Meta description={<div><p>{item.title}</p></div>} />
                             </Card>
                             )
                         })

@@ -157,6 +157,18 @@ DATABASES = {
         },
     }}
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "djongo",
+#         "NAME": "local_database",  # Replace with the name of your database
+#         "CLIENT": {
+#             "host": "127.0.0.1",  # Localhost IP or use "localhost"
+#             "port": 27017,        # Default MongoDB port
+#         },
+#     }
+# }
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
