@@ -1,7 +1,0 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# cache
-/redis_mac
-/redis_windows
-.DS_Store
-dump.rdb
