@@ -1,4 +1,5 @@
 # ColTeam
+A website demo with react, django and mongodb
 
 ### Run the Frontend
 Navigate to the `my-react-app` folder:
