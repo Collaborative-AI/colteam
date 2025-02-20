@@ -1,4 +1,4 @@
-# colteam
+# ColTeam
 
 ### Run the Frontend
 Navigate to the `my-react-app` folder:
